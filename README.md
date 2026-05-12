@@ -19,7 +19,6 @@ Drop the repo contents on any static host. GitHub Pages: push the repo, then in 
 ## Replace the placeholders
 
 - `assets/avatar.svg` &mdash; swap with a real headshot at `assets/avatar.jpg` (and update the `<img src>` in `index.html`).
-- LinkedIn URL &mdash; search `index.html` for the `TODO: confirm LinkedIn slug` comment.
 - `resume.pdf` &mdash; regenerate from a fresh `.docx` whenever the resume changes:
   ```bash
   "C:/Program Files/LibreOffice/program/soffice.exe" --headless --convert-to pdf --outdir . resume-source.docx
