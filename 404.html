@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>404 — Jake Hoffman</title>
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("jh-theme");
+          var prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+          var theme = stored || (prefersLight ? "light" : "dark");
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {}
+      })();
+    </script>
+    <meta name="description" content="Page not found." />
+    <meta name="robots" content="noindex" />
+    <link rel="stylesheet" href="/styles.css" />
+    <meta name="theme-color" content="#0a0e14" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f5efe4" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Primary">
+        <a class="nav-brand" href="/"><span class="nav-brand__prompt">$</span> jake_hoffman</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="container hero__inner">
+          <pre class="hero__boot" aria-label="404 error">
+<span class="boot__prompt">$ cat /requested/path</span>
+<span class="boot__line"><span class="boot__caret-mark">&gt;</span> error: file not found (404)</span>
+
+<span class="boot__prompt">$ ls /jake_hoffman</span>
+<span class="boot__line"><span class="boot__caret-mark">&gt;</span> the page you tried to visit doesn&rsquo;t exist.</span>
+<span class="boot__line"><span class="boot__caret-mark">&gt;</span> try one of:<span class="boot__caret" aria-hidden="true">_</span></span>
+          </pre>
+
+          <div class="hero__ctas" role="group" aria-label="Recovery links">
+            <a class="btn btn--primary" href="/">[ home ]</a>
+            <a class="btn" href="/#projects">[ projects ]</a>
+            <a class="btn" href="/#contact">[ contact ]</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container site-footer__inner">
+        <p class="site-footer__prompt">$ <span class="boot__caret" aria-hidden="true">_</span></p>
+        <p class="site-footer__meta"><span>&copy; <span id="footer-year">2026</span> jake hoffman</span></p>
+      </div>
+    </footer>
+
+    <script>
+      // Stamp the current year and apply the existing theme.
+      var y = document.getElementById("footer-year");
+      if (y) y.textContent = String(new Date().getFullYear());
+    </script>
+  </body>
+</html>
