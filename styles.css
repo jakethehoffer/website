@@ -288,3 +288,48 @@ button {
   padding-left: 1.25rem;
 }
 .timeline__bullets li { margin: 0.25rem 0; color: var(--text); }
+
+/* ---------- Education ---------- */
+.education__school {
+  margin: 0;
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
+}
+.education__program {
+  margin: 0.125rem 0;
+  color: var(--text);
+}
+.education__gpa {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+.education__highlights {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+.education__highlights li { margin: 0.25rem 0; }
+
+/* ---------- Contact ---------- */
+.contact__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-top: 1rem;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem 0 3rem;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  justify-content: space-between;
+}
+.site-footer p { margin: 0; }
