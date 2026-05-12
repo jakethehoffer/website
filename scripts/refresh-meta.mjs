@@ -18,10 +18,8 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const INDEX = resolve(HERE, "..", "index.html");
 
 const REPOS = [
-  { owner: "jakethehoffer", name: "trader",     key: "trader.last_commit" },
-  { owner: "jakethehoffer", name: "arbitrage",  key: "arbitrage.last_commit" },
-  // [removed] is in a different org. Adjust the owner if you have access.
-  { owner: "[removed-org]-Services", name: "[removed]", key: "[removed].last_commit" },
+  { owner: "jakethehoffer", name: "trader",    key: "trader.last_commit" },
+  { owner: "jakethehoffer", name: "arbitrage", key: "arbitrage.last_commit" },
 ];
 
 function ghPushedAt(owner, name) {
