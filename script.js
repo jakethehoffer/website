@@ -1,6 +1,60 @@
 (function () {
   "use strict";
 
+  // ---------- Hero boot sequence ----------
+  (function bootSequence() {
+    const lines = Array.from(document.querySelectorAll("[data-boot-line]"));
+    if (lines.length === 0) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let alreadyPlayed = false;
+    try { alreadyPlayed = sessionStorage.getItem("jh-boot-played") === "1"; } catch (e) {}
+
+    // No-op path: leave the static end-state alone.
+    if (reduceMotion || alreadyPlayed) return;
+
+    const skipBtn = document.querySelector(".hero__skip");
+    const cached = lines.map((el) => el.textContent);
+    lines.forEach((el) => (el.textContent = ""));
+
+    let cancelled = false;
+    function finish() {
+      cancelled = true;
+      lines.forEach((el, i) => (el.textContent = cached[i]));
+      if (skipBtn) skipBtn.hidden = true;
+      try { sessionStorage.setItem("jh-boot-played", "1"); } catch (e) {}
+    }
+
+    if (skipBtn) {
+      skipBtn.hidden = false;
+      skipBtn.addEventListener("click", finish);
+      // Auto-hide skip after 800ms.
+      setTimeout(() => { if (skipBtn && !cancelled) skipBtn.hidden = false; }, 800);
+    }
+
+    const charDelay = 14;   // ms per character
+    const lineDelay = 220;  // ms pause between lines
+
+    (async function play() {
+      for (let i = 0; i < lines.length; i++) {
+        const el = lines[i];
+        const target = cached[i];
+        for (let c = 0; c < target.length; c++) {
+          if (cancelled) return;
+          el.textContent += target[c];
+          await sleep(charDelay);
+        }
+        if (cancelled) return;
+        await sleep(lineDelay);
+      }
+      finish();
+    })();
+
+    function sleep(ms) {
+      return new Promise((r) => setTimeout(r, ms));
+    }
+  })();
+
   // ---------- Mobile nav ----------
   const toggle = document.querySelector(".nav-toggle");
   const menu = document.getElementById("nav-menu");
