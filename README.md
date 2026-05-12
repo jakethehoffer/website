@@ -14,7 +14,7 @@ python -m http.server 8000
 Open <http://localhost:8000/>. You can also just double-click
 `index.html` &mdash; it works `file://` too.
 
-## Refresh project last-commit data (optional)
+## Refresh project last-commit data
 
 `scripts/refresh-meta.mjs` pulls `pushed_at` from GitHub for each
 featured repo and rewrites the corresponding `<span data-meta="...">` in
@@ -27,6 +27,27 @@ node scripts/refresh-meta.mjs
 Requires the `gh` CLI authenticated with read access to the repos in the
 script's `REPOS` list. Safe to skip &mdash; defaults stay in place if you
 don't run it.
+
+### Automated weekly refresh (optional setup)
+
+A GitHub Action at `.github/workflows/refresh-meta.yml` runs the same
+script every Monday at 12:00 UTC (and on manual `gh workflow run`).
+It commits any changes back to `main` automatically.
+
+The source repos (`trader`, `arbitrage`, `[removed]`) are private, so the
+default `GITHUB_TOKEN` can't read them &mdash; the action no-ops without
+a personal-access token. To activate weekly refresh:
+
+1. Create a **fine-grained PAT** at
+   <https://github.com/settings/personal-access-tokens/new> with
+   *Repository permissions &rarr; Metadata: Read* on `jakethehoffer/trader`,
+   `jakethehoffer/arbitrage`, and `[removed-org]-Services/[removed]`.
+2. Add it to the website repo at
+   <https://github.com/jakethehoffer/website/settings/secrets/actions>
+   as `META_REFRESH_TOKEN`.
+
+Without the secret the workflow stays inert. Manual
+`node scripts/refresh-meta.mjs` continues to work normally either way.
 
 ## Refresh `resume.pdf`
 

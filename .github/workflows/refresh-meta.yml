@@ -18,7 +18,12 @@ jobs:
 
       - name: Run refresh-meta.mjs
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Prefer META_REFRESH_TOKEN (a fine-grained PAT with read
+          # access to the private source repos: trader, arbitrage,
+          # [removed]). Falls back to the default GITHUB_TOKEN, which
+          # can only read the current repo — the script will then
+          # log [skip] for everything and no-op. See README for setup.
+          GH_TOKEN: ${{ secrets.META_REFRESH_TOKEN || github.token }}
         run: node scripts/refresh-meta.mjs
 
       - name: Commit if changed
