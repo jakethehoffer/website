@@ -177,3 +177,8 @@ button {
   }
   .hero__avatar { width: 96px; height: 96px; font-size: 2rem; }
 }
+
+/* ---------- About ---------- */
+.about { max-width: 70ch; }
+.about p { margin: 0 0 1rem; color: var(--text); }
+.about p:last-child { margin-bottom: 0; }
