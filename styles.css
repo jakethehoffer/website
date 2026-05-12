@@ -369,3 +369,48 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 .sample__dim { color: var(--text-mute); }
 .sample__ok  { color: var(--accent-2); }
 .sample__hi  { color: var(--accent); }
+
+/* ---------- Case study ---------- */
+.case-study__lede {
+  font-size: 1.0625rem;
+  color: var(--text);
+  max-width: 65ch;
+  margin: 0 0 2rem;
+}
+.diagram {
+  margin: 0 0 2rem;
+  padding: 1.25rem 1rem;
+  background: var(--bg-elev);
+  border: 1px solid var(--bg-grid);
+  border-radius: var(--radius);
+  color: var(--accent);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  overflow-x: auto;
+  white-space: pre;
+}
+@media (min-width: 640px) {
+  .diagram { font-size: 0.8125rem; }
+}
+.case-study__prose h3 {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-mute);
+  margin: 2rem 0 0.5rem;
+  font-weight: 500;
+}
+.case-study__prose h3:first-child { margin-top: 0; }
+.case-study__prose p {
+  margin: 0 0 1rem;
+  max-width: 65ch;
+  color: var(--text);
+}
+.case-study__prose code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  color: var(--accent);
+  background: var(--bg-elev);
+  padding: 0.05em 0.35em;
+  border-radius: 3px;
+}

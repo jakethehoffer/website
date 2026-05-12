@@ -248,6 +248,44 @@ accuracy   <span class="sample__hi">0.965</span>   f1 0.964</pre>
           <p class="projects__more"><a href="https://github.com/jakethehoffer" target="_blank" rel="noopener">$ ls ~/github &rarr;</a></p>
         </div>
       </section>
+      <section id="case-study" class="section">
+        <div class="container">
+          <p class="section__label"># case study</p>
+          <h2>trader &mdash; a 24/7 ai swing-trading agent</h2>
+          <p class="case-study__lede">
+            Six scheduled Claude Code routines on IBKR paper + Finnhub news.
+            Paper-trading the S&amp;P 500, graduating to live only after 30 paper
+            days of documented outperformance.
+          </p>
+
+          <pre class="diagram" aria-label="trader architecture: six scheduled routines">
+   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;    &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+   &#9474;  scan_premarket  &#9474;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9658;&#9474;      gate        &#9474;
+   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;    &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+                                       &#9474;
+                                       &#9660;
+   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;    &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+   &#9474;     monitor      &#9474;&#9668;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9474;   place_orders   &#9474;
+   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;    &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+            &#9474;
+            &#9660;
+   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;    &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+   &#9474;       eod        &#9474;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9658;&#9474;     journal      &#9474;
+   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;    &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+          </pre>
+
+          <div class="case-study__prose">
+            <h3>The problem</h3>
+            <p>A monolith trading bot is one place where every bug becomes a money bug. Splitting the work across six small, idempotent routines means each one can be tested in isolation, re-run safely on failure, and reasoned about on its own. <code>scan_premarket</code> only knows how to filter candidates; <code>gate</code> only knows the risk rules; <code>place_orders</code> only knows the IBKR API. They communicate through the journal, not in-process state.</p>
+
+            <h3>The risk model</h3>
+            <p>Default is paper. The kill-switch is a single YAML key (<code>kill_switch.enabled: true</code>) read at the top of every routine &mdash; flip it and the system stops opening positions at the next scheduled tick. Risk counters (per-trade, per-day, per-week) live in committed JSON so the state survives restarts and is reviewable in a diff. The 30-day paper gate is enforced by <code>gate</code> reading a graduation file written only by the EOD routine.</p>
+
+            <h3>What&rsquo;s next</h3>
+            <p>Graduation to live trading is contingent on documented outperformance vs. SPY across 30 paper days. The broker layer is already abstracted (<code>broker.py</code> &mdash; IBKR active, Alpaca preserved) so the live cutover is a config change. Building toward a backtester that replays the journal against historical Finnhub headlines to validate model changes before they touch a real fill.</p>
+          </div>
+        </div>
+      </section>
       <section id="experience" class="section">
         <div class="container">
           <h2>Experience</h2>
