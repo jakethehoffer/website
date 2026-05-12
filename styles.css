@@ -92,16 +92,12 @@ button {
   width: 160px;
   height: 160px;
   border-radius: 50%;
-  background: var(--surface-2);
-  display: grid;
-  place-items: center;
+  overflow: hidden;
   color: var(--accent);
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 3rem;
   box-shadow: var(--shadow-sm);
+  background: var(--surface-2);
 }
-.hero__avatar-initials { letter-spacing: -0.05em; }
+.hero__avatar img { width: 100%; height: 100%; }
 .hero__eyebrow {
   font-family: var(--font-mono);
   font-size: 0.875rem;
