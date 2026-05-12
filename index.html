@@ -152,6 +152,9 @@
               <p class="project__body">Paper-traded on IBKR + Finnhub news; graduates to live only after 30 paper days of documented outperformance. Designed the risk model, journaling, and kill-switch from day one.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> s&amp;p 500 &middot; 6 scheduled agents &middot; ibkr paper</p>
               <p class="project__chips">python &middot; pytest &middot; ib_async &middot; finnhub &middot; claude code</p>
+              <pre class="project__sample" aria-label="Sample log line"><span class="sample__dim">[2026-05-12 09:31:02]</span> <span class="sample__ok">scan_premarket</span>: 14 candidates &rarr; <span class="sample__hi">3 passed</span> (volatility gate)
+<span class="sample__dim">[2026-05-12 09:31:18]</span> <span class="sample__ok">place_orders</span>: limit buy 100 NVDA @ 132.40 (paper)
+<span class="sample__dim">[2026-05-12 16:00:01]</span> <span class="sample__ok">eod</span>: pnl +1.23%, 1 fill, 0 reject</pre>
             </article>
 
             <article class="project">
@@ -165,6 +168,10 @@
               <p class="project__body">Ingest &rarr; normalize &rarr; detect cross-book arbs &rarr; push alerts to Telegram and Discord. Runs 24/7 on a Windows host with Alembic-managed schema and replay tooling for postmortems.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> 10 books &middot; 6 sports &middot; 24/7 uptime</p>
               <p class="project__chips">python &middot; playwright &middot; sqlite &middot; alembic &middot; fastapi</p>
+              <pre class="project__sample" aria-label="Sample alert"><span class="sample__hi">[ARB]</span> NHL &middot; Edmonton @ Vegas
+  pinnacle  EDM -132   &rarr;  stake 0.567
+  betmgm    VGK +145   &rarr;  stake 0.433
+  edge      <span class="sample__ok">+0.84%</span>      ttl 4m12s</pre>
             </article>
 
             <article class="project">
@@ -178,6 +185,9 @@
               <p class="project__body">Role-based accounts (Admin / PM / staff), War Room workflows, resource center. Vitest unit tests plus Playwright smoke checks before each deploy. Private repo &mdash; screenshot below.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> next.js 14 &middot; supabase &middot; vitest &middot; playwright</p>
               <p class="project__chips">typescript &middot; next.js &middot; supabase &middot; vitest &middot; playwright</p>
+              <figure class="project__media">
+                <img src="assets/projects/fuse-web.webp" alt="FUSE-Web worksheet overview" loading="lazy" decoding="async" width="1707" height="927" />
+              </figure>
             </article>
 
             <article class="project">
@@ -191,6 +201,12 @@
               <p class="project__body">Local + online multiplayer; single player vs. a Minimax-based AI with multiple difficulty levels. Self-shipped indie title.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> unity &middot; c# &middot; minimax ai &middot; local + online mp</p>
               <p class="project__chips">unity &middot; c# &middot; minimax ai &middot; multiplayer</p>
+              <pre class="project__sample" aria-label="Sample board state">+---+---+---+
+| X | . | O |
++---+---+---+   active board: top-right
+| . | X | . |   minimax depth 6
++---+---+---+   eval +0.21
+| O | . | X |</pre>
             </article>
 
             <article class="project">
@@ -204,6 +220,10 @@
               <p class="project__body">Users enter a destination; the app delivers on-screen prompts plus directional haptic feedback in the shoe itself.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> dart &middot; flutter &middot; bluetooth &middot; embedded haptics</p>
               <p class="project__chips">dart &middot; flutter &middot; bluetooth &middot; embedded</p>
+              <pre class="project__sample" aria-label="Sample API call"><span class="sample__dim">// turn right in 30m</span>
+shoe.pulse(side: <span class="sample__hi">Side.right</span>,
+           strength: 0.7,
+           pattern: <span class="sample__hi">Pattern.doubleTap</span>);</pre>
             </article>
 
             <article class="project">
@@ -217,6 +237,11 @@
               <p class="project__body">End-to-end &mdash; data collection, feature engineering, model training, evaluation. Course capstone shipped with reproducible scripts.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> python &middot; accelerometer &middot; signal processing</p>
               <p class="project__chips">python &middot; numpy &middot; scikit-learn &middot; signal processing</p>
+              <pre class="project__sample" aria-label="Sample confusion matrix">              pred=walk  pred=jump
+true=walk        <span class="sample__ok">182</span>         7
+true=jump          5        <span class="sample__ok">156</span>
+
+accuracy   <span class="sample__hi">0.965</span>   f1 0.964</pre>
             </article>
 
           </div>
