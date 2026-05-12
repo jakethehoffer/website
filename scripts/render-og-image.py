@@ -97,8 +97,8 @@ def render_og() -> None:
     y += 50
     body_lines = [
         "> i build production-grade software — trading",
-        "> agents, arbitrage daemons, web platforms,",
-        "> and ml pipelines.",
+        "> agents, arbitrage daemons, and ML",
+        "> pipelines.",
     ]
     for line in body_lines:
         d.text((PAD, y), line, font=body_font, fill=FG)
@@ -106,7 +106,7 @@ def render_og() -> None:
 
     # Metrics
     y += 28
-    metrics = "//  4 production systems  ·  10 bookmakers  ·  dean's scholar"
+    metrics = "//  3 production systems  ·  10 bookmakers  ·  dean's scholar"
     d.text((PAD, y), metrics, font=metrics_font, fill=DIM)
 
     # Footer URL (bottom-right)
