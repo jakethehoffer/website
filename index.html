@@ -351,11 +351,14 @@ accuracy   <span class="sample__hi">0.965</span>   f1 0.964</pre>
       </section>
       <section id="education" class="section">
         <div class="container">
+          <p class="section__label"># education</p>
           <h2>Education</h2>
           <article class="education">
-            <h3 class="education__school">Queen&rsquo;s University</h3>
-            <p class="education__program">BASc, Computer Engineering &middot; Expected 2027</p>
-            <p class="education__gpa">Cumulative GPA 3.85 &middot; Dean&rsquo;s Scholar</p>
+            <header class="education__head">
+              <h3 class="education__school">Queen&rsquo;s University</h3>
+              <span class="education__dates">2023 &ndash; expected 2027</span>
+            </header>
+            <p class="education__program">BASc, Computer Engineering &middot; <span class="education__gpa">GPA 3.85 &middot; Dean&rsquo;s Scholar</span></p>
             <ul class="education__highlights">
               <li>Built a Python ML classifier on accelerometer data for walking vs. jumping.</li>
               <li>Developed a pathfinding algorithm in Python for autonomous rover operation.</li>
@@ -365,13 +368,14 @@ accuracy   <span class="sample__hi">0.965</span>   f1 0.964</pre>
         </div>
       </section>
       <section id="contact" class="section">
-        <div class="container contact">
-          <h2>Contact</h2>
-          <p>Best way to reach me is email. I&rsquo;m open to internships, co-ops, and interesting side-project collaborations.</p>
+        <div class="container">
+          <p class="section__label"># contact</p>
+          <h2>Get in touch</h2>
+          <p class="contact__lede">Email is best. Open to internships, co-ops, and interesting side-project collaborations.</p>
           <div class="contact__links">
-            <a class="btn btn--primary" href="mailto:14jakehoffman@gmail.com">14jakehoffman@gmail.com</a>
-            <a class="btn" href="https://github.com/jakethehoffer" target="_blank" rel="noopener">github.com/jakethehoffer</a>
-            <a class="btn" href="https://www.linkedin.com/in/jake-hoffman-7117692a5/" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="btn btn--primary" href="mailto:14jakehoffman@gmail.com">[ 14jakehoffman@gmail.com ]</a>
+            <a class="btn" href="https://github.com/jakethehoffer" target="_blank" rel="noopener">[ github.com/jakethehoffer ]</a>
+            <a class="btn" href="https://www.linkedin.com/in/jake-hoffman-7117692a5/" target="_blank" rel="noopener">[ linkedin ]</a>
           </div>
         </div>
       </section>
@@ -379,8 +383,12 @@ accuracy   <span class="sample__hi">0.965</span>   f1 0.964</pre>
 
     <footer class="site-footer">
       <div class="container site-footer__inner">
-        <p>&copy; <span id="footer-year">2026</span> Jake Hoffman</p>
-        <p class="site-footer__note">Built with HTML, CSS, and a little JS &mdash; <a href="https://github.com/jakethehoffer/website" target="_blank" rel="noopener">view source</a> &#9786;</p>
+        <p class="site-footer__prompt">$ <span class="boot__caret" aria-hidden="true">_</span></p>
+        <p class="site-footer__meta">
+          <span data-meta="last_deployed">last_deployed: 2026-05-12</span>
+          <span class="site-footer__sep">&middot;</span>
+          <span>&copy; <span id="footer-year">2026</span> jake hoffman</span>
+        </p>
       </div>
     </footer>
 
