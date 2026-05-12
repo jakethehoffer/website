@@ -152,6 +152,16 @@ h1, h2, h3 { letter-spacing: -0.01em; }
   line-height: 1.8;
   white-space: pre-wrap;
   color: var(--text);
+  /* CLS guard: reserve enough vertical space for the longest mobile
+     wrap of the boot content so the system-mono -> JetBrains-Mono
+     font swap doesn't shift content below. ~22em covers a 320px
+     iPhone SE wrapping the bio paragraph to 4 lines; 14em on >=640px
+     where the bio fits in fewer lines. CSS-level lock applies before
+     first paint (no JS dependency). */
+  min-height: 22em;
+}
+@media (min-width: 640px) {
+  .hero__boot { min-height: 14em; }
 }
 .boot__prompt {
   color: var(--accent);

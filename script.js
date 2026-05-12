@@ -13,14 +13,10 @@
     // No-op path: leave the static end-state alone.
     if (reduceMotion || alreadyPlayed) return;
 
-    // CLS guard: lock the boot block's height to its pre-animation
-    // rendered height before we clear the lines. Without this, the
-    // <pre> collapses to ~3 lines and the page reflows ~15 times as
-    // characters are typed back in.
-    const preEl = document.querySelector(".hero__boot");
-    if (preEl) {
-      preEl.style.minHeight = preEl.getBoundingClientRect().height + "px";
-    }
+    // (CLS guard for the hero box height is now in CSS via
+    // `.hero__boot { min-height }` so the lock applies before first
+    // paint — earlier JS-based lock fired too late to prevent the
+    // font-swap shift.)
 
     const skipBtn = document.querySelector(".hero__skip");
     const cached = lines.map((el) => el.textContent);
