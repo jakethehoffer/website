@@ -1,5 +1,52 @@
 <!doctype html>
 <html lang="en">
-  <head><meta charset="utf-8"><title>Jake Hoffman</title></head>
-  <body></body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jake Hoffman — Computer Engineering @ Queen's University</title>
+    <meta name="description" content="Jake Hoffman — 3rd-year Computer Engineering student at Queen's University. Builds production-grade software in Python, JavaScript, C/C++, Java, and Dart." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Primary">
+        <a class="nav-brand" href="#top">Jake Hoffman</a>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open navigation">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li>
+            <button class="theme-toggle" type="button" aria-label="Switch theme">
+              <span class="theme-toggle__label">Theme</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section id="top" class="hero"></section>
+      <section id="about" class="section"></section>
+      <section id="skills" class="section"></section>
+      <section id="projects" class="section"></section>
+      <section id="experience" class="section"></section>
+      <section id="education" class="section"></section>
+      <section id="contact" class="section"></section>
+    </main>
+
+    <footer class="site-footer"></footer>
+
+    <script src="script.js" defer></script>
+  </body>
 </html>
