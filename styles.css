@@ -210,3 +210,45 @@ button {
   border-radius: 999px;
   border: 1px solid var(--border);
 }
+
+/* ---------- Projects ---------- */
+.projects {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 640px) { .projects { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .projects { grid-template-columns: repeat(3, 1fr); } }
+
+.project {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.project:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.project__name {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+}
+.project__what {
+  margin: 0 0 0.5rem;
+  font-weight: 500;
+}
+.project__why {
+  margin: 0 0 0.875rem;
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+.projects__more {
+  margin: 1.5rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}

@@ -97,7 +97,69 @@
           </div>
         </div>
       </section>
-      <section id="projects" class="section"></section>
+      <section id="projects" class="section">
+        <div class="container">
+          <h2>Featured Projects</h2>
+          <div class="projects">
+            <article class="project">
+              <h3 class="project__name">trader</h3>
+              <p class="project__what">24/7 AI swing-trading agent for S&amp;P 500 equities, driven by six scheduled Claude Code routines.</p>
+              <p class="project__why">Paper-traded on IBKR + Finnhub news; graduates to live only after 30 paper days of documented outperformance. Designed risk, journaling, and kill-switch from day one.</p>
+              <ul class="chips">
+                <li>Python</li><li>IBKR</li><li>Finnhub</li><li>pytest</li><li>Claude Code</li>
+              </ul>
+            </article>
+
+            <article class="project">
+              <h3 class="project__name">Odds Aggregator</h3>
+              <p class="project__what">Production arbitrage daemon covering 10 bookmakers across 6 sports.</p>
+              <p class="project__why">Ingest &rarr; normalize &rarr; detect cross-book arbs &rarr; push alerts to Telegram and Discord. Runs 24/7 on a Windows host with Alembic-managed schema and replay tooling.</p>
+              <ul class="chips">
+                <li>Python</li><li>Playwright</li><li>SQLite</li><li>Alembic</li><li>FastAPI</li>
+              </ul>
+            </article>
+
+            <article class="project">
+              <h3 class="project__name">FUSE-Web</h3>
+              <p class="project__what">Next.js + Supabase platform for insurance catastrophe management.</p>
+              <p class="project__why">Role-based accounts (Admin / PM / staff), War Room workflows, resource center. Vitest unit tests plus Playwright smoke checks before each deploy.</p>
+              <ul class="chips">
+                <li>Next.js</li><li>TypeScript</li><li>Supabase</li><li>Vitest</li><li>Playwright</li>
+              </ul>
+            </article>
+
+            <article class="project">
+              <h3 class="project__name">Mega Tic-Tac-Toe</h3>
+              <p class="project__what">Unity game on a 3&times;3 grid of linked Tic-Tac-Toe boards &mdash; each move determines the opponent&rsquo;s next board.</p>
+              <p class="project__why">Local + online multiplayer; single player vs. a Minimax-based AI with multiple difficulty levels. Self-shipped indie title.</p>
+              <ul class="chips">
+                <li>Unity</li><li>C#</li><li>Minimax AI</li><li>Multiplayer</li>
+              </ul>
+            </article>
+
+            <article class="project">
+              <h3 class="project__name">Smart Shoe Navigation</h3>
+              <p class="project__what">Dart mobile app pairing via Bluetooth to a &ldquo;Smart Shoe&rdquo; for turn-by-turn directions.</p>
+              <p class="project__why">Users enter a destination; the app delivers on-screen prompts plus directional haptic feedback in the shoe itself.</p>
+              <ul class="chips">
+                <li>Dart</li><li>Flutter</li><li>Bluetooth</li><li>Embedded</li>
+              </ul>
+            </article>
+
+            <article class="project">
+              <h3 class="project__name">Walking / Jumping Classifier</h3>
+              <p class="project__what">Python ML pipeline classifying accelerometer time-series as walking vs. jumping.</p>
+              <p class="project__why">End-to-end &mdash; data collection, feature engineering, model training, evaluation. Course capstone shipped with reproducible scripts.</p>
+              <ul class="chips">
+                <li>Python</li><li>NumPy</li><li>scikit-learn</li><li>Signal processing</li>
+              </ul>
+            </article>
+          </div>
+          <p class="projects__more">
+            <a href="https://github.com/jakethehoffer" target="_blank" rel="noopener">More on GitHub &rarr;</a>
+          </p>
+        </div>
+      </section>
       <section id="experience" class="section"></section>
       <section id="education" class="section"></section>
       <section id="contact" class="section"></section>
