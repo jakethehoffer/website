@@ -7,11 +7,15 @@
     if (lines.length === 0) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const smallViewport = window.matchMedia("(max-width: 640px)").matches;
     let alreadyPlayed = false;
     try { alreadyPlayed = sessionStorage.getItem("jh-boot-played") === "1"; } catch (e) {}
 
     // No-op path: leave the static end-state alone.
-    if (reduceMotion || alreadyPlayed) return;
+    // Small viewports skip the animation entirely — the per-char
+    // textContent updates count as layout shifts and drag mobile CLS
+    // below the "good" threshold even with the outer min-height lock.
+    if (reduceMotion || alreadyPlayed || smallViewport) return;
 
     // (CLS guard for the hero box height is now in CSS via
     // `.hero__boot { min-height }` so the lock applies before first
