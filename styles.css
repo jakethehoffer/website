@@ -522,3 +522,91 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 .site-footer p { margin: 0; }
 .site-footer__prompt { color: var(--accent); }
 .site-footer__sep { margin: 0 0.25rem; }
+
+/* ---------- Header / nav ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(180%) blur(8px);
+  -webkit-backdrop-filter: saturate(180%) blur(8px);
+  border-bottom: 1px solid var(--bg-grid);
+  z-index: 20;
+}
+.site-nav {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0.75rem var(--gutter);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.nav-brand {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 0.9375rem;
+}
+.nav-brand:hover { text-decoration: none; color: var(--accent); }
+.nav-brand__prompt { color: var(--accent); margin-right: 0.25em; }
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  list-style: none;
+  margin: 0 0 0 auto;
+  padding: 0;
+}
+.nav-menu a {
+  color: var(--text-dim);
+  font-size: 0.875rem;
+}
+.nav-menu a:hover { color: var(--accent); text-decoration: none; }
+
+.nav-toggle {
+  display: none;
+  margin-left: auto;
+  width: 40px;
+  height: 40px;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius-sm);
+}
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+}
+.theme-toggle {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--bg-grid);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  text-transform: lowercase;
+}
+.theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+
+@media (max-width: 768px) {
+  .nav-toggle { display: flex; }
+  .nav-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--bg-grid);
+    padding: 0.5rem var(--gutter);
+    display: none;
+  }
+  .nav-menu.is-open { display: flex; }
+  .nav-menu li { padding: 0.5rem 0; }
+  .nav-menu a { display: block; padding: 0.25rem 0; }
+}
