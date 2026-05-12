@@ -182,3 +182,31 @@ button {
 .about { max-width: 70ch; }
 .about p { margin: 0 0 1rem; color: var(--text); }
 .about p:last-child { margin-bottom: 0; }
+
+/* ---------- Skills ---------- */
+.skills { display: grid; gap: 1.5rem; }
+.skill-group__label {
+  font-size: 0.8125rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 0 0 0.5rem;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.chips li {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.625rem;
+  background: var(--surface-2);
+  color: var(--text);
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
