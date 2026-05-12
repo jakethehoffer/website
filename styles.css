@@ -252,3 +252,39 @@ button {
   font-family: var(--font-mono);
   font-size: 0.875rem;
 }
+
+/* ---------- Experience / timeline ---------- */
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.5rem;
+}
+.timeline__item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+}
+.timeline__head { margin-bottom: 0.75rem; }
+.timeline__role {
+  margin: 0;
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
+}
+.timeline__org {
+  margin: 0.125rem 0 0;
+  color: var(--text);
+}
+.timeline__dates {
+  margin: 0.125rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+.timeline__bullets {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+.timeline__bullets li { margin: 0.25rem 0; color: var(--text); }
