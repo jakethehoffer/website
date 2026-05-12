@@ -338,3 +338,34 @@ h1, h2, h3 { letter-spacing: -0.01em; }
   font-size: 0.9375rem;
 }
 .projects__more a { color: var(--accent); }
+
+/* ---------- Project media + samples ---------- */
+.project__media {
+  margin: 1rem 0 0;
+  border: 1px solid var(--bg-grid);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg);
+}
+.project__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.project__sample {
+  margin: 1rem 0 0;
+  padding: 0.75rem 0.875rem;
+  background: var(--bg);
+  border: 1px solid var(--bg-grid);
+  border-left: 2px solid var(--accent);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  line-height: 1.55;
+  color: var(--text-dim);
+  white-space: pre;
+  overflow-x: auto;
+}
+.sample__dim { color: var(--text-mute); }
+.sample__ok  { color: var(--accent-2); }
+.sample__hi  { color: var(--accent); }
