@@ -4,6 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Jake Hoffman — Computer Engineering @ Queen's University</title>
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("jh-theme");
+          var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var theme = stored || (prefersDark ? "dark" : "light");
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {}
+      })();
+    </script>
     <meta name="description" content="Jake Hoffman — 3rd-year Computer Engineering student at Queen's University. Builds production-grade software in Python, JavaScript, C/C++, Java, and Dart." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
