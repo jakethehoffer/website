@@ -3,6 +3,8 @@
 Single-page resume for Jake Hoffman &mdash; the "engineering log" v2.
 Plain HTML, CSS, and a touch of vanilla JS. No framework, no build step.
 
+**Live at <https://jakethehoffer.github.io/website/>**
+
 ## Serve locally
 
 ```bash
