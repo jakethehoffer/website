@@ -76,23 +76,32 @@
     <main id="main">
       <section id="top" class="hero">
         <div class="container hero__inner">
-          <div class="hero__avatar" aria-hidden="true">
-            <img src="assets/avatar.svg" alt="" width="160" height="160" />
+          <pre class="hero__boot" aria-label="Profile boot sequence">
+<span class="boot__prompt">$ whoami</span>
+<span class="boot__line"><span class="boot__caret-mark">&gt;</span> <span data-boot-line>jake hoffman &middot; computer engineering @ queen&rsquo;s &middot; class of 2027</span></span>
+
+<span class="boot__prompt">$ summary</span>
+<span class="boot__line"><span class="boot__caret-mark">&gt;</span> <span data-boot-line>i build production-grade software &mdash; trading agents, arbitrage daemons, web platforms, and ml pipelines. paper-trading the s&amp;p 500 on real infrastructure; running a 24/7 odds daemon across ten bookmakers.</span></span>
+
+<span class="boot__prompt">$ <span data-boot-line>contact</span><span class="boot__caret" aria-hidden="true">_</span></span>
+          </pre>
+
+          <div class="hero__ctas" role="group" aria-label="Contact links">
+            <a class="btn btn--primary" href="mailto:14jakehoffman@gmail.com">[ email ]</a>
+            <a class="btn" href="https://github.com/jakethehoffer" target="_blank" rel="noopener">[ github ]</a>
+            <a class="btn" href="https://www.linkedin.com/in/jake-hoffman-7117692a5/" target="_blank" rel="noopener">[ linkedin ]</a>
+            <a class="btn btn--ghost" href="resume.pdf" download>[ resume.pdf &darr; ]</a>
           </div>
-          <div class="hero__copy">
-            <p class="hero__eyebrow">Computer Engineering @ Queen&rsquo;s University</p>
-            <h1 class="hero__name">Jake Hoffman</h1>
-            <p class="hero__tagline">I build production-grade software &mdash; trading agents, arbitrage daemons, web platforms, and ML pipelines.</p>
-            <ul class="hero__chips" aria-label="Core technologies">
-              <li>Python</li><li>JavaScript</li><li>C / C++</li><li>SQL</li><li>Next.js</li>
-            </ul>
-            <div class="hero__ctas">
-              <a class="btn btn--primary" href="mailto:14jakehoffman@gmail.com">Email</a>
-              <a class="btn" href="https://github.com/jakethehoffer" target="_blank" rel="noopener">GitHub</a>
-              <a class="btn" href="https://www.linkedin.com/in/jake-hoffman-7117692a5/" target="_blank" rel="noopener">LinkedIn</a>
-              <a class="btn btn--ghost" href="resume.pdf" download>Download Resume (PDF)</a>
-            </div>
-          </div>
+
+          <p class="hero__metrics">
+            <span class="metrics__prefix">//</span>
+            <span>4 production systems</span>
+            <span>10 bookmakers ingested</span>
+            <span>6 scheduled agents</span>
+            <span>dean&rsquo;s scholar</span>
+          </p>
+
+          <button class="hero__skip" type="button" hidden>skip &#9656;</button>
         </div>
       </section>
       <section id="about" class="section">

@@ -122,3 +122,97 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
 }
+
+/* ---------- Hero ---------- */
+.hero {
+  padding: 5rem 0 3rem;
+  position: relative;
+}
+@media (min-width: 768px) { .hero { padding: 7rem 0 4rem; } }
+.hero__inner { max-width: 720px; }
+
+.hero__boot {
+  margin: 0 0 2rem;
+  font-family: var(--font-mono);
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  line-height: 1.8;
+  white-space: pre-wrap;
+  color: var(--text);
+}
+.boot__prompt {
+  color: var(--accent);
+  font-weight: 600;
+}
+.boot__line {
+  display: inline;
+}
+.boot__caret-mark {
+  color: var(--text-mute);
+}
+.boot__caret {
+  display: inline-block;
+  width: 0.55em;
+  background: var(--cursor);
+  color: transparent;
+  margin-left: 2px;
+  animation: blink 1.06s steps(1) infinite;
+}
+@keyframes blink { 50% { background: transparent; } }
+@media (prefers-reduced-motion: reduce) {
+  .boot__caret { animation: none; background: var(--cursor); }
+}
+
+.hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  margin: 0 0 2rem;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--bg-grid);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: var(--font-mono);
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.btn:hover {
+  text-decoration: none;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn--primary {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn--primary:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+.btn--ghost { color: var(--text-dim); }
+
+.hero__metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  font-size: 0.8125rem;
+  color: var(--text-dim);
+  margin: 0;
+}
+.metrics__prefix { color: var(--text-mute); }
+
+.hero__skip {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  font-size: 0.75rem;
+  color: var(--text-mute);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+.hero__skip:hover { color: var(--accent); }
