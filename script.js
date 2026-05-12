@@ -23,4 +23,26 @@
   // ---------- Footer year ----------
   const yearEl = document.getElementById("footer-year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+  // ---------- Theme toggle ----------
+  const themeBtn = document.querySelector(".theme-toggle");
+  const labelEl = themeBtn ? themeBtn.querySelector(".theme-toggle__label") : null;
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    if (labelEl) labelEl.textContent = theme === "dark" ? "Light" : "Dark";
+    if (themeBtn) themeBtn.setAttribute("aria-label", theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
+  }
+
+  // Reflect whatever the early-paint script applied.
+  applyTheme(document.documentElement.getAttribute("data-theme") || "light");
+
+  if (themeBtn) {
+    themeBtn.addEventListener("click", () => {
+      const current = document.documentElement.getAttribute("data-theme");
+      const next = current === "dark" ? "light" : "dark";
+      try { localStorage.setItem("jh-theme", next); } catch (e) {}
+      applyTheme(next);
+    });
+  }
 })();
