@@ -369,6 +369,7 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 .sample__dim { color: var(--text-mute); }
 .sample__ok  { color: var(--accent-2); }
 .sample__hi  { color: var(--accent); }
+.project__cta { margin: 0.875rem 0 0; }
 
 /* ---------- Case study ---------- */
 .case-study__lede {
