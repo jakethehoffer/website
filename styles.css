@@ -36,19 +36,24 @@
   --line-h:    1.7;
 }
 
-/* ---------- Parchment light theme ---------- */
+/* ---------- Parchment light theme ----------
+   Darker --accent and --text-mute for WCAG AA contrast against --bg.
+   Computed ratios on #f5efe4 background:
+     --accent #915308    -> 5.28:1  (AA pass + margin)
+     --text-mute #525a66 -> 6.08:1  (AA pass + AAA body)
+*/
 :root[data-theme="light"] {
   --bg:        #f5efe4;
   --bg-elev:   #ece4d3;
   --bg-grid:   #d9ceb7;
   --text:      #1a1f26;
   --text-dim:  #4a5560;
-  --text-mute: #6a7480;
-  --accent:    #a86a14;
+  --text-mute: #525a66;
+  --accent:    #915308;
   --accent-2:  #3f7a3f;
   --accent-3:  #a23a3a;
-  --cursor:    #a86a14;
-  --shadow:    0 1px 0 rgba(168, 106, 20, 0.08), 0 4px 12px rgba(26, 31, 38, 0.08);
+  --cursor:    #915308;
+  --shadow:    0 1px 0 rgba(145, 83, 8, 0.08), 0 4px 12px rgba(26, 31, 38, 0.08);
 }
 
 /* ---------- Reset ---------- */
