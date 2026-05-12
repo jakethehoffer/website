@@ -16,22 +16,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: DIAG — token source
-        env:
-          GH_TOKEN: ${{ secrets.META_REFRESH_TOKEN || github.token }}
-        run: |
-          echo "secret META_REFRESH_TOKEN set? $([ -n "${{ secrets.META_REFRESH_TOKEN }}" ] && echo yes || echo no)"
-          echo "GH_TOKEN length: ${#GH_TOKEN}"
-          echo "GH_TOKEN prefix (first 8): ${GH_TOKEN:0:8}"
-          echo "--- gh auth status ---"
-          gh auth status 2>&1 || true
-          echo "--- gh api /user ---"
-          gh api /user --jq '{login,id,type}' 2>&1 || true
-          echo "--- gh api repos/jakethehoffer/trader (full stderr) ---"
-          gh api repos/jakethehoffer/trader 2>&1 | head -20 || true
-
       - name: Run refresh-meta.mjs
         env:
+          # Prefer META_REFRESH_TOKEN (a fine-grained PAT with read
+          # access to the private source repos: trader, arbitrage).
+          # Falls back to the default GITHUB_TOKEN, which can only read
+          # the current repo — the script will then log [skip] for
+          # everything and no-op. See README for setup.
           GH_TOKEN: ${{ secrets.META_REFRESH_TOKEN || github.token }}
         run: node scripts/refresh-meta.mjs
 
