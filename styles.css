@@ -240,3 +240,101 @@ h1, h2, h3 { letter-spacing: -0.01em; }
   margin: 0;
   color: var(--text);
 }
+
+/* ---------- Projects ---------- */
+.projects {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .projects { grid-template-columns: repeat(2, 1fr); }
+}
+
+.project {
+  background: var(--bg-elev);
+  border: 1px solid var(--bg-grid);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  position: relative;
+  transition: border-color 0.18s ease;
+}
+.project::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: transparent;
+  border-top-left-radius: var(--radius);
+  border-bottom-left-radius: var(--radius);
+  transition: background 0.18s ease;
+}
+.project:hover { border-color: var(--text-mute); }
+.project:hover::before { background: var(--accent); }
+
+.project__head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-mute);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+.project__last-commit { margin-left: auto; }
+
+.status {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+.status--active {
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(245, 179, 66, 0.5);
+}
+.status--shipped {
+  background: var(--accent-2);
+  box-shadow: 0 0 6px rgba(127, 191, 127, 0.4);
+}
+.project__status-label {
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.project__name {
+  font-size: 1.0625rem;
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.project__name a { color: var(--text); }
+.project__name a:hover { color: var(--accent); text-decoration: none; }
+
+.project__what {
+  margin: 0 0 0.5rem;
+  font-weight: 500;
+}
+.project__body {
+  margin: 0 0 0.875rem;
+  color: var(--text-dim);
+  font-size: 0.9375rem;
+}
+.project__metrics {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--text-dim);
+}
+.project__chips {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--text-mute);
+}
+
+.projects__more {
+  margin: 2rem 0 0;
+  font-size: 0.9375rem;
+}
+.projects__more a { color: var(--accent); }
