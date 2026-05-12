@@ -34,14 +34,14 @@ A GitHub Action at `.github/workflows/refresh-meta.yml` runs the same
 script every Monday at 12:00 UTC (and on manual `gh workflow run`).
 It commits any changes back to `main` automatically.
 
-The source repos (`trader`, `arbitrage`, `FUSE-Web`) are private, so the
-default `GITHUB_TOKEN` can't read them &mdash; the action no-ops without
-a personal-access token. To activate weekly refresh:
+The source repos (`trader`, `arbitrage`) are private, so the default
+`GITHUB_TOKEN` can't read them &mdash; the action no-ops without a
+personal-access token. To activate weekly refresh:
 
 1. Create a **fine-grained PAT** at
    <https://github.com/settings/personal-access-tokens/new> with
-   *Repository permissions &rarr; Metadata: Read* on `jakethehoffer/trader`,
-   `jakethehoffer/arbitrage`, and `Shield-Restoration-Services/FUSE-Web`.
+   *Repository permissions &rarr; Metadata: Read* on
+   `jakethehoffer/trader` and `jakethehoffer/arbitrage`.
 2. Add it to the website repo at
    <https://github.com/jakethehoffer/website/settings/secrets/actions>
    as `META_REFRESH_TOKEN`.
@@ -67,6 +67,5 @@ then in **Settings &rarr; Pages**, source = `main` branch / root.
 - `styles.css` &mdash; all-mono design system, dark default + parchment light.
 - `script.js` &mdash; boot animation, mobile nav, theme toggle, IntersectionObserver reveal.
 - `scripts/refresh-meta.mjs` &mdash; optional last-commit injector (Node, uses `gh`).
-- `assets/projects/fuse-web.webp` &mdash; FUSE-Web product screenshot.
 - `resume.pdf` &mdash; downloadable PDF.
 - `docs/superpowers/` &mdash; design spec and implementation plan.
