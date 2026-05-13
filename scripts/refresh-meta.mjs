@@ -45,13 +45,17 @@ function humanize(iso) {
 }
 
 function replaceMeta(html, key, value) {
-  if (value == null) return html;
-  // Match any text between the opening and closing tag.
+  if (value == null) return { html, matched: true };
   const pattern = new RegExp(
     `(<span[^>]*data-meta="${key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"[^>]*>)([^<]*)(</span>)`,
     "g"
   );
-  return html.replace(pattern, (_, open, _old, close) => `${open}${value}${close}`);
+  let matched = false;
+  const newHtml = html.replace(pattern, (_, open, _old, close) => {
+    matched = true;
+    return `${open}${value}${close}`;
+  });
+  return { html: newHtml, matched };
 }
 
 function main() {
@@ -62,22 +66,30 @@ function main() {
     const value = humanize(ghPushedAt(repo.owner, repo.name));
     if (!value) continue;
     const before = html;
-    html = replaceMeta(html, repo.key, value);
-    if (html !== before) {
+    const result = replaceMeta(html, repo.key, value);
+    html = result.html;
+    if (!result.matched) {
+      console.warn(`[miss] ${repo.key} (no sentinel found in index.html)`);
+    } else if (html !== before) {
       touched++;
       console.log(`[ok]   ${repo.key} = "${value}"`);
     } else {
-      console.warn(`[miss] ${repo.key} (no sentinel found in index.html)`);
+      console.log(`[same] ${repo.key} = "${value}" (unchanged)`);
     }
   }
 
   // Footer last_deployed
   const today = new Date().toISOString().slice(0, 10);
   const before = html;
-  html = replaceMeta(html, "last_deployed", `last_deployed: ${today}`);
-  if (html !== before) {
+  const result = replaceMeta(html, "last_deployed", `last_deployed: ${today}`);
+  html = result.html;
+  if (!result.matched) {
+    console.warn(`[miss] last_deployed (no sentinel found in index.html)`);
+  } else if (html !== before) {
     touched++;
     console.log(`[ok]   last_deployed = ${today}`);
+  } else {
+    console.log(`[same] last_deployed = ${today} (unchanged)`);
   }
 
   if (touched > 0) {
