@@ -1,5 +1,6 @@
 """Refresh resume-source.docx with the website URL, updated skills line,
-and a new PERSONAL PROJECTS section (trader + Odds Aggregator).
+hyperlinks in the contact header, a trimmed Lynx Equity entry, and a
+PERSONAL PROJECTS section (trader + Odds Aggregator).
 
 Idempotent: re-running produces the same docx output. Committed for
 reproducibility.
@@ -17,6 +18,7 @@ import copy
 from pathlib import Path
 
 from docx import Document
+from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.text.paragraph import Paragraph
@@ -26,13 +28,22 @@ DOCX = ROOT / "resume-source.docx"
 
 # ------------- desired content -------------
 
-NEW_CONTACT_LINE = (
-    "3 [removed-street] Blvd, Toronto ON M3H 3B7"
-    "\t14jakehoffman@gmail.com"
-    "\tTel: 647-823-4504"
-    "\tLinkedIn"
-    "\tjakethehoffer.github.io/website"
-)
+# Structured contact line: list of (kind, value-or-(text,url)) tuples.
+# 'text' produces a plain run; 'tab' produces a <w:tab/>; 'link' wraps
+# a styled run in a <w:hyperlink>.
+CONTACT_LINE = [
+    ("text", "3 [removed-street] Blvd, Toronto ON M3H 3B7"),
+    ("tab",  None),
+    ("link", ("14jakehoffman@gmail.com", "mailto:14jakehoffman@gmail.com")),
+    ("tab",  None),
+    ("text", "Tel: 647-823-4504"),
+    ("tab",  None),
+    ("link", ("LinkedIn",
+              "https://www.linkedin.com/in/jake-hoffman-7117692a5/")),
+    ("tab",  None),
+    ("link", ("jakethehoffer.github.io/website",
+              "https://jakethehoffer.github.io/website/")),
+]
 
 NEW_SKILLS_LINE = (
     "Proficient in Python, Java, C, C#, C++, SQL, Git, Word, Excel, "
@@ -40,12 +51,13 @@ NEW_SKILLS_LINE = (
     "Google Apps Script."
 )
 
-# Structured as (paragraph_type, text). Templates are cloned from
-# existing EXPERIENCE paragraphs:
-#   - heading -> "EXPERIENCE" paragraph
-#   - role    -> "IT Intern" paragraph (bold + dates)
-#   - org     -> "Lynx Equity Limited" paragraph
-#   - bullet  -> any Lynx Equity bullet (numbered list)
+# Bullets to drop from Lynx Equity. Matched by exact text prefix.
+LYNX_BULLETS_TO_DROP = [
+    "Designed Monday.com form that prefills",
+    "Conducted DNS lookups",
+]
+
+# Cloned-template-based PERSONAL PROJECTS section.
 NEW_SECTION = [
     ("heading", "PERSONAL PROJECTS"),
     ("role",    "trader (Python · IBKR · Finnhub · pytest)"),
@@ -80,41 +92,24 @@ def find_para(paragraphs, predicate):
 
 
 def set_paragraph_text(p: Paragraph, new_text: str) -> None:
-    """Replace text in `p` while keeping the formatting of its first run.
-
-    Handles paragraphs containing hyperlinks: we remove ALL <w:r> and
-    <w:hyperlink> children, then re-attach the original first run with
-    a single <w:t> holding the new text. The hyperlink targets are
-    discarded — the new text is rendered as plain text.
-    """
+    """Plain-text replacement preserving the first run's formatting.
+    Drops any <w:r> and <w:hyperlink> children."""
     pe = p._element
-
-    # Locate the first run to preserve its formatting (rPr).
     first_run = pe.find(qn("w:r"))
-
-    # Remove all <w:r> and <w:hyperlink> children.
     for child in list(pe):
         tag = child.tag.split("}", 1)[-1]
         if tag in ("r", "hyperlink"):
             pe.remove(child)
-
     if first_run is None:
-        # Build a fresh run from scratch.
         first_run = OxmlElement("w:r")
-
-    # Clear text from the preserved run and add one fresh <w:t>.
     for t in list(first_run.findall(qn("w:t"))):
         first_run.remove(t)
-    # Drop any embedded <w:tab/> children that were structural to
-    # the original; tabs in `new_text` are handled by xml:space=preserve.
     for tab in list(first_run.findall(qn("w:tab"))):
         first_run.remove(tab)
-
     new_t = OxmlElement("w:t")
     new_t.set(qn("xml:space"), "preserve")
     new_t.text = new_text
     first_run.append(new_t)
-
     pe.append(first_run)
 
 
@@ -122,21 +117,135 @@ def clone_paragraph_element(template_p: Paragraph):
     return copy.deepcopy(template_p._element)
 
 
+def _copy_text_rpr(template_run_element):
+    """Return a deep copy of a run's rPr (run properties), or None."""
+    if template_run_element is None:
+        return None
+    rPr = template_run_element.find(qn("w:rPr"))
+    if rPr is None:
+        return None
+    return copy.deepcopy(rPr)
+
+
+def _make_text_run(text, template_rPr):
+    r = OxmlElement("w:r")
+    if template_rPr is not None:
+        r.append(copy.deepcopy(template_rPr))
+    t = OxmlElement("w:t")
+    t.set(qn("xml:space"), "preserve")
+    t.text = text
+    r.append(t)
+    return r
+
+
+def _make_tab_run(template_rPr):
+    r = OxmlElement("w:r")
+    if template_rPr is not None:
+        r.append(copy.deepcopy(template_rPr))
+    r.append(OxmlElement("w:tab"))
+    return r
+
+
+def _make_hyperlink(text, url, template_rPr, header_part):
+    """Build a <w:hyperlink> with one styled run inside, and register
+    the URL in header_part's relationships."""
+    rid = header_part.relate_to(url, RT.HYPERLINK, is_external=True)
+    hl = OxmlElement("w:hyperlink")
+    hl.set(qn("r:id"), rid)
+    hl.set(qn("w:history"), "1")
+
+    r = OxmlElement("w:r")
+    # Build rPr: Hyperlink style + selected base properties (font, size, color).
+    rPr = OxmlElement("w:rPr")
+    rStyle = OxmlElement("w:rStyle")
+    rStyle.set(qn("w:val"), "Hyperlink")
+    rPr.append(rStyle)
+    if template_rPr is not None:
+        for child in template_rPr:
+            tag = child.tag.split("}", 1)[-1]
+            if tag in ("rFonts", "sz", "szCs"):
+                rPr.append(copy.deepcopy(child))
+    r.append(rPr)
+
+    t = OxmlElement("w:t")
+    t.set(qn("xml:space"), "preserve")
+    t.text = text
+    r.append(t)
+
+    hl.append(r)
+    return hl
+
+
+def build_contact_line(p: Paragraph, header_part) -> None:
+    """Rebuild the contact paragraph with mixed plain-text runs,
+    tab characters, and hyperlinks."""
+    pe = p._element
+
+    # Capture a template rPr from the first run before nuking children,
+    # so the new runs inherit the original font/size formatting.
+    first_run = pe.find(qn("w:r"))
+    template_rPr = _copy_text_rpr(first_run)
+
+    # Remove all existing <w:r> and <w:hyperlink> children.
+    for child in list(pe):
+        tag = child.tag.split("}", 1)[-1]
+        if tag in ("r", "hyperlink"):
+            pe.remove(child)
+
+    # Build new content in order.
+    for kind, value in CONTACT_LINE:
+        if kind == "text":
+            pe.append(_make_text_run(value, template_rPr))
+        elif kind == "tab":
+            pe.append(_make_tab_run(template_rPr))
+        elif kind == "link":
+            text, url = value
+            pe.append(_make_hyperlink(text, url, template_rPr, header_part))
+        else:
+            raise ValueError(f"Unknown CONTACT_LINE kind: {kind}")
+
+
+def trim_lynx_bullets(doc) -> int:
+    """Remove the Lynx Equity bullets we marked for deletion. Returns
+    the count removed. Idempotent."""
+    to_remove = []
+    for p in doc.paragraphs:
+        stripped = p.text.strip()
+        for prefix in LYNX_BULLETS_TO_DROP:
+            if stripped.startswith(prefix):
+                to_remove.append(p)
+                break
+    for p in to_remove:
+        p._element.getparent().remove(p._element)
+    return len(to_remove)
+
+
 # ------------- main -------------
 
 def main() -> None:
     doc = Document(str(DOCX))
 
-    # --- 1. Contact line in header ---
-    hdr_paragraphs = doc.sections[0].header.paragraphs
-    contact_p = find_para(hdr_paragraphs, lambda p: "@gmail.com" in p.text)
+    # --- 1. Contact line in header (with hyperlinks) ---
+    header = doc.sections[0].header
+    header_paragraphs = header.paragraphs
+    contact_p = find_para(header_paragraphs, lambda p: "@gmail.com" in p.text)
     if contact_p is None:
         raise RuntimeError("Could not find contact line in document header.")
-    if "jakethehoffer.github.io/website" not in contact_p.text:
-        set_paragraph_text(contact_p, NEW_CONTACT_LINE)
-        print("[ok] contact line updated")
+
+    # Check idempotency: a rebuilt contact line has exactly 3 hyperlinks.
+    existing_hlinks = contact_p._element.findall(qn("w:hyperlink"))
+    expected_text = "".join(
+        v if kind == "text" else
+        ("\t" if kind == "tab" else v[0])
+        for kind, v in CONTACT_LINE
+    )
+    # Note: <w:tab/> renders as "\t" when reading paragraph.text.
+    if len(existing_hlinks) == 3 and contact_p.text == expected_text:
+        print("[same] contact line already has 3 hyperlinks and matching text")
     else:
-        print("[same] contact line already has website URL")
+        build_contact_line(contact_p, header.part)
+        print("[ok]   contact line rebuilt with hyperlinks "
+              "(email, LinkedIn, website)")
 
     # --- 2. Skills line in Summary of Qualifications ---
     body = doc.paragraphs
@@ -145,11 +254,19 @@ def main() -> None:
         raise RuntimeError("Could not find skills paragraph.")
     if skills_p.text != NEW_SKILLS_LINE:
         set_paragraph_text(skills_p, NEW_SKILLS_LINE)
-        print("[ok] skills line updated")
+        print("[ok]   skills line updated")
     else:
         print("[same] skills line already updated")
 
-    # --- 3. PERSONAL PROJECTS section ---
+    # --- 3. Trim Lynx Equity bullets ---
+    removed = trim_lynx_bullets(doc)
+    if removed > 0:
+        print(f"[ok]   trimmed {removed} Lynx Equity bullet(s)")
+    else:
+        print("[same] no Lynx Equity bullets to trim")
+
+    # --- 4. PERSONAL PROJECTS section ---
+    body = doc.paragraphs  # re-read after trim
     experience_heading = find_para(body, lambda p: p.text.strip() == "EXPERIENCE")
     if experience_heading is None:
         raise RuntimeError("Could not find EXPERIENCE heading.")
@@ -171,7 +288,6 @@ def main() -> None:
     if already is not None:
         print("[same] PERSONAL PROJECTS section already present")
     else:
-        # Insert after the last body paragraph.
         anchor = body[-1]._element
         for kind, text in NEW_SECTION:
             template = templates[kind]
@@ -180,7 +296,7 @@ def main() -> None:
             anchor = new_el
             wrapper = Paragraph(new_el, None)
             set_paragraph_text(wrapper, text)
-        print(f"[ok] inserted PERSONAL PROJECTS section ({len(NEW_SECTION)} paragraphs)")
+        print(f"[ok]   inserted PERSONAL PROJECTS section ({len(NEW_SECTION)} paragraphs)")
 
     # --- save ---
     doc.save(str(DOCX))
