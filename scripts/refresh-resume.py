@@ -17,6 +17,8 @@ import copy
 from pathlib import Path
 
 from docx import Document
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 from docx.text.paragraph import Paragraph
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -78,14 +80,42 @@ def find_para(paragraphs, predicate):
 
 
 def set_paragraph_text(p: Paragraph, new_text: str) -> None:
-    """Replace text in `p` while keeping the formatting of its first run."""
-    runs = p.runs
-    if not runs:
-        p.add_run(new_text)
-        return
-    runs[0].text = new_text
-    for r in runs[1:]:
-        r._element.getparent().remove(r._element)
+    """Replace text in `p` while keeping the formatting of its first run.
+
+    Handles paragraphs containing hyperlinks: we remove ALL <w:r> and
+    <w:hyperlink> children, then re-attach the original first run with
+    a single <w:t> holding the new text. The hyperlink targets are
+    discarded — the new text is rendered as plain text.
+    """
+    pe = p._element
+
+    # Locate the first run to preserve its formatting (rPr).
+    first_run = pe.find(qn("w:r"))
+
+    # Remove all <w:r> and <w:hyperlink> children.
+    for child in list(pe):
+        tag = child.tag.split("}", 1)[-1]
+        if tag in ("r", "hyperlink"):
+            pe.remove(child)
+
+    if first_run is None:
+        # Build a fresh run from scratch.
+        first_run = OxmlElement("w:r")
+
+    # Clear text from the preserved run and add one fresh <w:t>.
+    for t in list(first_run.findall(qn("w:t"))):
+        first_run.remove(t)
+    # Drop any embedded <w:tab/> children that were structural to
+    # the original; tabs in `new_text` are handled by xml:space=preserve.
+    for tab in list(first_run.findall(qn("w:tab"))):
+        first_run.remove(tab)
+
+    new_t = OxmlElement("w:t")
+    new_t.set(qn("xml:space"), "preserve")
+    new_t.text = new_text
+    first_run.append(new_t)
+
+    pe.append(first_run)
 
 
 def clone_paragraph_element(template_p: Paragraph):
