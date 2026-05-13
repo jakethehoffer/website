@@ -32,7 +32,7 @@ DOCX = ROOT / "resume-source.docx"
 # 'text' produces a plain run; 'tab' produces a <w:tab/>; 'link' wraps
 # a styled run in a <w:hyperlink>.
 CONTACT_LINE = [
-    ("text", "3 [removed-street] Blvd, Toronto ON M3H 3B7"),
+    ("text", "Toronto, ON"),
     ("tab",  None),
     ("link", ("14jakehoffman@gmail.com", "mailto:14jakehoffman@gmail.com")),
     ("tab",  None),
@@ -51,34 +51,41 @@ NEW_SKILLS_LINE = (
     "Google Apps Script."
 )
 
-# Bullets to drop from Lynx Equity. Matched by exact text prefix.
-LYNX_BULLETS_TO_DROP = [
+# Paragraphs to drop from the existing resume body. Matched by exact text prefix.
+PARAGRAPHS_TO_DROP = [
+    # Lynx Equity bullets (lower-signal items)
     "Designed Monday.com form that prefills",
     "Conducted DNS lookups",
+    # BMC Pharmacy entry — drop entirely (pre-Queen's, least
+    # aligned with the tech/quant target audience). The trim catches
+    # the role line, the org line, and both bullets.
+    "Financial Analyst",
+    "BMC Pharmacy",
+    "Conducted research in SW Ontario",
+    "Tracked profitability and margin contribution",
+    # PERSONAL PROJECTS — drop redundant subtitles and the most
+    # arcane bullet from each project to hit a 1-page resume.
+    "AI swing-trading agent",
+    "Production cross-book arbitrage daemon",
+    "Designed broker abstraction",
+    "Built defensive ingestion",
 ]
 
 # Cloned-template-based PERSONAL PROJECTS section.
 NEW_SECTION = [
     ("heading", "PERSONAL PROJECTS"),
     ("role",    "trader (Python · IBKR · Finnhub · pytest)"),
-    ("org",     "AI swing-trading agent"),
     ("bullet",  "24/7 AI swing-trading agent for S&P 500 equities, "
                 "driven by six scheduled Claude Code routines."),
     ("bullet",  "Paper-traded against SPY with kill-switch, risk gates, "
                 "and committed JSON journaling; graduates to live "
                 "trading after 30 days of documented outperformance."),
-    ("bullet",  "Designed broker abstraction so the live cutover is a "
-                "one-line config change (IBKR active, Alpaca preserved)."),
     ("role",    "Odds Aggregator (Python · Playwright · SQLite/Alembic · FastAPI)"),
-    ("org",     "Production cross-book arbitrage daemon"),
     ("bullet",  "Production arbitrage daemon covering 10 bookmakers "
                 "across 6 sports."),
     ("bullet",  "Ingest → normalize → detect cross-book arbs → push "
                 "alerts to Telegram and Discord. Runs 24/7 with replay "
                 "tooling for postmortems."),
-    ("bullet",  "Built defensive ingestion: per-book health scoring, "
-                "automatic backoff on bot-detection, and ten Alembic "
-                "migrations from iterating on real production traffic."),
 ]
 
 
@@ -205,13 +212,13 @@ def build_contact_line(p: Paragraph, header_part) -> None:
             raise ValueError(f"Unknown CONTACT_LINE kind: {kind}")
 
 
-def trim_lynx_bullets(doc) -> int:
-    """Remove the Lynx Equity bullets we marked for deletion. Returns
-    the count removed. Idempotent."""
+def trim_dropped_paragraphs(doc) -> int:
+    """Remove the paragraphs we marked for deletion. Returns the count
+    removed. Idempotent."""
     to_remove = []
     for p in doc.paragraphs:
         stripped = p.text.strip()
-        for prefix in LYNX_BULLETS_TO_DROP:
+        for prefix in PARAGRAPHS_TO_DROP:
             if stripped.startswith(prefix):
                 to_remove.append(p)
                 break
@@ -258,12 +265,12 @@ def main() -> None:
     else:
         print("[same] skills line already updated")
 
-    # --- 3. Trim Lynx Equity bullets ---
-    removed = trim_lynx_bullets(doc)
+    # --- 3. Trim dropped paragraphs (Lynx bullets + BMC entry) ---
+    removed = trim_dropped_paragraphs(doc)
     if removed > 0:
-        print(f"[ok]   trimmed {removed} Lynx Equity bullet(s)")
+        print(f"[ok]   trimmed {removed} paragraph(s)")
     else:
-        print("[same] no Lynx Equity bullets to trim")
+        print("[same] no paragraphs to trim")
 
     # --- 4. PERSONAL PROJECTS section ---
     body = doc.paragraphs  # re-read after trim
