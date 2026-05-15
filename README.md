@@ -51,10 +51,18 @@ Without the secret the workflow stays inert. Manual
 
 ## Refresh `resume.pdf`
 
+`resume-source.docx` is **not tracked** by git (Office metadata
+privacy — the binary captures creator/last-modified info). It lives
+locally next to `resume.pdf`. `scripts/refresh-resume.py` reads,
+edits, and scrubs metadata before saving.
+
 ```bash
+python scripts/refresh-resume.py
 "C:/Program Files/LibreOffice/program/soffice.exe" --headless --convert-to pdf --outdir . resume-source.docx
 mv resume-source.pdf resume.pdf
 ```
+
+The committed `resume.pdf` is the only public-facing artifact.
 
 ## Deploy
 

@@ -229,6 +229,26 @@ def trim_dropped_paragraphs(doc) -> int:
 
 # ------------- main -------------
 
+def scrub_metadata(doc) -> None:
+    """Clear Office metadata fields that leak identity / history.
+
+    The committed PDF is the only public artifact; the docx stays local
+    after v2.12, but we still scrub on every run so any accidental
+    re-tracking of the docx doesn't ship a stranger's name in the
+    author field. Idempotent."""
+    cp = doc.core_properties
+    cp.author = "Jake Hoffman"
+    cp.last_modified_by = "Jake Hoffman"
+    cp.title = ""
+    cp.subject = ""
+    cp.keywords = ""
+    cp.category = ""
+    cp.comments = ""
+    cp.identifier = ""
+    cp.version = ""
+    cp.content_status = ""
+
+
 def main() -> None:
     doc = Document(str(DOCX))
 
@@ -304,6 +324,10 @@ def main() -> None:
             wrapper = Paragraph(new_el, None)
             set_paragraph_text(wrapper, text)
         print(f"[ok]   inserted PERSONAL PROJECTS section ({len(NEW_SECTION)} paragraphs)")
+
+    # --- 4. Scrub Office metadata ---
+    scrub_metadata(doc)
+    print("[ok]   scrubbed Office metadata (author, comments, etc.)")
 
     # --- save ---
     doc.save(str(DOCX))
