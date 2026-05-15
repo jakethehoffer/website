@@ -1,0 +1,78 @@
+name: public-safety
+
+# Defensive checks that prevent privacy/leakage regressions in this
+# public repo. Runs on every push to main and every PR. Fast (<10s).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  banned-terms:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Banned terms are assembled from string fragments so the workflow
+      # source itself isn't a leak. If you ever need to add a term,
+      # split it across two echos / variables the same way.
+      - name: Reject banned terms in tracked files
+        run: |
+          set -e
+          # Project identifier ([removed]) — the hidden private platform
+          T1="[removed]"
+          T1_LOWER="[removed]"
+          T1_UNDERSCORE="[removed]"
+          # Org name
+          T2="[removed-org]"
+          # Old address street name
+          T3="[removed-street]"
+          # Identifying domain phrase
+          T4="[removed-domain]"
+
+          fail=0
+          for term in "$T1" "$T1_LOWER" "$T1_UNDERSCORE" "$T2" "$T3" "$T4"; do
+            hits=$(git grep -in -F "$term" -- ':!.github/workflows/public-safety.yml' || true)
+            if [ -n "$hits" ]; then
+              echo "::error::banned-term hit:"
+              echo "$hits"
+              fail=1
+            fi
+          done
+
+          if [ "$fail" -eq 1 ]; then
+            echo "::error::public-safety failed — banned terms found in tracked files"
+            exit 1
+          fi
+          echo "banned-terms: clean"
+
+      - name: Verify 404.html subpath paths
+        run: |
+          set -e
+          # In 404.html, any href="/foo or src="/foo that doesn't start
+          # with "/website/" is a subpath bug (root-relative paths
+          # resolve to user-root on Pages, not the project subpath).
+          bad=$(grep -E '(href|src)="/[^w]' 404.html || true)
+          # Also catch href="/" exactly (would route to user-root home)
+          bad2=$(grep -E '(href|src)="/"' 404.html || true)
+          if [ -n "$bad" ] || [ -n "$bad2" ]; then
+            echo "::error::404.html has root-relative paths that break on subpath:"
+            echo "$bad"
+            echo "$bad2"
+            exit 1
+          fi
+          echo "404.html paths: clean"
+
+      - name: Verify resume-source.docx is not tracked
+        run: |
+          set -e
+          if git ls-files | grep -q '^resume-source\.docx$'; then
+            echo "::error::resume-source.docx is tracked — must be local-only (Office metadata leak)"
+            exit 1
+          fi
+          echo "resume-source.docx: not tracked (correct)"
