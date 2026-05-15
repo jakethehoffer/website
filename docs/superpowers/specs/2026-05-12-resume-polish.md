@@ -55,7 +55,7 @@ page 1.
 
 Target paragraph (in `doc.sections[0].header.paragraphs[1]`):
 
-> `3 Collinson Blvd, Toronto ON M3H 3B7\t14jakehoffman@gmail.com\tTel: 647-823-4504\tLinkedIn\tjakethehoffer.github.io/website`
+> `<full-address>\t14jakehoffman@gmail.com\tTel: 647-823-4504\tLinkedIn\tjakethehoffer.github.io/website`
 
 Three substrings become hyperlinks:
 

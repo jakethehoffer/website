@@ -25,7 +25,7 @@ website/
 │   └── refresh-meta.mjs               NEW
 ├── assets/
 │   ├── projects/
-│   │   └── fuse-web.webp              NEW (converted from FUSE-Web PNG)
+│   │   └── private-platform.webp              NEW (converted from [private platform] PNG)
 │   └── avatar.svg                     DELETED (v2 has no avatar)
 ├── README.md                          UPDATED
 ├── resume.pdf                         UNCHANGED
@@ -592,7 +592,7 @@ replace with:
           <h2>What I work on</h2>
           <div class="about">
             <p>Computer engineering at Queen&rsquo;s. I&rsquo;m most at home building systems that run unattended &mdash; trading agents that paper-trade the S&amp;P 500, an arbitrage daemon ingesting ten bookmakers every minute, web platforms with their tests wired up before the first commit.</p>
-            <p>What I&rsquo;m best at: turning a messy real-world domain (insurance catastrophe management, sports-book pricing, broker order flow) into clean abstractions and a service that doesn&rsquo;t wake me up at 3am.</p>
+            <p>What I&rsquo;m best at: turning a messy real-world domain (a private client platform, sports-book pricing, broker order flow) into clean abstractions and a service that doesn&rsquo;t wake me up at 3am.</p>
             <p>Looking for an internship or co-op where I can ship production code &mdash; ideally somewhere with hard correctness requirements: trading, infrastructure, financial systems, or developer tools.</p>
           </div>
         </div>
@@ -748,11 +748,11 @@ and replace with:
               <header class="project__head">
                 <span class="status status--active" aria-label="Status: active"></span>
                 <span class="project__status-label">ACTIVE</span>
-                <span class="project__last-commit" data-meta="FUSE-Web.last_commit">last commit: recent</span>
+                <span class="project__last-commit" data-meta="private-platform.last_commit">last commit: recent</span>
               </header>
-              <h3 class="project__name">FUSE-Web</h3>
-              <p class="project__what">Next.js + Supabase platform for insurance catastrophe management.</p>
-              <p class="project__body">Role-based accounts (Admin / PM / staff), War Room workflows, resource center. Vitest unit tests plus Playwright smoke checks before each deploy. Private repo &mdash; screenshot below.</p>
+              <h3 class="project__name">[private platform]</h3>
+              <p class="project__what">Next.js + Supabase platform for a private client platform.</p>
+              <p class="project__body">Role-based accounts (role-based accounts), role-gated workflows, resource center. Vitest unit tests plus Playwright smoke checks before each deploy. Private repo &mdash; screenshot below.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> next.js 14 &middot; supabase &middot; vitest &middot; playwright</p>
               <p class="project__chips">typescript &middot; next.js &middot; supabase &middot; vitest &middot; playwright</p>
             </article>
@@ -927,39 +927,39 @@ git -C "C:/Users/14jak/GitHub/website" commit -m "feat(v2): rebuild project card
 
 ---
 
-## Task 8: Project cards — FUSE-Web screenshot + output samples
+## Task 8: Project cards — [private platform] screenshot + output samples
 
-Convert the FUSE-Web overview screenshot to WebP and add it to the FUSE-
+Convert the [private platform] overview screenshot to WebP and add it to the [private]-
 Web card. Add small "output sample" code blocks to the cards without
 images.
 
 **Files:**
-- Create: `C:/Users/14jak/GitHub/website/assets/projects/fuse-web.webp`
+- Create: `C:/Users/14jak/GitHub/website/assets/projects/private-platform.webp`
 - Modify: `C:/Users/14jak/GitHub/website/index.html` (project cards)
 - Modify: `C:/Users/14jak/GitHub/website/styles.css` (append)
 
-- [ ] **Step 1: Convert the FUSE-Web screenshot to WebP**
+- [ ] **Step 1: Convert the [private platform] screenshot to WebP**
 
 ```bash
 mkdir -p "C:/Users/14jak/GitHub/website/assets/projects"
 # Pillow ships with the Python on this machine; use it to encode WebP.
-python -c "from PIL import Image; im = Image.open(r'C:/Users/14jak/GitHub/FUSE-Web/worksheet-overview.png'); im.save(r'C:/Users/14jak/GitHub/website/assets/projects/fuse-web.webp', 'WEBP', quality=80, method=6)"
-ls -la "C:/Users/14jak/GitHub/website/assets/projects/fuse-web.webp"
+python -c "from PIL import Image; im = Image.open(r'C:/Users/14jak/GitHub/[private platform]/private-platform-screenshot.png'); im.save(r'C:/Users/14jak/GitHub/website/assets/projects/private-platform.webp', 'WEBP', quality=80, method=6)"
+ls -la "C:/Users/14jak/GitHub/website/assets/projects/private-platform.webp"
 ```
 
 Expected: a file under 50 KB. If Pillow isn't available, fall back to
 LibreOffice's bundled `cwebp` if installed, or skip this step and
-reference the PNG directly (copy `worksheet-overview.png` → `fuse-web.png`
-and use `<img src="assets/projects/fuse-web.png">` instead of WebP).
+reference the PNG directly (copy `private-platform-screenshot.png` → `private-platform.png`
+and use `<img src="assets/projects/private-platform.png">` instead of WebP).
 
-- [ ] **Step 2: Add the FUSE-Web image to its card**
+- [ ] **Step 2: Add the [private platform] image to its card**
 
-In `index.html`, find the FUSE-Web `<article>` block. After the
+In `index.html`, find the [private platform] `<article>` block. After the
 `<p class="project__chips">…</p>` line and before `</article>`, insert:
 
 ```html
               <figure class="project__media">
-                <img src="assets/projects/fuse-web.webp" alt="FUSE-Web worksheet overview" loading="lazy" decoding="async" width="1200" height="700" />
+                <img src="assets/projects/private-platform.webp" alt="[private platform] worksheet overview" loading="lazy" decoding="async" width="1200" height="700" />
               </figure>
 ```
 
@@ -1046,7 +1046,7 @@ accuracy   <span class="sample__hi">0.965</span>   f1 0.964</pre>
 
 - [ ] **Step 5: Verify**
 
-Reload. Each project card now has either a screenshot (FUSE-Web) or a
+Reload. Each project card now has either a screenshot ([private platform]) or a
 small ascii-flavored output sample. Hovering still slides in the amber
 left-border on the card itself. The sample blocks have their own
 permanent amber left-border.
@@ -1054,8 +1054,8 @@ permanent amber left-border.
 - [ ] **Step 6: Commit**
 
 ```bash
-git -C "C:/Users/14jak/GitHub/website" add assets/projects/fuse-web.webp index.html styles.css
-git -C "C:/Users/14jak/GitHub/website" commit -m "feat(v2): add FUSE-Web screenshot and per-project output samples"
+git -C "C:/Users/14jak/GitHub/website" add assets/projects/private-platform.webp index.html styles.css
+git -C "C:/Users/14jak/GitHub/website" commit -m "feat(v2): add [private platform] screenshot and per-project output samples"
 ```
 
 ---
@@ -1634,7 +1634,7 @@ grep -n 'data-meta=' "C:/Users/14jak/GitHub/website/index.html"
 ```
 
 Expected: 4 lines — `trader.last_commit`, `arbitrage.last_commit`,
-`FUSE-Web.last_commit`, `last_deployed`.
+`private-platform.last_commit`, `last_deployed`.
 
 - [ ] **Step 2: Create `scripts/refresh-meta.mjs`**
 
@@ -1661,8 +1661,8 @@ const INDEX = resolve(HERE, "..", "index.html");
 const REPOS = [
   { owner: "jakethehoffer", name: "trader",     key: "trader.last_commit" },
   { owner: "jakethehoffer", name: "arbitrage",  key: "arbitrage.last_commit" },
-  // FUSE-Web is in a different org. Adjust the owner if you have access.
-  { owner: "Shield-Restoration-Services", name: "FUSE-Web", key: "FUSE-Web.last_commit" },
+  // [private platform] is in a different org. Adjust the owner if you have access.
+  { owner: "[redacted-org]", name: "[private platform]", key: "private-platform.last_commit" },
 ];
 
 function ghPushedAt(owner, name) {
@@ -1741,8 +1741,8 @@ node "C:/Users/14jak/GitHub/website/scripts/refresh-meta.mjs"
 ```
 
 Expected output: one `[ok]` line per accessible repo (`trader`,
-`arbitrage`), one `[skip]` line for FUSE-Web if the script doesn't have
-access to the Shield-Restoration-Services org (which is fine — FUSE-Web's
+`arbitrage`), one `[skip]` line for [private platform] if the script doesn't have
+access to the [redacted-org] org (which is fine — [private platform]'s
 last_commit will stay as the default string), and one `[ok]` for
 last_deployed.
 
@@ -1825,7 +1825,7 @@ then in **Settings &rarr; Pages**, source = `main` branch / root.
 - `styles.css` &mdash; all-mono design system, dark default + parchment light.
 - `script.js` &mdash; boot animation, mobile nav, theme toggle, IntersectionObserver reveal.
 - `scripts/refresh-meta.mjs` &mdash; optional last-commit injector (Node, uses `gh`).
-- `assets/projects/fuse-web.webp` &mdash; FUSE-Web product screenshot.
+- `assets/projects/private-platform.webp` &mdash; [private platform] product screenshot.
 - `resume.pdf` &mdash; downloadable PDF.
 - `docs/superpowers/` &mdash; design spec and implementation plan.
 ```
@@ -1842,7 +1842,7 @@ repo root. Verify:
 - Nav anchor links scroll smoothly to each section, including the new
   `case_study`.
 - Project cards show status dots, last-commit text (real or default),
-  and either a screenshot (FUSE-Web) or an output sample.
+  and either a screenshot ([private platform]) or an output sample.
 - Case-study ASCII diagram renders aligned in dark mode, and remains
   aligned in parchment (mono font means the alignment is theme-agnostic).
 - Timeline cards have the left rail with status dots overlapping it.
@@ -1883,7 +1883,7 @@ git -C "C:/Users/14jak/GitHub/website" push
 - [ ] **Step 1: Run the handoff command**
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$HOME\.ai-sync\ai-sync.ps1" -Action handoff -Agent claude -Summary "v2 'engineering log' redesign live. Mono-only typography, terminal-flavored dark default with parchment light, git-log-style project cards with status dots and real last-commit data via opt-in refresh-meta.mjs, new trader case-study with ASCII architecture diagram." -FilesChanged "index.html, styles.css, script.js, scripts/refresh-meta.mjs (NEW), assets/projects/fuse-web.webp (NEW), assets/avatar.svg (DELETED), README.md, docs/superpowers/specs/2026-05-12-resume-website-v2-design.md, docs/superpowers/plans/2026-05-12-resume-website-v2.md" -TestsRun "Manual visual smoke tests on Chrome (dark + parchment, mobile + desktop), boot animation timing, theme persistence, keyboard tab order, prefers-reduced-motion. refresh-meta.mjs run on trader + arbitrage. Lighthouse passed >=95 on Performance/Accessibility/Best Practices/SEO." -Blockers "FUSE-Web last_commit stays as default unless gh CLI has access to Shield-Restoration-Services org." -NextSteps "1) Decide on GitHub Pages (currently private repo). 2) Add screenshots for other projects as Jake takes them. 3) Optionally re-run refresh-meta.mjs before any external sharing for fresh dates."
+powershell -NoProfile -ExecutionPolicy Bypass -File "$HOME\.ai-sync\ai-sync.ps1" -Action handoff -Agent claude -Summary "v2 'engineering log' redesign live. Mono-only typography, terminal-flavored dark default with parchment light, git-log-style project cards with status dots and real last-commit data via opt-in refresh-meta.mjs, new trader case-study with ASCII architecture diagram." -FilesChanged "index.html, styles.css, script.js, scripts/refresh-meta.mjs (NEW), assets/projects/private-platform.webp (NEW), assets/avatar.svg (DELETED), README.md, docs/superpowers/specs/2026-05-12-resume-website-v2-design.md, docs/superpowers/plans/2026-05-12-resume-website-v2.md" -TestsRun "Manual visual smoke tests on Chrome (dark + parchment, mobile + desktop), boot animation timing, theme persistence, keyboard tab order, prefers-reduced-motion. refresh-meta.mjs run on trader + arbitrage. Lighthouse passed >=95 on Performance/Accessibility/Best Practices/SEO." -Blockers "[private platform] last_commit stays as default unless gh CLI has access to [redacted-org] org." -NextSteps "1) Decide on GitHub Pages (currently private repo). 2) Add screenshots for other projects as Jake takes them. 3) Optionally re-run refresh-meta.mjs before any external sharing for fresh dates."
 ```
 
 - [ ] **Step 2: Verify handoff**

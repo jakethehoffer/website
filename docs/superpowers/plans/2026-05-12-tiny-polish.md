@@ -49,7 +49,7 @@ node "C:/Users/14jak/GitHub/website/scripts/refresh-meta.mjs"
 ```
 
 Expected output: `[ok]` lines for `trader.last_commit`,
-`arbitrage.last_commit`, and `FUSE-Web.last_commit` (the local `gh`
+`arbitrage.last_commit`, and `private-platform.last_commit` (the local `gh`
 login has access to all three), plus a `last_deployed` update. If
 any repo returns `[skip]`, the corresponding default string stays.
 

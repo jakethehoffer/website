@@ -66,8 +66,7 @@ Single page, sections in this order with sticky top nav:
    - **Odds Aggregator** — Production arbitrage daemon: ingests odds from 10
      bookmakers across 6 sports, detects cross-book arbs, pushes alerts to
      Telegram + Discord. 24/7 on Windows host.
-   - **FUSE-Web** — Next.js + Supabase web platform for insurance catastrophe
-     management, with role-based accounts, workflow toggles, and a resource
+   - **[private platform]** — Next.js + Supabase web platform for a private client platform, with role-based accounts, workflow toggles, and a resource
      center. Built tests with Vitest + Playwright.
    - **Mega Tic-Tac-Toe** — Unity game built on a 3×3 grid of linked
      Tic-Tac-Toe boards. Local + online multiplayer; single player vs.
@@ -178,7 +177,7 @@ website/
 
 - Resume content: `C:/Users/14jak/OneDrive/Desktop/Jake's new resume (2).docx`,
   extracted during the design phase.
-- Project descriptions: drawn from each repo's `README.md` (FUSE-Web,
+- Project descriptions: drawn from each repo's `README.md` ([private platform],
   arbitrage, trader, Workshop-Arcade, claude-usage-widget, crypto, money,
   youtube) and the resume.
 

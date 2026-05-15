@@ -175,15 +175,15 @@ Each card is a single column with:
 4. **Body** — 2–3 sentences of why / impact.
 5. **Metrics row** (where applicable) — `//  10 books · 6 sports · 24/7`
 6. **Tech chips** — small mono, no border, just dim text separated by `·`.
-7. **Optional screenshot** — full-width below the chips. FUSE-Web has
-   real screenshots in the repo (`worksheet-overview.png`,
+7. **Optional screenshot** — full-width below the chips. [private platform] has
+   real screenshots in the repo (`private-platform-screenshot.png`,
    `screenshot-comments-tasks.png`, `screenshot-workflow-toggles.png`);
    copy one into `assets/projects/`. Projects without a screenshot show a
    small mono "output sample" code block instead (e.g. a redacted Telegram
    alert payload for Odds Aggregator, a tiny terminal log for trader).
 
 **Status assignment:**
-- ●amber `ACTIVE` — `trader`, `Odds Aggregator`, `FUSE-Web`
+- ●amber `ACTIVE` — `trader`, `Odds Aggregator`, `[private platform]`
 - ●green `SHIPPED` — `Mega Tic-Tac-Toe`, `Smart Shoe`, `Walking/Jumping Classifier`
 
 ### Case study — trader (NEW)
@@ -299,7 +299,7 @@ website/
 ├── resume-source.docx                 unchanged
 ├── assets/
 │   ├── projects/
-│   │   ├── fuse-web.png               NEW: from FUSE-Web/screenshot-*.png
+│   │   ├── private-platform.png               NEW: from [private platform]/screenshot-*.png
 │   │   └── (others added later)
 │   └── (no avatar.svg — removed)
 ├── docs/superpowers/
@@ -323,7 +323,7 @@ an arbitrage daemon ingesting ten bookmakers every minute, web
 platforms with their tests wired up before the first commit.
 
 What I'm best at: turning a messy real-world domain (insurance
-catastrophe management, sports-book pricing, broker order flow)
+private-domain workflows, sports-book pricing, broker order flow)
 into clean abstractions and a service that doesn't wake me up at
 3am.
 
@@ -394,7 +394,7 @@ Lighthouse:
 
 - `last_commit` strings on project cards: rendered with defaults; refresh
   via `scripts/refresh-meta.mjs` whenever Jake wants fresh dates.
-- Real screenshots for projects beyond FUSE-Web: optional, can be added
+- Real screenshots for projects beyond [private platform]: optional, can be added
   one at a time as Jake takes them.
 - Headshot: still no real one. v2 removes the avatar entirely from the
   hero, so this is no longer a blocker.
