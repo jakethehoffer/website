@@ -78,7 +78,7 @@ mono is bundled with the rendering machine if the font isn't on disk.
 **Rendering:** a Python script at
 `C:/Users/14jak/GitHub/website/scripts/render-og-image.py`, kept in the
 repo for reproducibility. Uses PIL (already on the machine — used for
-the [removed] WebP conversion). The script finds a JetBrains Mono TTF
+the [private platform] WebP conversion). The script finds a JetBrains Mono TTF
 on disk; if not found, it falls back to the first available mono font
 on the system (Cascadia Mono, Consolas, etc.) — visually close enough
 because the OG image is consumed standalone.

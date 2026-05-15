@@ -89,7 +89,7 @@ jobs:
 
 **Failure modes:**
 - `gh api` returns 404 for a private repo the bot can't see (e.g.,
-  [removed] in the [removed-org]-Services org). The existing
+  [private platform] in the [redacted-org] org). The existing
   `refresh-meta.mjs` `try/catch` logs `[skip]` and leaves that field
   on the default string. Acceptable.
 - Network blip prevents one of the API calls. The script may write
@@ -139,7 +139,7 @@ website/
 - `gh workflow run refresh-meta.yml` manually dispatches the action
   and completes without error. Inspect the run log via
   `gh run view --log` to confirm `[ok]` lines for trader / arbitrage
-  (and the expected `[skip]` for [removed]). If it auto-commits,
+  (and the expected `[skip]` for [private platform]). If it auto-commits,
   confirm the new commit appears on `origin/main` with the bot
   as author.
 - `curl -s https://jakethehoffer.github.io/website/ | grep -c 'rel="canonical"'`

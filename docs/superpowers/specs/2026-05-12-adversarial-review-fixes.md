@@ -8,12 +8,12 @@
 
 External adversarial review surfaced four real issues:
 
-1. **[removed] reference leakage in public docs.** v2.7 removed FUSE
-   from the live site, but the v2.7 spec/plan (`remove-[removed].md`)
-   are *more* explicit about FUSE than the site ever was — the spec
+1. **[private platform] reference leakage in public docs.** v2.7 removed [private]
+   from the live site, but the v2.7 spec/plan (`remove-private-platform.md`)
+   are *more* explicit about [private] than the site ever was — the spec
    even says "should not be publicly attributed to Jake on the site."
    Anyone reading the public repo learns more than someone reading
-   the deployed site. 13 tracked files reference [removed].
+   the deployed site. 13 tracked files reference [private platform].
 2. **404 page absolute-path bug.** I used `/styles.css`,
    `/assets/...`, `/#projects` etc. in `404.html`. On GitHub Pages
    with the subpath `jakethehoffer.github.io/website/`, root-relative
@@ -22,9 +22,9 @@ External adversarial review surfaced four real issues:
    root, not back to the home page. 9 broken paths.
 3. **`resume-source.docx` privacy.** The binary docx ships Office
    metadata (creator, last-modified). Two docs still contain the old
-   full-address text "3 [removed-street] Blvd, Toronto ON M3H 3B7" even
+   full-address text "<full-address>" even
    though the live resume now says "Toronto, ON".
-4. **No regression guardrail.** Nothing prevents [removed], the old
+4. **No regression guardrail.** Nothing prevents [private platform], the old
    address, broken subpath links, or `resume-source.docx` from
    creeping back in on future edits.
 
@@ -32,14 +32,14 @@ External adversarial review surfaced four real issues:
 
 A repo where:
 - The public surface (tracked files + live URL) tells the same story
-  about [removed] — namely, nothing.
+  about [private platform] — namely, nothing.
 - The 404 page actually works on the subpath deploy.
 - The privacy-sensitive resume source isn't tracked at all.
 - A CI guard rejects regressions of any of the above.
 
 ## Non-Goals
 
-- **Git history rewrite to scrub the deleted [removed] image blob.**
+- **Git history rewrite to scrub the deleted [private platform] image blob.**
   Real concern, but force-pushing main is disruptive and irreversible.
   Documented as a deferred follow-up (v2.13 if you want it).
 - **Deleting all `docs/superpowers/`.** The bulk of the design docs
@@ -67,17 +67,17 @@ Pages subpath site, relative paths are robust to subpath changes
 | `/#projects` | `./#projects` |
 | `/#contact` | `./#contact` |
 
-### Part B — scrub [removed] from public docs
+### Part B — scrub [private platform] from public docs
 
 **Delete entirely:**
-- `docs/superpowers/specs/2026-05-12-remove-[removed].md`
-- `docs/superpowers/plans/2026-05-12-remove-[removed].md`
+- `docs/superpowers/specs/2026-05-12-remove-private-platform.md`
+- `docs/superpowers/plans/2026-05-12-remove-private-platform.md`
 
-These exist solely to document the removal of [removed] and contain
+These exist solely to document the removal of [private platform] and contain
 the most egregious leak phrasing ("should not be publicly attributed
 to Jake on the site"). Their disappearance is itself the fix.
 
-**Edit (redact [removed] references):**
+**Edit (redact [private platform] references):**
 - `docs/superpowers/specs/2026-05-12-resume-website-design.md`
 - `docs/superpowers/specs/2026-05-12-resume-website-v2-design.md`
 - `docs/superpowers/plans/2026-05-12-resume-website.md`
@@ -90,19 +90,19 @@ to Jake on the site"). Their disappearance is itself the fix.
 - `docs/superpowers/plans/2026-05-12-tiny-polish.md`
 - `docs/superpowers/specs/2026-05-12-tiny-polish.md`
 
-Strategy: replace "[removed]" / "[removed]" with a generic placeholder
+Strategy: replace "[private platform]" / "private-platform" with a generic placeholder
 (`a private client web platform` or `[redacted]` depending on
 context). Preserve the narrative shape (so the docs still make sense
 as design history) but remove the specific name and any details
 that uniquely identify it (insurance-domain, catastrophe-management,
-[removed-org]-Services, etc.).
+[redacted-org], etc.).
 
 ### Part C — scrub old-address references
 
 - `docs/superpowers/plans/2026-05-12-resume-refresh.md`
 - `docs/superpowers/specs/2026-05-12-resume-polish.md`
 
-Replace `"3 [removed-street] Blvd, Toronto ON M3H 3B7"` with
+Replace `"<full-address>"` with
 `"<full-address>"` placeholder. The narrative point ("we shortened
 the address to 'Toronto, ON'") survives without the actual address.
 
@@ -124,8 +124,8 @@ a fresh PDF). The docx becomes a personal-workstation file.
 
 Triggers on push to `main` and on `pull_request`. Runs four checks:
 
-1. **Banned-term grep** across tracked files: `[removed]`,
-   `[removed]`, `[removed-org]-Services`, `[removed-street]`.
+1. **Banned-term grep** across tracked files: `[private platform]`,
+   `private-platform`, `[redacted-org]`, `[old-address-pattern]`.
 2. **404.html absolute-path check**: any `href="/"` or `src="/"` in
    404.html that doesn't start with `/website/` fails. We standardize
    on relative paths, so this catches accidental absolute-path
@@ -149,11 +149,11 @@ website/
 ├── resume-source.docx                  UNTRACKED (still on disk)
 ├── scripts/refresh-resume.py           MODIFIED (metadata scrub)
 ├── docs/superpowers/specs/
-│   ├── 2026-05-12-remove-[removed].md   DELETED
+│   ├── 2026-05-12-remove-private-platform.md   DELETED
 │   ├── 2026-05-12-adversarial-review-fixes.md   NEW (this doc)
 │   └── (... 7 other files edited ...)
 ├── docs/superpowers/plans/
-│   ├── 2026-05-12-remove-[removed].md   DELETED
+│   ├── 2026-05-12-remove-private-platform.md   DELETED
 │   └── (... 6 other files edited ...)
 └── .github/workflows/
     └── public-safety.yml               NEW
@@ -162,7 +162,7 @@ website/
 ## Verification
 
 After all changes:
-- `git grep -i "[removed]\|[removed]\|[removed-street]\|[removed-org]"` → no results
+- `git grep -i` for the banned-term patterns (see `.github/workflows/public-safety.yml`) returns no results
 - `git ls-files | grep -i "resume-source"` → no results
 - 404 page on `https://jakethehoffer.github.io/website/does-not-exist` renders with the styled boot-prompt layout (not the unstyled fallback)
 - 404 page's home/projects/contact buttons land on the right pages
@@ -196,7 +196,7 @@ After all changes:
 
 ## Deferred
 
-- **History rewrite** to scrub the deleted [removed] image blob from
+- **History rewrite** to scrub the deleted [private platform] image blob from
   prior commits. Out of scope for v2.12. If you want this, it's a
   ~10-minute `git filter-repo` operation followed by force-push.
   Disrupts any clones; irreversible. Available as v2.13 on request.

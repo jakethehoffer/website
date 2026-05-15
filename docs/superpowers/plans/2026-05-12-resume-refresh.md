@@ -34,7 +34,7 @@ From `python-docx` + raw-XML inspection:
 
 | Location | Content |
 |---|---|
-| `doc.sections[0].header.paragraphs[1]` | `3 [removed-street] Blvd, Toronto ON M3H 3B7\t14jakehoffman@gmail.com\tTel: 647-823-4504\tLinkedIn` — tab-separated contact line |
+| `doc.sections[0].header.paragraphs[1]` | `<full-address>\t14jakehoffman@gmail.com\tTel: 647-823-4504\tLinkedIn` — tab-separated contact line |
 | `doc.paragraphs[2]` | `Proficient in Python, Java, C, C#, C++, SQL, Git, Word, Excel, JavaScript, Dart, Unity, and Monday.com.` — Summary skills line |
 | `doc.paragraphs[13]` | `EXPERIENCE` — section heading style we mirror |
 | Lynx bullets (e.g. `doc.paragraphs[16]`) | `Normal` style + `<w:numPr w:numId="2">` numbering + Garamond 11.5pt — what we clone for PERSONAL PROJECTS bullets |
@@ -79,7 +79,7 @@ DOCX = ROOT / "resume-source.docx"
 # ------------- desired content -------------
 
 NEW_CONTACT_LINE = (
-    "3 [removed-street] Blvd, Toronto ON M3H 3B7"
+    "<full-address>"
     "\t14jakehoffman@gmail.com"
     "\tTel: 647-823-4504"
     "\tLinkedIn"

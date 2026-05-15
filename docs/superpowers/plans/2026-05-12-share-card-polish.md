@@ -405,7 +405,7 @@ git -C "C:/Users/14jak/GitHub/website" commit -m "feat: add og:image, twitter ca
 cd "C:/Users/14jak/GitHub/website" && python -m http.server 8765 > "$TEMP/jh-http4.log" 2>&1 &
 sleep 2
 echo "=== Asset responses ==="
-for path in "" styles.css script.js favicon.svg favicon.ico apple-touch-icon.png assets/og-image.png assets/projects/mega-ttt.webp assets/projects/walking-jumping-cm.png assets/projects/[removed].webp resume.pdf; do
+for path in "" styles.css script.js favicon.svg favicon.ico apple-touch-icon.png assets/og-image.png assets/projects/mega-ttt.webp assets/projects/walking-jumping-cm.png assets/projects/private-platform.webp resume.pdf; do
   curl -s -o /dev/null -w "$path: %{http_code} (%{size_download} bytes)\n" "http://localhost:8765/$path"
 done
 echo ""
@@ -417,7 +417,7 @@ live = [
     r'C:/Users/14jak/GitHub/website/styles.css',
     r'C:/Users/14jak/GitHub/website/script.js',
     r'C:/Users/14jak/GitHub/website/favicon.svg',
-    r'C:/Users/14jak/GitHub/website/assets/projects/[removed].webp',
+    r'C:/Users/14jak/GitHub/website/assets/projects/private-platform.webp',
     r'C:/Users/14jak/GitHub/website/assets/projects/mega-ttt.webp',
     r'C:/Users/14jak/GitHub/website/assets/projects/walking-jumping-cm.png',
 ]

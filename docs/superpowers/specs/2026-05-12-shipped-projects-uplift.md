@@ -6,10 +6,10 @@
 
 ## Why
 
-v2 introduced [removed]'s real product screenshot but left the three SHIPPED
+v2 introduced [private platform]'s real product screenshot but left the three SHIPPED
 projects (Mega Tic-Tac-Toe, Smart Shoe, Walking/Jumping Classifier) with
 ASCII output samples. Two of those samples reference real projects but no
-longer feel as concrete as [removed]'s. This cycle uplifts Mega TTT and
+longer feel as concrete as [private platform]'s. This cycle uplifts Mega TTT and
 Walking/Jumping with real visual assets sourced from real outputs — no
 fakery, no fresh implementation, no scope drift into "what else can we
 improve."
@@ -30,7 +30,7 @@ to "I downloaded the game" is one click.
 - No re-implementation of the game in JS / canvas / WebGL.
 - No new screenshots for Smart Shoe (no good public asset; the Dart code
   sample is authentic and on-aesthetic).
-- No changes to the trader, Odds Aggregator, or [removed] cards.
+- No changes to the trader, Odds Aggregator, or [private platform] cards.
 - No animations, no carousels, no lightbox.
 
 ## Concrete Changes
@@ -56,7 +56,7 @@ same dimensions.
 - Remove the existing `<pre class="project__sample">+---+---+---+ ...`
   ASCII board block.
 - Insert a `<figure class="project__media">` with the WebP image
-  (same `.project__media` class [removed] already uses — zero new CSS).
+  (same `.project__media` class [private platform] already uses — zero new CSS).
 - Below the figure, insert a `<p class="project__cta">` containing a
   `[ play on itch.io ↗ ]` link styled as `.btn`.
 
@@ -112,7 +112,7 @@ phone frame would downgrade authenticity. Leave it as-is.
 ```
 website/
 ├── assets/projects/
-│   ├── [removed].webp                  unchanged
+│   ├── private-platform.webp                  unchanged
 │   ├── mega-ttt.webp                  NEW
 │   └── walking-jumping-cm.png         NEW
 ├── scripts/

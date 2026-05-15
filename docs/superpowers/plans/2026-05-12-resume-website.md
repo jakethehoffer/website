@@ -609,9 +609,9 @@ Replace `<section id="projects" class="section"></section>` with:
       </article>
 
       <article class="project">
-        <h3 class="project__name">[removed]</h3>
-        <p class="project__what">Next.js + Supabase platform for [removed-domain].</p>
-        <p class="project__why">Role-based accounts (Admin / PM / staff), War Room workflows, resource center. Vitest unit tests plus Playwright smoke checks before each deploy.</p>
+        <h3 class="project__name">[private platform]</h3>
+        <p class="project__what">Next.js + Supabase platform for a private client platform.</p>
+        <p class="project__why">Role-based accounts (role-based accounts), role-gated workflows, resource center. Vitest unit tests plus Playwright smoke checks before each deploy.</p>
         <ul class="chips">
           <li>Next.js</li><li>TypeScript</li><li>Supabase</li><li>Vitest</li><li>Playwright</li>
         </ul>
