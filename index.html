@@ -274,6 +274,9 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
             <h3>The risk model</h3>
             <p>Default is paper. The kill-switch is a single YAML key (<code>kill_switch.enabled: true</code>) read at the top of every routine &mdash; flip it and the system stops opening positions at the next scheduled tick. Risk counters (per-trade, per-day, per-week) live in committed JSON so the state survives restarts and is reviewable in a diff. The 30-day paper gate is enforced by <code>gate</code> reading a graduation file written only by the EOD routine.</p>
 
+            <h3>What I learned</h3>
+            <p>Three things I&rsquo;d repeat on the next agent like this: idempotent scheduled routines from day one (the monolith refactor I avoided would have eaten weeks); kill-switch and risk gates <em>before</em> any trading logic, so strategy iteration can&rsquo;t corrupt state; observability turned out to be the hardest engineering problem, not the math &mdash; knowing <em>why</em> the agent made each call was harder than getting it to make calls at all.</p>
+
             <h3>What&rsquo;s next</h3>
             <p>Graduation to live trading is contingent on documented outperformance vs. SPY across 30 paper days. The broker layer is already abstracted (<code>broker.py</code> &mdash; IBKR active, Alpaca preserved) so the live cutover is a config change. Building toward a backtester that replays the journal against historical Finnhub headlines to validate model changes before they touch a real fill.</p>
           </div>
