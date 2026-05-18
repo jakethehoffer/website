@@ -17,6 +17,7 @@ from __future__ import annotations
 import copy
 from pathlib import Path
 
+import yaml
 from docx import Document
 from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.oxml import OxmlElement
@@ -25,6 +26,7 @@ from docx.text.paragraph import Paragraph
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCX = ROOT / "resume-source.docx"
+PROJECTS_YML = ROOT / "projects.yml"
 
 # ------------- desired content -------------
 
@@ -83,35 +85,51 @@ PARAGRAPHS_TO_DROP = [
     # OA resume bullet 2 — same reasoning. Website case study covers
     # ingestion + detection in full. Dropped in v2.17.
     "Ingest → normalize → detect cross-book arbs",
+    # equity-arbs bullet 1 — old 2-bullet form merged into a single
+    # dense bullet in v2.18 to keep the PDF at 1 page. Catches the
+    # old form already in the docx. The new merged form starts with
+    # "Stat-arb research toolkit for TSX pair trading (spec-first"
+    # (parenthesis), which does NOT match this prefix.
+    "Stat-arb research toolkit for TSX pair trading. Spec",
+    # equity-arbs bullet 2 — old form (now merged into bullet 1).
+    "Decision-grade backtest demonstrated",
+    # EDUCATION bullet about Walking/Jumping ML — the project is
+    # already featured in the website's PROJECTS section, so leaving
+    # the resume bullet is a double-count. Dropped in v2.18 to keep
+    # the page-fit constraint after adding equity-arbs.
+    "Built a machine learning program in Python for accelerometer",
+    # EDUCATION bullet about Smart Shoe — same reasoning: the
+    # Smart Shoe Navigation project is already featured in the
+    # website's PROJECTS section. Dropped in v2.18.
+    "Created a mobile app in Dart that pairs via Bluetooth",
 ]
 
-# Cloned-template-based PERSONAL PROJECTS section.
-NEW_SECTION = [
-    ("heading", "PERSONAL PROJECTS"),
-    ("role",    "trader (Python · IBKR · Finnhub · pytest)"),
-    ("bullet",  "24/7 AI swing-trading agent for S&P 500 equities, "
-                "driven by six scheduled Claude Code routines."),
-    # trader bullet 2 ("Paper-traded against SPY with kill-switch...")
-    # is dropped in v2.17 to make page-fit room for tax-rebalance.
-    # The website case study tells that story in full; the resume
-    # reader can click through. Removed from NEW_SECTION and trimmed
-    # via PARAGRAPHS_TO_DROP for the migration from old docx state.
-    ("role",    "Odds Aggregator (Python · Playwright · SQLite/Alembic · FastAPI)"),
-    ("bullet",  "Production arbitrage daemon covering 10 bookmakers "
-                "across 6 sports."),
-    # OA bullet 2 ("Ingest → normalize ...") removed in v2.17 to make
-    # page-fit room. The website case study covers ingestion +
-    # detection in full; the resume stays terse for parallelism with
-    # the 1-bullet trader entry.
-    ("role",    "tax-rebalance (Python · async SQLAlchemy 2 · httpx · pytest)"),
-    ("bullet",  "Canadian TFSA + RRSP portfolio drift monitor — emails "
-                "weekly digests with cost-aware rebalance verdicts. "
-                "Read-only; never places trades."),
-    ("bullet",  "Spec-driven TDD: 21-task plan executed task-by-task "
-                "with two-stage subagent review. 117 tests, zero ruff "
-                "violations, CI on Python 3.11 + 3.13. Questrade IQ "
-                "API with OAuth refresh-token rotation."),
-]
+def build_new_section() -> list[tuple[str, str]]:
+    """Read projects.yml and produce the (kind, text) tuples that the
+    walk-anchor logic consumes. The first tuple is always
+    ("heading", "PERSONAL PROJECTS"). Each project with a resume:
+    block produces ("role", role) followed by ("bullet", b) for each
+    bullet. Projects without a resume: block are skipped.
+
+    Order matches projects.yml order, so re-ordering on the website
+    re-orders the resume too. The walk-anchor logic in main()
+    handles per-entry idempotency, so adding/removing projects in
+    projects.yml just works."""
+    projects = yaml.safe_load(PROJECTS_YML.read_text(encoding="utf-8"))
+    section: list[tuple[str, str]] = [("heading", "PERSONAL PROJECTS")]
+    for p in projects:
+        resume = p.get("resume")
+        if not resume:
+            continue
+        section.append(("role", resume["role"]))
+        for bullet in resume.get("bullets", []):
+            section.append(("bullet", bullet))
+    return section
+
+
+# Built at import time from projects.yml. Kept as a module-level name
+# so the existing main() flow that references NEW_SECTION still works.
+NEW_SECTION = build_new_section()
 
 # Writing-section pointer appended at the end of PERSONAL PROJECTS.
 # Built as text + hyperlink + text so the URL is clickable in the PDF.

@@ -16,15 +16,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run refresh-meta.mjs
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Run refresh-meta.py
         env:
           # Prefer META_REFRESH_TOKEN (a fine-grained PAT with read
-          # access to the private source repos: trader, arbitrage).
-          # Falls back to the default GITHUB_TOKEN, which can only read
-          # the current repo — the script will then log [skip] for
-          # everything and no-op. See README for setup.
+          # access on All repositories, Metadata: Read). Falls back to
+          # the default GITHUB_TOKEN, which can only read the current
+          # repo — the script will then log [skip] for everything and
+          # no-op. See README for setup.
           GH_TOKEN: ${{ secrets.META_REFRESH_TOKEN || github.token }}
-        run: node scripts/refresh-meta.mjs
+        run: python scripts/refresh-meta.py
 
       - name: Commit if changed
         run: |

@@ -14,55 +14,91 @@ python -m http.server 8000
 Open <http://localhost:8000/>. You can also just double-click
 `index.html` &mdash; it works `file://` too.
 
-## Refresh project last-commit data
+## Adding or editing projects
 
-`scripts/refresh-meta.mjs` pulls `pushed_at` from GitHub for each
-featured repo and rewrites the corresponding `<span data-meta="...">` in
-`index.html`. It also stamps the footer `last_deployed`.
+Project content (cards on the site + entries on the resume) lives in
+`projects.yml`. To add or edit a project, change that one file and run:
 
 ```bash
-node scripts/refresh-meta.mjs
+python scripts/build-site.py
 ```
 
-Requires the `gh` CLI authenticated with read access to the repos in the
-script's `REPOS` list. Safe to skip &mdash; defaults stay in place if you
-don't run it.
+This calls three generators in order:
 
-### Automated weekly refresh (optional setup)
+- `scripts/generate-cards.py` &mdash; rewrites the `<div class="projects">`
+  block of `index.html` from `projects.yml`.
+- `scripts/refresh-resume.py` &mdash; updates `resume-source.docx`
+  PERSONAL PROJECTS section from each project's `resume:` block.
+- `scripts/refresh-meta.py` &mdash; refreshes `last-commit` timestamps
+  for projects with `auto_meta: true` and stamps the footer
+  `last_deployed`.
 
-A GitHub Action at `.github/workflows/refresh-meta.yml` runs the same
-script every Monday at 12:00 UTC (and on manual `gh workflow run`).
-It commits any changes back to `main` automatically.
-
-The source repos (`trader`, `arbitrage`) are private, so the default
-`GITHUB_TOKEN` can't read them &mdash; the action no-ops without a
-personal-access token. To activate weekly refresh:
-
-1. Create a **fine-grained PAT** at
-   <https://github.com/settings/personal-access-tokens/new> with
-   *Repository permissions &rarr; Metadata: Read* on
-   `jakethehoffer/trader` and `jakethehoffer/arbitrage`.
-2. Add it to the website repo at
-   <https://github.com/jakethehoffer/website/settings/secrets/actions>
-   as `META_REFRESH_TOKEN`.
-
-Without the secret the workflow stays inert. Manual
-`node scripts/refresh-meta.mjs` continues to work normally either way.
-
-## Refresh `resume.pdf`
-
-`resume-source.docx` is **not tracked** by git (Office metadata
-privacy — the binary captures creator/last-modified info). It lives
-locally next to `resume.pdf`. `scripts/refresh-resume.py` reads,
-edits, and scrubs metadata before saving.
+All three are idempotent. After running `build-site.py`, regenerate
+the PDF:
 
 ```bash
-python scripts/refresh-resume.py
 "C:/Program Files/LibreOffice/program/soffice.exe" --headless --convert-to pdf --outdir . resume-source.docx
 mv resume-source.pdf resume.pdf
 ```
 
-The committed `resume.pdf` is the only public-facing artifact.
+Commit `index.html`, `projects.yml`, and `resume.pdf` together.
+
+## projects.yml schema
+
+Each entry:
+
+| field | description |
+|---|---|
+| `key` | short id; matches `data-meta="<key>.last_commit"` on the page |
+| `name` | displayed name in the card's `<h3>` |
+| `status` | `active`, `shipped`, or `archived` (controls the pill colour) |
+| `url` | external link; `null` = name renders without an `<a>` wrapper |
+| `meta_key` | data-meta sentinel key (usually `<key>.last_commit`) |
+| `auto_meta` | `true` &rarr; `refresh-meta.py` auto-updates the timestamp |
+| `hardcoded_date` | fallback string when `auto_meta: false` (e.g. `"mar 2024"`) |
+| `what` | 1-2 sentence lede (HTML allowed for entities) |
+| `body` | 80-120 word description (HTML allowed) |
+| `metrics` | terse stats line (HTML entities pre-encoded) |
+| `chips` | tech-stack chips line |
+| `sample` | optional `{label, html}` for a code-block example |
+| `media` | optional `{src, alt, width, height}` for an image |
+| `cta` | optional `{label, url}` for an external CTA button |
+| `resume` | optional `{role, bullets}` for the resume; omit to skip |
+
+Project order in the rendered page matches order in `projects.yml`.
+
+## Automated weekly refresh
+
+A GitHub Action at `.github/workflows/refresh-meta.yml` runs
+`refresh-meta.py` every Monday at 12:00 UTC (and on manual
+`gh workflow run`). It commits any changes back to `main` automatically.
+
+The action reads `META_REFRESH_TOKEN` (a fine-grained PAT) from secrets.
+To set it up:
+
+1. Create a **fine-grained PAT** at
+   <https://github.com/settings/personal-access-tokens/new> with
+   *Repository access &rarr; All repositories* and *Repository
+   permissions &rarr; Metadata: Read*. "All repositories" is the right
+   scope so new projects are picked up automatically.
+2. Add it to the website repo at
+   <https://github.com/jakethehoffer/website/settings/secrets/actions>
+   as `META_REFRESH_TOKEN`.
+
+Without the secret the workflow stays inert &mdash; the default
+`GITHUB_TOKEN` can only read the current repo, so every project with
+`auto_meta: true` logs `[skip]`.
+
+## Refresh `resume.pdf`
+
+`resume-source.docx` is **not tracked** by git (Office metadata
+privacy &mdash; the binary captures creator/last-modified info). It lives
+locally next to `resume.pdf`. `scripts/refresh-resume.py` reads,
+edits, and scrubs metadata before saving.
+
+The full refresh sequence is documented above in the "Adding or
+editing projects" section. The committed `resume.pdf` is the only
+public-facing artifact.
 
 ## Deploy
 
@@ -71,9 +107,14 @@ then in **Settings &rarr; Pages**, source = `main` branch / root.
 
 ## Files
 
-- `index.html` &mdash; semantic single-page markup, boot-sequence end-state, JSON-LD Person.
+- `projects.yml` &mdash; single source of truth for featured projects.
+- `index.html` &mdash; semantic single-page markup; projects block
+  generated from `projects.yml`.
 - `styles.css` &mdash; all-mono design system, dark default + parchment light.
 - `script.js` &mdash; boot animation, mobile nav, theme toggle, IntersectionObserver reveal.
-- `scripts/refresh-meta.mjs` &mdash; optional last-commit injector (Node, uses `gh`).
+- `scripts/build-site.py` &mdash; orchestrator (runs the three generators).
+- `scripts/generate-cards.py` &mdash; renders the projects block.
+- `scripts/refresh-resume.py` &mdash; rewrites `resume-source.docx`.
+- `scripts/refresh-meta.py` &mdash; refreshes last-commit timestamps.
 - `resume.pdf` &mdash; downloadable PDF.
-- `docs/superpowers/` &mdash; design spec and implementation plan.
+- `docs/superpowers/` &mdash; design specs and implementation plans.

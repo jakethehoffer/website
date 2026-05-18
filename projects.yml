@@ -1,0 +1,189 @@
+# projects.yml — single source of truth for projects featured on the website + resume.
+#
+# Add a new project by appending an entry below. Then run:
+#   python scripts/build-site.py
+# which calls generate-cards.py + refresh-resume.py + refresh-meta.py in order.
+# Regenerate the PDF separately via the documented LibreOffice command.
+#
+# Schema (each entry):
+#   key             short id; matches data-meta="<key>.last_commit" on the page
+#   name            displayed name in the <h3>
+#   status          active | shipped | archived
+#   url             external link for the <h3> (null = name renders without <a>)
+#   meta_key        data-meta sentinel key (usually "<key>.last_commit")
+#   auto_meta       true → refresh-meta.py auto-updates the last-commit timestamp
+#   hardcoded_date  string used when auto_meta is false (e.g. "mar 2024", "2024")
+#   what            1-2 sentence project lede (HTML allowed)
+#   body            longer description, 80-120 words (HTML allowed)
+#   metrics         terse stats line (HTML entities pre-encoded)
+#   chips           tech-stack chips line
+#   sample          optional code-block: {label, html} where html uses sample__dim/ok/hi spans
+#   media           optional image: {src, alt, width, height}
+#   cta             optional button: {label, url}
+#   resume          optional resume entry: {role, bullets: [...]}; omit to skip resume
+
+- key: trader
+  name: trader
+  status: active
+  url: https://github.com/jakethehoffer/trader
+  meta_key: trader.last_commit
+  auto_meta: true
+  hardcoded_date: "last commit: today"
+  what: "24/7 AI swing-trading agent for S&amp;P 500 equities, driven by six scheduled Claude Code routines."
+  body: "Paper-traded on IBKR + Finnhub news; graduates to live only after 30 paper days of documented outperformance. Designed the risk model, journaling, and kill-switch from day one."
+  metrics: "s&amp;p 500 &middot; 6 scheduled agents &middot; ibkr paper"
+  chips: "python &middot; pytest &middot; ib_async &middot; finnhub &middot; claude code"
+  sample:
+    label: "Example daemon log"
+    html: |-
+      <span class="sample__dim">// example daemon log</span>
+      <span class="sample__dim">[2026-05-12 09:31:02]</span> <span class="sample__ok">scan_premarket</span>: 14 candidates &rarr; <span class="sample__hi">3 passed</span> (volatility gate)
+      <span class="sample__dim">[2026-05-12 09:31:18]</span> <span class="sample__ok">place_orders</span>: limit buy 100 NVDA @ 132.40 (paper)
+      <span class="sample__dim">[2026-05-12 16:00:01]</span> <span class="sample__ok">eod</span>: pnl +1.23%, 1 fill, 0 reject
+  media: null
+  cta: null
+  resume:
+    role: "trader (Python · IBKR · Finnhub · pytest)"
+    bullets:
+      - "24/7 AI swing-trading agent for S&P 500 equities, driven by six scheduled Claude Code routines."
+
+- key: arbitrage
+  name: Odds Aggregator
+  status: active
+  url: https://github.com/jakethehoffer/arbitrage
+  meta_key: arbitrage.last_commit
+  auto_meta: true
+  hardcoded_date: "last commit: today"
+  what: "Production arbitrage daemon covering 10 bookmakers across 6 sports."
+  body: "Ingest &rarr; normalize &rarr; detect cross-book arbs &rarr; push alerts to Telegram and Discord. Runs 24/7 on a Windows host with Alembic-managed schema and replay tooling for postmortems."
+  metrics: "10 books &middot; 6 sports &middot; 24/7 uptime"
+  chips: "python &middot; playwright &middot; sqlite &middot; alembic &middot; fastapi"
+  sample:
+    label: "Example alert payload"
+    html: |-
+      <span class="sample__dim">// example alert payload</span>
+      <span class="sample__hi">[ARB]</span> NHL &middot; Edmonton @ Vegas
+        pinnacle  EDM -132   &rarr;  stake 0.567
+        betmgm    VGK +145   &rarr;  stake 0.433
+        edge      <span class="sample__ok">+0.84%</span>      ttl 4m12s
+  media: null
+  cta: null
+  resume:
+    role: "Odds Aggregator (Python · Playwright · SQLite/Alembic · FastAPI)"
+    bullets:
+      - "Production arbitrage daemon covering 10 bookmakers across 6 sports."
+
+- key: tax-rebalance
+  name: tax-rebalance
+  status: active
+  url: https://github.com/jakethehoffer/tax-rebalance
+  meta_key: tax-rebalance.last_commit
+  auto_meta: true
+  hardcoded_date: "last commit: today"
+  what: "Python CLI that monitors a Canadian TFSA + RRSP portfolio for allocation drift and emails weekly digests with cost-aware rebalance verdicts."
+  body: "Read-only &mdash; never places trades; the user takes the action in their broker. Async end-to-end: SQLAlchemy 2.0 + aiosqlite, httpx, aiosmtplib, jinja2, structlog. Spec-driven development &mdash; every feature traces to a written design spec and a 21-task TDD implementation plan executed task-by-task with fresh-context subagent review (spec compliance, then code quality)."
+  metrics: "117 tests &middot; ruff-clean &middot; ci on py 3.11 + 3.13"
+  chips: "python &middot; async sqlalchemy 2 &middot; httpx &middot; aiosmtplib &middot; jinja2 &middot; pytest"
+  sample:
+    label: "Example weekly digest"
+    html: |-
+      <span class="sample__dim">// example weekly digest excerpt</span>
+      <span class="sample__dim">[TFSA]</span> VEQT 60.2% vs target 60.0%  &rarr; <span class="sample__ok">hold</span> (drift &lt;2%)
+      <span class="sample__dim">[TFSA]</span> XBB  19.4% vs target 20.0%  &rarr; <span class="sample__hi">buy $312</span> (cost-aware)
+      <span class="sample__dim">[RRSP]</span> VTI  39.8% vs target 40.0%  &rarr; <span class="sample__dim">hold</span> (cost &gt; expected benefit)
+  media: null
+  cta: null
+  resume:
+    role: "tax-rebalance (Python · async SQLAlchemy 2 · httpx · pytest)"
+    bullets:
+      - "Canadian TFSA + RRSP portfolio drift monitor — emails weekly digests with cost-aware rebalance verdicts. Read-only; never places trades."
+      - "Spec-driven TDD: 21-task plan executed task-by-task with two-stage subagent review. 117 tests, zero ruff violations, CI on Python 3.11 + 3.13. Questrade IQ API with OAuth refresh-token rotation."
+
+- key: equity-arbs
+  name: equity-arbs
+  status: shipped
+  url: https://github.com/jakethehoffer/equity-arbs
+  meta_key: equity-arbs.last_commit
+  auto_meta: true
+  hardcoded_date: "v1.0 &middot; 2026"
+  what: "Async Python stat-arb research toolkit for TSX-listed equities and ETFs &mdash; documented a hard ceiling and retired at v1.0."
+  body: "Engle-Granger cointegration + OLS hedge ratio + Ornstein-Uhlenbeck half-life scoring across an 80-name TSX universe; rolling-window regime-stability sweep; configurable backtest engine with z-score entry/exit, hold-time cap, and stop-loss buffer. Six analysis arcs, 76 unit tests. Decision-grade backtest proved the strategy works mathematically (+$216 net across 6 ETF pairs at zero commissions) but caps at ~0.6% annual return on $5K capital &mdash; below the passive TSX index alternative. Shipped a correct negative; retired the project at v1.0 with the toolkit as a reusable research asset."
+  metrics: "76 tests &middot; 80 equities + 39 etfs &middot; 6 analysis arcs"
+  chips: "python &middot; asyncio &middot; sqlalchemy 2 &middot; statsmodels &middot; pydantic &middot; typer"
+  sample:
+    label: "Example backtest verdict"
+    html: |-
+      <span class="sample__dim">// example backtest result — etf pairs, 7 years</span>
+      <span class="sample__dim">[XIU/XIC]</span> coint p=0.001  half-life 22d  &rarr; <span class="sample__ok">+$84</span> (entries 14, hits 9)
+      <span class="sample__dim">[XEG/XIT]</span> coint p=0.024  half-life 18d  &rarr; <span class="sample__hi">-$31</span> (entries 8, hits 3)
+      <span class="sample__dim">// net 6 pairs over 7y: +$216 (zero fees) &rarr; ~$30/yr at retail capital → below tsx index</span>
+  media: null
+  cta: null
+  resume:
+    role: "equity-arbs (Python · asyncio · SQLAlchemy 2 · statsmodels · pydantic)"
+    bullets:
+      - "Stat-arb research toolkit for TSX pair trading (spec-first, TDD, 76 unit tests). Decision-grade backtest demonstrated a ~0.6%/yr ceiling on retail capital; retired at v1.0 with the toolkit as a reusable research asset and a documented negative result."
+
+- key: mega-tictactoe
+  name: Mega Tic-Tac-Toe
+  status: shipped
+  url: https://jakethehoffer.itch.io/mega-tictactoe
+  meta_key: null
+  auto_meta: false
+  hardcoded_date: "mar 2024"
+  what: "Unity game on a 3&times;3 grid of linked Tic-Tac-Toe boards &mdash; each move dictates the opponent&rsquo;s next board."
+  body: "Local + online multiplayer; single player vs. a Minimax-based AI with multiple difficulty levels. Self-shipped indie title on itch.io."
+  metrics: "unity &middot; c# &middot; minimax ai &middot; local + online mp"
+  chips: "unity &middot; c# &middot; minimax ai &middot; multiplayer"
+  sample: null
+  media:
+    src: "assets/projects/mega-ttt.webp"
+    alt: "Mega Tic-Tac-Toe gameplay: a 3x3 grid of sub-boards with Xs and Os, one sub-board claimed by a large blue O"
+    width: 802
+    height: 802
+  cta:
+    label: "[ play on itch.io &#x2197; ]"
+    url: "https://jakethehoffer.itch.io/mega-tictactoe"
+  resume: null
+
+- key: smart-shoe
+  name: Smart Shoe Navigation
+  status: shipped
+  url: null
+  meta_key: null
+  auto_meta: false
+  hardcoded_date: "2024"
+  what: "Dart mobile app pairing via Bluetooth to a &ldquo;Smart Shoe&rdquo; for turn-by-turn directions."
+  body: "Users enter a destination; the app delivers on-screen prompts plus directional haptic feedback in the shoe itself."
+  metrics: "dart &middot; flutter &middot; bluetooth &middot; embedded haptics"
+  chips: "dart &middot; flutter &middot; bluetooth &middot; embedded"
+  sample:
+    label: "Example API call"
+    html: |-
+      <span class="sample__dim">// example api call — turn right in 30m</span>
+      shoe.pulse(side: <span class="sample__hi">Side.right</span>,
+                 strength: 0.7,
+                 pattern: <span class="sample__hi">Pattern.doubleTap</span>);
+  media: null
+  cta: null
+  resume: null
+
+- key: walking-jumping
+  name: Walking / Jumping Classifier
+  status: shipped
+  url: null
+  meta_key: null
+  auto_meta: false
+  hardcoded_date: "2023"
+  what: "Python ML pipeline classifying accelerometer time-series as walking vs. jumping."
+  body: "End-to-end &mdash; data collection, feature engineering, model training, evaluation. Course capstone shipped with reproducible scripts."
+  metrics: "python &middot; accelerometer &middot; signal processing"
+  chips: "python &middot; numpy &middot; scikit-learn &middot; signal processing"
+  sample: null
+  media:
+    src: "assets/projects/walking-jumping-cm.png"
+    alt: "Confusion matrix: 182 true walking, 156 true jumping, 7+5 misclassifications. Accuracy 0.965, F1 0.964."
+    width: 660
+    height: 440
+  cta: null
+  resume: null
