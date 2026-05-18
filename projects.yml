@@ -103,8 +103,8 @@
   name: equity-arbs
   status: shipped
   url: https://github.com/jakethehoffer/equity-arbs
-  meta_key: equity-arbs.last_commit
-  auto_meta: true
+  meta_key: null
+  auto_meta: false
   hardcoded_date: "v1.0 &middot; 2026"
   what: "Async Python stat-arb research toolkit for TSX-listed equities and ETFs &mdash; documented a hard ceiling and retired at v1.0."
   body: "Engle-Granger cointegration + OLS hedge ratio + Ornstein-Uhlenbeck half-life scoring across an 80-name TSX universe; rolling-window regime-stability sweep; configurable backtest engine with z-score entry/exit, hold-time cap, and stop-loss buffer. Six analysis arcs, 76 unit tests. Decision-grade backtest proved the strategy works mathematically (+$216 net across 6 ETF pairs at zero commissions) but caps at ~0.6% annual return on $5K capital &mdash; below the passive TSX index alternative. Shipped a correct negative; retired the project at v1.0 with the toolkit as a reusable research asset."
