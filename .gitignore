@@ -17,3 +17,4 @@ Thumbs.db
 # The canonical published artifact is resume.pdf, regenerated via
 # scripts/refresh-resume.py + LibreOffice on the user's machine.
 *.docx
+__pycache__/
