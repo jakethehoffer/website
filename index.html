@@ -72,6 +72,7 @@
           <li><a href="#skills">skills</a></li>
           <li><a href="#projects">projects</a></li>
           <li><a href="#case-study">case_study</a></li>
+          <li><a href="#writing">writing</a></li>
           <li><a href="#experience">experience</a></li>
           <li><a href="#education">education</a></li>
           <li><a href="#contact">contact</a></li>
@@ -319,6 +320,45 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
             <h3>What I learned / what&rsquo;s next</h3>
             <p>Production scrapers fail in interesting ways. The most underestimated work was <em>defensive ingestion</em> &mdash; per-book health scoring, automatic backoff on bot-detection, intermittent-cluster tolerance. The math layer was small; the operations layer was most of it. Next step: a paper-trading recorder that attributes realized P&amp;L to historical alerts without actually placing bets, so the alert pipeline can be calibrated against real outcomes.</p>
           </div>
+        </div>
+      </section>
+      <section id="writing" class="section">
+        <div class="container">
+          <p class="section__label"># writing</p>
+          <article class="writing-post">
+            <header>
+              <p class="writing-post__meta">2026-05-18 &middot; ~3 min read</p>
+              <h2>The cheapest kill-switch is a YAML key</h2>
+            </header>
+            <p>You&rsquo;re building something that can blow up &mdash; money, data, state. You need a way to stop it. The instinct is to reach for &ldquo;real&rdquo; infrastructure: a feature flag service, an env var the operator sets at runtime, a row in a database the worker polls. I picked none of those for <code>trader</code>. I used a YAML key. Here&rsquo;s why.</p>
+
+            <h3>The instinct</h3>
+            <p>Each of the &ldquo;serious&rdquo; options has real engineering behind it. A feature flag service like LaunchDarkly gives you per-user gates, scheduled rollouts, and audit logs &mdash; sophisticated and well-understood. An environment variable, set with <code>KILL_SWITCH=1</code> and a restart, is the textbook twelve-factor move. A row in a <code>kill_switches</code> table that the worker polls on every iteration is composable, supports per-strategy flags, and trivially grows a UI later.</p>
+            <p>I have used all three in other contexts and I will use them again. None of them is right for this problem. The kill-switch on a trading agent is not a feature flag and not a deployment toggle. It is a stop button. The thing a stop button needs to do, more than anything else, is <em>work when you press it</em>.</p>
+
+            <h3>Why those are wrong here</h3>
+            <p>The asymmetry is the whole argument. For a kill-switch, the cost of failing to stop is catastrophic &mdash; money moves, positions open, the agent keeps trading through the failure. The cost of being too simple &mdash; one global switch, no per-strategy granularity, no UI &mdash; is zero. The decision should optimize for <em>can I reliably stop?</em> and nothing else.</p>
+            <p>Each &ldquo;serious&rdquo; option introduces a dependency between <em>I want to stop</em> and <em>I can stop</em>. The feature flag service needs the network; if the network is what&rsquo;s broken, the kill-switch is what&rsquo;s broken. The environment variable requires the operator to be present and the process to restart, and the restart is itself a risky action while a position is open. The database row requires the worker to be talking to the DB to read it, so a degraded DB connection is a degraded kill-switch.</p>
+            <p>A YAML key in the repo has no failure mode that isn&rsquo;t also a failure mode of running the code at all.</p>
+
+            <h3>The one-key approach</h3>
+            <p>The implementation is six lines of config and four lines of code:</p>
+<pre><code>kill_switch:
+  enabled: false</code></pre>
+<pre><code>def main():
+    cfg = yaml.safe_load(open("config.yaml"))
+    if cfg["kill_switch"]["enabled"]:
+        log.warning("kill_switch enabled; exiting")
+        return
+    # ... normal routine body</code></pre>
+            <p>Flipping the switch is <code>git commit -am 'kill' &amp;&amp; git push</code>. The next scheduled tick reads the new config and exits cleanly without opening a position. The state is in version control, the diff is the audit log, the rollback is <code>git revert</code>, and &ldquo;who triggered the kill&rdquo; is <code>git blame</code>.</p>
+
+            <h3>What you give up</h3>
+            <p>No per-strategy flags. No scheduled windows. No UI. No ability to disable opening positions while still allowing closes &mdash; that one stings a little, and if I ever need it I&rsquo;ll add a second key, not a second system. All true tradeoffs. None of them answer the question the kill-switch exists to answer, which is: <em>is the agent allowed to trade right now?</em> That is the only question, and one global boolean answers it.</p>
+
+            <h3>The shape of the principle</h3>
+            <p>The cheapest tool that solves the actual problem beats the sophisticated tool that also solves problems you don&rsquo;t have. The trap is reaching for infrastructure because it feels more engineered, when the asymmetry of the failure modes points hard at the simple option. Kill-switches are the clearest case I&rsquo;ve worked through. The same shape shows up elsewhere &mdash; risk counters in committed JSON instead of SQLite, a 30-day paper-trade gate as a file write instead of a feature flag. Same instinct, same result.</p>
+          </article>
         </div>
       </section>
       <section id="experience" class="section">

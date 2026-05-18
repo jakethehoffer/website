@@ -440,6 +440,53 @@ h1, h2, h3 { letter-spacing: -0.01em; }
   border-radius: 3px;
 }
 
+/* ---------- Writing post ---------- */
+.writing-post {
+  max-width: 65ch;
+}
+.writing-post__meta {
+  margin: 0 0 0.25rem;
+  font-size: 0.8125rem;
+  color: var(--text-mute);
+  letter-spacing: 0.04em;
+}
+.writing-post h3 {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-mute);
+  margin: 2rem 0 0.5rem;
+  font-weight: 500;
+}
+.writing-post p {
+  margin: 0 0 1rem;
+  color: var(--text);
+}
+.writing-post code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  color: var(--accent);
+  background: var(--bg-elev);
+  padding: 0.05em 0.35em;
+  border-radius: 3px;
+}
+.writing-post pre {
+  margin: 1rem 0 1.25rem;
+  padding: 1rem;
+  background: var(--bg-elev);
+  border: 1px solid var(--bg-grid);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.writing-post pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
 /* ---------- Timeline ---------- */
 .timeline {
   list-style: none;
