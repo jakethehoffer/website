@@ -307,18 +307,13 @@ Visually verify:
 - Both dark and light themes look correct (use the theme toggle in nav)
 - Mobile: open dev tools, set viewport to 375px wide, verify the section reads cleanly and code blocks scroll horizontally if needed
 
-- [ ] **Step 3: Run banned-term grep locally (mimics public-safety CI)**
+- [ ] **Step 3: Skip local banned-term grep — let CI handle it**
 
-```bash
-git grep -in -F '[removed]' || echo "clean"
-git grep -in -F '[removed]' || echo "clean"
-git grep -in -F '[removed]' || echo "clean"
-git grep -in -F '[removed-org]-Services' || echo "clean"
-git grep -in -F '[removed-street]' || echo "clean"
-git grep -in -F '[removed-domain]' || echo "clean"
-```
-
-Expected: six `clean` lines. Any actual hits (other than the public-safety.yml file itself, which is excluded in CI) must be investigated.
+The repo's `public-safety.yml` workflow runs on every push and greps for
+the project's banned-term list using string-fragmented selectors so the
+workflow itself isn't a leak. Reproducing the list here in plain text
+would itself be a banned-term hit. Push the commit; CI verifies in ~10s.
+See `.github/workflows/public-safety.yml` for the canonical check.
 
 - [ ] **Step 4: Stop the local server**
 
