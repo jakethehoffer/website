@@ -18,8 +18,9 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const INDEX = resolve(HERE, "..", "index.html");
 
 const REPOS = [
-  { owner: "jakethehoffer", name: "trader",    key: "trader.last_commit" },
-  { owner: "jakethehoffer", name: "arbitrage", key: "arbitrage.last_commit" },
+  { owner: "jakethehoffer", name: "trader",        key: "trader.last_commit" },
+  { owner: "jakethehoffer", name: "arbitrage",     key: "arbitrage.last_commit" },
+  { owner: "jakethehoffer", name: "tax-rebalance", key: "tax-rebalance.last_commit" },
 ];
 
 function ghPushedAt(owner, name) {

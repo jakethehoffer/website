@@ -73,6 +73,16 @@ PARAGRAPHS_TO_DROP = [
     # bullets establish the Q-learning + Deep Q story without it.
     # Dropped in v2.16 to make room for the Writing line.
     "Helped the team move from the simple Q-learning",
+    # SUMMARY bullet 4 — generic soft-skill line, lowest signal on
+    # the page. Dropped in v2.17 to make room for tax-rebalance.
+    "Collaborates with non-technical teammates",
+    # trader resume bullet 2 — the website case study tells the
+    # kill-switch / risk-gate / paper-trade-gate story in full;
+    # the resume reader can click through. Dropped in v2.17.
+    "Paper-traded against SPY with kill-switch",
+    # OA resume bullet 2 — same reasoning. Website case study covers
+    # ingestion + detection in full. Dropped in v2.17.
+    "Ingest → normalize → detect cross-book arbs",
 ]
 
 # Cloned-template-based PERSONAL PROJECTS section.
@@ -81,15 +91,26 @@ NEW_SECTION = [
     ("role",    "trader (Python · IBKR · Finnhub · pytest)"),
     ("bullet",  "24/7 AI swing-trading agent for S&P 500 equities, "
                 "driven by six scheduled Claude Code routines."),
-    ("bullet",  "Paper-traded against SPY with kill-switch, risk gates, "
-                "and committed JSON journaling; graduates to live "
-                "trading after 30 days of documented outperformance."),
+    # trader bullet 2 ("Paper-traded against SPY with kill-switch...")
+    # is dropped in v2.17 to make page-fit room for tax-rebalance.
+    # The website case study tells that story in full; the resume
+    # reader can click through. Removed from NEW_SECTION and trimmed
+    # via PARAGRAPHS_TO_DROP for the migration from old docx state.
     ("role",    "Odds Aggregator (Python · Playwright · SQLite/Alembic · FastAPI)"),
     ("bullet",  "Production arbitrage daemon covering 10 bookmakers "
                 "across 6 sports."),
-    ("bullet",  "Ingest → normalize → detect cross-book arbs → push "
-                "alerts to Telegram and Discord. Runs 24/7 with replay "
-                "tooling for postmortems."),
+    # OA bullet 2 ("Ingest → normalize ...") removed in v2.17 to make
+    # page-fit room. The website case study covers ingestion +
+    # detection in full; the resume stays terse for parallelism with
+    # the 1-bullet trader entry.
+    ("role",    "tax-rebalance (Python · async SQLAlchemy 2 · httpx · pytest)"),
+    ("bullet",  "Canadian TFSA + RRSP portfolio drift monitor — emails "
+                "weekly digests with cost-aware rebalance verdicts. "
+                "Read-only; never places trades."),
+    ("bullet",  "Spec-driven TDD: 21-task plan executed task-by-task "
+                "with two-stage subagent review. 117 tests, zero ruff "
+                "violations, CI on Python 3.11 + 3.13. Questrade IQ "
+                "API with OAuth refresh-token rotation."),
 ]
 
 # Writing-section pointer appended at the end of PERSONAL PROJECTS.
@@ -371,19 +392,40 @@ def main() -> None:
         "bullet":  bullet_template,
     }
 
-    already = find_para(body, lambda p: p.text.strip() == "PERSONAL PROJECTS")
-    if already is not None:
-        print("[same] PERSONAL PROJECTS section already present")
+    # Walk-anchor idempotent insert: for each NEW_SECTION entry, find
+    # a matching paragraph in the body. If present, advance the anchor;
+    # if absent, clone the template, set text, insert after anchor.
+    # Matching: heading uses exact text equality (after strip); role
+    # and bullet use prefix match on the first 30 chars (enough to
+    # disambiguate without being fragile to em-dash/punctuation drift).
+    def _matches(p, kind, text):
+        if kind == "heading":
+            return p.text.strip() == text
+        return p.text.strip().startswith(text[:30].strip())
+
+    anchor_el = doc.paragraphs[-1]._element
+    inserted = 0
+    skipped = 0
+    body = doc.paragraphs  # may have been mutated by trim step
+    for kind, text in NEW_SECTION:
+        existing = find_para(body, lambda p, k=kind, t=text: _matches(p, k, t))
+        if existing is not None:
+            anchor_el = existing._element
+            skipped += 1
+            continue
+        template = templates[kind]
+        new_el = clone_paragraph_element(template)
+        anchor_el.addnext(new_el)
+        anchor_el = new_el
+        wrapper = Paragraph(new_el, None)
+        set_paragraph_text(wrapper, text)
+        inserted += 1
+        body = doc.paragraphs  # re-read after mutation
+
+    if inserted == 0:
+        print(f"[same] PERSONAL PROJECTS section already present ({skipped} entries)")
     else:
-        anchor = body[-1]._element
-        for kind, text in NEW_SECTION:
-            template = templates[kind]
-            new_el = clone_paragraph_element(template)
-            anchor.addnext(new_el)
-            anchor = new_el
-            wrapper = Paragraph(new_el, None)
-            set_paragraph_text(wrapper, text)
-        print(f"[ok]   inserted PERSONAL PROJECTS section ({len(NEW_SECTION)} paragraphs)")
+        print(f"[ok]   PERSONAL PROJECTS: inserted {inserted} entry(ies), {skipped} already present")
 
     # --- 5. Writing-section reference appended to PERSONAL PROJECTS ---
     if insert_writing_line(doc):

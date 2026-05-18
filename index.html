@@ -190,6 +190,23 @@
 
             <article class="project">
               <header class="project__head">
+                <span class="status status--active" role="img" aria-label="Status: active"></span>
+                <span class="project__status-label">ACTIVE</span>
+                <span class="project__last-commit" data-meta="tax-rebalance.last_commit">last commit: today</span>
+              </header>
+              <h3 class="project__name"><a href="https://github.com/jakethehoffer/tax-rebalance" target="_blank" rel="noopener">tax-rebalance</a></h3>
+              <p class="project__what">Python CLI that monitors a Canadian TFSA + RRSP portfolio for allocation drift and emails weekly digests with cost-aware rebalance verdicts.</p>
+              <p class="project__body">Read-only &mdash; never places trades; the user takes the action in their broker. Async end-to-end: SQLAlchemy 2.0 + aiosqlite, httpx, aiosmtplib, jinja2, structlog. Spec-driven development &mdash; every feature traces to a written design spec and a 21-task TDD implementation plan executed task-by-task with fresh-context subagent review (spec compliance, then code quality).</p>
+              <p class="project__metrics"><span class="metrics__prefix">//</span> 117 tests &middot; ruff-clean &middot; ci on py 3.11 + 3.13</p>
+              <p class="project__chips">python &middot; async sqlalchemy 2 &middot; httpx &middot; aiosmtplib &middot; jinja2 &middot; pytest</p>
+              <pre class="project__sample" aria-label="Example weekly digest"><span class="sample__dim">// example weekly digest excerpt</span>
+<span class="sample__dim">[TFSA]</span> VEQT 60.2% vs target 60.0%  &rarr; <span class="sample__ok">hold</span> (drift &lt;2%)
+<span class="sample__dim">[TFSA]</span> XBB  19.4% vs target 20.0%  &rarr; <span class="sample__hi">buy $312</span> (cost-aware)
+<span class="sample__dim">[RRSP]</span> VTI  39.8% vs target 40.0%  &rarr; <span class="sample__dim">hold</span> (cost &gt; expected benefit)</pre>
+            </article>
+
+            <article class="project">
+              <header class="project__head">
                 <span class="status status--shipped" role="img" aria-label="Status: shipped"></span>
                 <span class="project__status-label">SHIPPED</span>
                 <span class="project__last-commit">mar 2024</span>
