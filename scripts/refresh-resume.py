@@ -69,6 +69,10 @@ PARAGRAPHS_TO_DROP = [
     "Production cross-book arbitrage daemon",
     "Designed broker abstraction",
     "Built defensive ingestion",
+    # QMIND bullet 3 — diluted "helped" phrasing; the first two
+    # bullets establish the Q-learning + Deep Q story without it.
+    # Dropped in v2.16 to make room for the Writing line.
+    "Helped the team move from the simple Q-learning",
 ]
 
 # Cloned-template-based PERSONAL PROJECTS section.
@@ -87,6 +91,15 @@ NEW_SECTION = [
                 "alerts to Telegram and Discord. Runs 24/7 with replay "
                 "tooling for postmortems."),
 ]
+
+# Writing-section pointer appended at the end of PERSONAL PROJECTS.
+# Built as text + hyperlink + text so the URL is clickable in the PDF.
+WRITING_LINE = {
+    "prefix":    "Writing: ",
+    "link_text": "jakethehoffer.github.io/website/#writing",
+    "link_url":  "https://jakethehoffer.github.io/website/#writing",
+    "suffix":    " — short essays on engineering tradeoffs.",
+}
 
 
 # ------------- helpers -------------
@@ -227,6 +240,53 @@ def trim_dropped_paragraphs(doc) -> int:
     return len(to_remove)
 
 
+def insert_writing_line(doc) -> bool:
+    """Append a one-line Writing reference at the end of the document.
+
+    The line lives at the same indent as the role-template paragraphs
+    (e.g. 'trader (Python ...)') so it sits as an addendum to PERSONAL
+    PROJECTS rather than as a bullet under any specific project.
+    Idempotent: returns False if a paragraph starting with 'Writing:'
+    is already present."""
+    body = doc.paragraphs
+    if any(p.text.strip().startswith("Writing:") for p in body):
+        return False
+
+    role_template = find_para(
+        body, lambda p: p.text.strip().startswith("trader (Python"))
+    if role_template is None:
+        raise RuntimeError(
+            "Could not find role template ('trader (Python...') "
+            "— PERSONAL PROJECTS step must run first.")
+
+    # Clone the role template element so we inherit its indent and
+    # paragraph properties, then strip its runs so we can rebuild.
+    new_el = clone_paragraph_element(role_template)
+    for child in list(new_el):
+        tag = child.tag.split("}", 1)[-1]
+        if tag in ("r", "hyperlink"):
+            new_el.remove(child)
+
+    # Capture the role template's first-run formatting (font, size).
+    first_run = role_template._element.find(qn("w:r"))
+    template_rPr = _copy_text_rpr(first_run)
+
+    # Build prefix text + hyperlink + suffix text.
+    new_el.append(_make_text_run(WRITING_LINE["prefix"], template_rPr))
+    new_el.append(_make_hyperlink(
+        WRITING_LINE["link_text"],
+        WRITING_LINE["link_url"],
+        template_rPr,
+        doc.part,
+    ))
+    new_el.append(_make_text_run(WRITING_LINE["suffix"], template_rPr))
+
+    # Append after the current last paragraph (which is the last
+    # Odds Aggregator bullet after the PERSONAL PROJECTS step has run).
+    doc.paragraphs[-1]._element.addnext(new_el)
+    return True
+
+
 # ------------- main -------------
 
 def scrub_metadata(doc) -> None:
@@ -324,6 +384,12 @@ def main() -> None:
             wrapper = Paragraph(new_el, None)
             set_paragraph_text(wrapper, text)
         print(f"[ok]   inserted PERSONAL PROJECTS section ({len(NEW_SECTION)} paragraphs)")
+
+    # --- 5. Writing-section reference appended to PERSONAL PROJECTS ---
+    if insert_writing_line(doc):
+        print("[ok]   inserted Writing line at end of PERSONAL PROJECTS")
+    else:
+        print("[same] Writing line already present")
 
     # --- 4. Scrub Office metadata ---
     scrub_metadata(doc)
