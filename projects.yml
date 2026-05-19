@@ -96,8 +96,33 @@
   resume:
     role: "tax-rebalance (Python · async SQLAlchemy 2 · httpx · pytest)"
     bullets:
-      - "Canadian TFSA + RRSP portfolio drift monitor — emails weekly digests with cost-aware rebalance verdicts. Read-only; never places trades."
-      - "Spec-driven TDD: 21-task plan executed task-by-task with two-stage subagent review. 117 tests, zero ruff violations, CI on Python 3.11 + 3.13. Questrade IQ API with OAuth refresh-token rotation."
+      - "Canadian TFSA + RRSP portfolio drift monitor — emails weekly digests with cost-aware rebalance verdicts (read-only; never places trades). Spec-driven TDD: 21-task plan, two-stage subagent review, 117 tests, ruff-clean, CI on Py 3.11 + 3.13. Questrade IQ API with OAuth refresh-token rotation."
+
+- key: trades-agency
+  name: trades-agency
+  status: shipped
+  url: https://github.com/jakethehoffer/trades-agency
+  meta_key: null
+  auto_meta: false
+  hardcoded_date: "abandoned &middot; 2026"
+  what: "AI receptionist + lead-gen service targeting Toronto trades &mdash; built the full stack, ran a real customer-discovery experiment, abandoned the venture on the data."
+  body: "Three Python subsystems: lead-gen via Google Places API, an LLM-driven SDR generating cold outreach, and a conversational receptionist agent (&ldquo;Riley&rdquo;) with booking and message-taking logic. Ran a 32-contact cold-outreach experiment over four days (18 SMS, 14 email) and got 0 positive replies. Wrote a Bayesian post-mortem ranking six hypotheses; the leading explanation was ICP/channel mismatch &mdash; small Toronto trades simply don&rsquo;t engage with cold outreach from strangers. Abandoned the venture rather than burning more credibility and time on a non-responsive niche."
+  metrics: "32 contacts &middot; 0 positive replies &middot; 6 hypotheses ranked"
+  chips: "python &middot; google places api &middot; llm &middot; sdr &middot; receptionist agent"
+  sample:
+    label: "Excerpt from post-mortem hypothesis ranking"
+    html: |-
+      <span class="sample__dim">// cold outreach batch 1 — 32 contacts, 0 positive replies</span>
+      <span class="sample__dim">[H1]</span> wrong icp for cold inbound      <span class="sample__hi">strong</span> (0/32 across 2 channels)
+      <span class="sample__dim">[H2]</span> send time wrong (sat 2pm)      <span class="sample__dim">weak</span>   (wouldn&rsquo;t explain 0%)
+      <span class="sample__dim">[H6]</span> wrong offer (missed-call pmf)  <span class="sample__hi">strong</span> (never validated demand)
+      <span class="sample__dim">// recommendation: warm-intro experiment before more cold outreach</span>
+  media: null
+  cta: null
+  resume:
+    role: "trades-agency (Python · Google Places API · LLM SDR · async)"
+    bullets:
+      - "Toronto AI-receptionist + lead-gen venture (3 Python subsystems). 32-contact cold-outreach experiment returned 0 positive replies; wrote a 6-hypothesis post-mortem and abandoned the venture on the data rather than iterating on a non-responsive ICP."
 
 - key: equity-arbs
   name: equity-arbs

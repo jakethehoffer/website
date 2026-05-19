@@ -102,6 +102,33 @@ PARAGRAPHS_TO_DROP = [
     # Smart Shoe Navigation project is already featured in the
     # website's PROJECTS section. Dropped in v2.18.
     "Created a mobile app in Dart that pairs via Bluetooth",
+    # tax-rebalance old bullet 1 — merged into a single denser bullet
+    # in v2.19 to make page-fit room for trades-agency. The new
+    # merged form starts with the same prefix, so the trim's exact
+    # prefix has to be specific enough to NOT match the new form.
+    # Old bullet 1: ends after "never places trades."
+    # New merged:   continues into "Spec-driven TDD: 21-task plan..."
+    # Use a prefix that catches the old form's exact ending:
+    "Canadian TFSA + RRSP portfolio drift monitor — emails weekly digests with cost-aware rebalance verdicts. Read",
+    # tax-rebalance old bullet 2 (the spec-driven TDD bullet) —
+    # merged into bullet 1.
+    "Spec-driven TDD: 21-task plan",
+    # trades-agency old form (longer initial wording) — tightened to
+    # a shorter dense bullet in the same cycle that added it. The
+    # new form starts with "Toronto AI-receptionist + lead-gen
+    # venture (3 Python subsystems)." (parenthesis) while the old
+    # started with "Toronto AI-receptionist + lead-gen venture:"
+    # (colon). Trim catches the old form via the colon.
+    "Toronto AI-receptionist + lead-gen venture:",
+    # QMIND bullet 2 — bullet 1 covers the RL story; bullet 2 adds
+    # detail at the cost of vertical space. Dropped when adding
+    # trades-agency pushed PERSONAL PROJECTS over page boundary.
+    "Built a tabular Q-learning version",
+    # Mega TTT EXPERIENCE Minimax bullet — the Minimax AI is
+    # mentioned on the project's chip list and metrics line on the
+    # website, so the resume bullet is redundant. Dropped to make
+    # page-fit room for trades-agency.
+    "Implemented a Minimax-based algorithm for the computer opponent",
 ]
 
 def build_new_section() -> list[tuple[str, str]]:
