@@ -159,7 +159,7 @@
                 <span class="project__status-label">ACTIVE</span>
                 <span class="project__last-commit" data-meta="trader.last_commit">last commit: today</span>
               </header>
-              <h3 class="project__name"><a href="https://github.com/jakethehoffer/trader" target="_blank" rel="noopener">trader</a></h3>
+              <h3 class="project__name">trader <span class="project__private">private</span></h3>
               <p class="project__what">24/7 AI swing-trading agent for S&amp;P 500 equities, driven by six scheduled Claude Code routines.</p>
               <p class="project__body">Paper-traded on IBKR + Finnhub news; graduates to live only after 30 paper days of documented outperformance. Designed the risk model, journaling, and kill-switch from day one.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> s&amp;p 500 &middot; 6 scheduled agents &middot; ibkr paper</p>
@@ -168,6 +168,7 @@
 <span class="sample__dim">[2026-05-12 09:31:02]</span> <span class="sample__ok">scan_premarket</span>: 14 candidates &rarr; <span class="sample__hi">3 passed</span> (volatility gate)
 <span class="sample__dim">[2026-05-12 09:31:18]</span> <span class="sample__ok">place_orders</span>: limit buy 100 NVDA @ 132.40 (paper)
 <span class="sample__dim">[2026-05-12 16:00:01]</span> <span class="sample__ok">eod</span>: pnl +1.23%, 1 fill, 0 reject</pre>
+              <p class="project__cta"><a class="btn" href="#case-study">[ read case study &darr; ]</a></p>
             </article>
 
             <article class="project">
@@ -176,7 +177,7 @@
                 <span class="project__status-label">ACTIVE</span>
                 <span class="project__last-commit" data-meta="arbitrage.last_commit">last commit: today</span>
               </header>
-              <h3 class="project__name"><a href="https://github.com/jakethehoffer/arbitrage" target="_blank" rel="noopener">Odds Aggregator</a></h3>
+              <h3 class="project__name">Odds Aggregator <span class="project__private">private</span></h3>
               <p class="project__what">Production arbitrage daemon covering 10 bookmakers across 6 sports.</p>
               <p class="project__body">Ingest &rarr; normalize &rarr; detect cross-book arbs &rarr; push alerts to Telegram and Discord. Runs 24/7 on a Windows host with Alembic-managed schema and replay tooling for postmortems.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> 10 books &middot; 6 sports &middot; 24/7 uptime</p>
@@ -186,15 +187,16 @@
   pinnacle  EDM -132   &rarr;  stake 0.567
   betmgm    VGK +145   &rarr;  stake 0.433
   edge      <span class="sample__ok">+0.84%</span>      ttl 4m12s</pre>
+              <p class="project__cta"><a class="btn" href="#case-study-arb">[ read case study &darr; ]</a></p>
             </article>
 
             <article class="project">
               <header class="project__head">
                 <span class="status status--active" role="img" aria-label="Status: active"></span>
                 <span class="project__status-label">ACTIVE</span>
-                <span class="project__last-commit" data-meta="tax-rebalance.last_commit">last commit: 6d ago</span>
+                <span class="project__last-commit" data-meta="tax-rebalance.last_commit">last commit: 10d ago</span>
               </header>
-              <h3 class="project__name"><a href="https://github.com/jakethehoffer/tax-rebalance" target="_blank" rel="noopener">tax-rebalance</a></h3>
+              <h3 class="project__name">tax-rebalance <span class="project__private">private</span></h3>
               <p class="project__what">Python CLI that monitors a Canadian TFSA + RRSP portfolio for allocation drift and emails weekly digests with cost-aware rebalance verdicts.</p>
               <p class="project__body">Read-only &mdash; never places trades; the user takes the action in their broker. Async end-to-end: SQLAlchemy 2.0 + aiosqlite, httpx, aiosmtplib, jinja2, structlog. Spec-driven development &mdash; every feature traces to a written design spec and a 21-task TDD implementation plan executed task-by-task with fresh-context subagent review (spec compliance, then code quality).</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> 117 tests &middot; ruff-clean &middot; ci on py 3.11 + 3.13</p>
@@ -512,7 +514,7 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
       <div class="container site-footer__inner">
         <p class="site-footer__prompt">$ <span class="boot__caret" aria-hidden="true">_</span></p>
         <p class="site-footer__meta">
-          <span data-meta="last_deployed">last_deployed: 2026-05-25</span>
+          <span data-meta="last_deployed">last_deployed: 2026-05-28</span>
           <span class="site-footer__sep">&middot;</span>
           <span>&copy; <span id="footer-year">2026</span> jake hoffman</span>
         </p>
