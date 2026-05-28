@@ -53,6 +53,9 @@ Each entry:
 | `name` | displayed name in the card's `<h3>` |
 | `status` | `active`, `shipped`, or `archived` (controls the pill colour) |
 | `url` | external link; `null` = name renders without an `<a>` wrapper |
+| `private` | `true` &rarr; name renders as a `private` pill, not a (404-ing) link |
+| `case_study` | optional on-page anchor (e.g. `"#case-study"`) for a `[ read case study ↓ ]` CTA |
+| `resume_priority` | int; higher = more important (drives resume curation, below) |
 | `meta_key` | data-meta sentinel key (usually `<key>.last_commit`) |
 | `auto_meta` | `true` &rarr; `refresh-meta.py` auto-updates the timestamp |
 | `hardcoded_date` | fallback string when `auto_meta: false` (e.g. `"mar 2024"`) |
@@ -63,9 +66,24 @@ Each entry:
 | `sample` | optional `{label, html}` for a code-block example |
 | `media` | optional `{src, alt, width, height}` for an image |
 | `cta` | optional `{label, url}` for an external CTA button |
-| `resume` | optional `{role, bullets}` for the resume; omit to skip |
+| `resume` | optional `{role, bullets}` for the resume; `null`/omit to skip |
 
 Project order in the rendered page matches order in `projects.yml`.
+
+### Resume curation (one-page guarantee)
+
+The **website** shows every project. The **resume** shows only the top
+`RESUME_MAX_PROJECTS` (in `scripts/refresh-resume.py`, currently 4) of
+the projects that have a `resume:` block, ranked by `resume_priority`
+(highest first) and displayed in `projects.yml` order.
+
+This means adding a project never forces manual cuts to
+EXPERIENCE/EDUCATION to keep the resume on one page — a new project
+simply competes for the capped slots. To feature a new project on the
+resume, give it a `resume:` block and a `resume_priority` higher than
+whichever project it should displace. (The old `PARAGRAPHS_TO_DROP`
+list in `refresh-resume.py` is now a frozen historical ledger — don't
+add page-fit cuts there.)
 
 ## Automated weekly refresh
 

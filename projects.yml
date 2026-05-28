@@ -8,6 +8,10 @@
 # Schema (each entry):
 #   key             short id; matches data-meta="<key>.last_commit" on the page
 #   name            displayed name in the <h3>
+#   resume_priority int; higher = more important. The resume shows only the
+#                   top RESUME_MAX_PROJECTS candidates (those with a resume
+#                   block) by priority — so adding a project never forces
+#                   manual cuts elsewhere. Website shows all projects.
 #   status          active | shipped | archived
 #   url             external link for the <h3> (null = name renders without <a>)
 #   meta_key        data-meta sentinel key (usually "<key>.last_commit")
@@ -24,6 +28,7 @@
 
 - key: trader
   name: trader
+  resume_priority: 100
   status: active
   url: https://github.com/jakethehoffer/trader
   private: true
@@ -51,6 +56,7 @@
 
 - key: arbitrage
   name: Odds Aggregator
+  resume_priority: 90
   status: active
   url: https://github.com/jakethehoffer/arbitrage
   private: true
@@ -79,6 +85,7 @@
 
 - key: tax-rebalance
   name: tax-rebalance
+  resume_priority: 80
   status: active
   url: https://github.com/jakethehoffer/tax-rebalance
   private: true
@@ -105,6 +112,7 @@
 
 - key: trades-agency
   name: trades-agency
+  resume_priority: 65
   status: shipped
   url: https://github.com/jakethehoffer/trades-agency
   meta_key: null
@@ -132,6 +140,7 @@
 
 - key: equity-arbs
   name: equity-arbs
+  resume_priority: 70
   status: shipped
   url: https://github.com/jakethehoffer/equity-arbs
   meta_key: null
@@ -157,6 +166,7 @@
 
 - key: mega-tictactoe
   name: Mega Tic-Tac-Toe
+  resume_priority: 40
   status: shipped
   url: https://jakethehoffer.itch.io/mega-tictactoe
   meta_key: null
@@ -179,6 +189,7 @@
 
 - key: smart-shoe
   name: Smart Shoe Navigation
+  resume_priority: 30
   status: shipped
   url: null
   meta_key: null
@@ -201,6 +212,7 @@
 
 - key: walking-jumping
   name: Walking / Jumping Classifier
+  resume_priority: 20
   status: shipped
   url: null
   meta_key: null
