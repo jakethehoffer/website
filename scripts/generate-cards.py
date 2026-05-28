@@ -67,8 +67,20 @@ def render_header(project: dict) -> str:
 
 
 def render_name(project: dict) -> str:
-    """Render the <h3 class='project__name'> with optional <a>."""
+    """Render the <h3 class='project__name'>.
+
+    Private repos render as plain text with a "private" pill instead of
+    a link — a link to a private repo 404s for any cold visitor, which
+    subtracts trust. The pill explains the missing link (the code
+    exists, it just isn't public). Public projects with a url link as
+    usual; url-less public projects render plain text.
+    """
     name = project["name"]
+    if project.get("private"):
+        return (
+            '              <h3 class="project__name">'
+            f'{name} <span class="project__private">private</span></h3>'
+        )
     url = project.get("url")
     if url:
         return f'              <h3 class="project__name"><a href="{url}" target="_blank" rel="noopener">{name}</a></h3>'
@@ -110,6 +122,23 @@ def render_cta(cta: dict | None) -> str | None:
     )
 
 
+def render_case_study_cta(project: dict) -> str | None:
+    """Render a '[ read case study ↓ ]' CTA linking to an on-page case
+    study anchor, or None if the project has no case_study.
+
+    For private projects this is the path that survives privacy: the
+    card can't link to source, but it can route to the deep writeup.
+    The link is a same-page anchor (no target=_blank).
+    """
+    anchor = project.get("case_study")
+    if not anchor:
+        return None
+    return (
+        f'              <p class="project__cta">'
+        f'<a class="btn" href="{anchor}">[ read case study &darr; ]</a></p>'
+    )
+
+
 def render_card(project: dict) -> str:
     """Render one full <article class='project'> block."""
     parts = [
@@ -130,6 +159,9 @@ def render_card(project: dict) -> str:
     cta = render_cta(project.get("cta"))
     if cta:
         parts.append(cta)
+    case_study_cta = render_case_study_cta(project)
+    if case_study_cta:
+        parts.append(case_study_cta)
     parts.append("            </article>")
     return "\n".join(parts)
 

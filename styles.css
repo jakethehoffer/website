@@ -336,6 +336,18 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 }
 .project__name a { color: var(--text); }
 .project__name a:hover { color: var(--accent); text-decoration: none; }
+.project__private {
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--text-mute);
+  border: 1px solid var(--bg-grid);
+  border-radius: var(--radius-sm);
+  padding: 0.05rem 0.4rem;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  text-transform: lowercase;
+}
 
 .project__what {
   margin: 0 0 0.5rem;

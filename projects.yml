@@ -26,6 +26,8 @@
   name: trader
   status: active
   url: https://github.com/jakethehoffer/trader
+  private: true
+  case_study: "#case-study"
   meta_key: trader.last_commit
   auto_meta: true
   hardcoded_date: "last commit: today"
@@ -51,6 +53,8 @@
   name: Odds Aggregator
   status: active
   url: https://github.com/jakethehoffer/arbitrage
+  private: true
+  case_study: "#case-study-arb"
   meta_key: arbitrage.last_commit
   auto_meta: true
   hardcoded_date: "last commit: today"
@@ -77,6 +81,7 @@
   name: tax-rebalance
   status: active
   url: https://github.com/jakethehoffer/tax-rebalance
+  private: true
   meta_key: tax-rebalance.last_commit
   auto_meta: true
   hardcoded_date: "last commit: today"
