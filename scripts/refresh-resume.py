@@ -113,13 +113,13 @@ PARAGRAPHS_TO_DROP = [
     # tax-rebalance old bullet 2 (the spec-driven TDD bullet) —
     # merged into bullet 1.
     "Spec-driven TDD: 21-task plan",
-    # trades-agency old form (longer initial wording) — tightened to
-    # a shorter dense bullet in the same cycle that added it. The
-    # new form starts with "Toronto AI-receptionist + lead-gen
-    # venture (3 Python subsystems)." (parenthesis) while the old
-    # started with "Toronto AI-receptionist + lead-gen venture:"
-    # (colon). Trim catches the old form via the colon.
-    "Toronto AI-receptionist + lead-gen venture:",
+    # trades-agency — dropped from the resume entirely in v2.21
+    # (review #3: one negative result on the resume, not two). It was
+    # inserted into the docx in v2.19 and walk-anchor only inserts, so
+    # the role + bullet are trimmed here. The prefix (no colon) matches
+    # both the old and the tightened bullet forms. Stays on the website.
+    "trades-agency (Python",
+    "Toronto AI-receptionist + lead-gen venture",
     # QMIND bullet 2 — bullet 1 covers the RL story; bullet 2 adds
     # detail at the cost of vertical space. Dropped when adding
     # trades-agency pushed PERSONAL PROJECTS over page boundary.

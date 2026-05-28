@@ -124,10 +124,11 @@
       <span class="sample__dim">// recommendation: warm-intro experiment before more cold outreach</span>
   media: null
   cta: null
-  resume:
-    role: "trades-agency (Python · Google Places API · LLM SDR · async)"
-    bullets:
-      - "Toronto AI-receptionist + lead-gen venture (3 Python subsystems). 32-contact cold-outreach experiment returned 0 positive replies; wrote a 6-hypothesis post-mortem and abandoned the venture on the data rather than iterating on a non-responsive ICP."
+  # Dropped from the resume in v2.21 (adversarial review #3: avoid two
+  # abandoned projects on the resume). Stays on the website in full —
+  # the card fields above are unchanged. equity-arbs carries the single
+  # negative-result story on the resume.
+  resume: null
 
 - key: equity-arbs
   name: equity-arbs
