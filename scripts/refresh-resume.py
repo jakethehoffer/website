@@ -15,6 +15,7 @@ In-place rewrites:
 from __future__ import annotations
 
 import copy
+from datetime import datetime, timezone
 from pathlib import Path
 
 import yaml
@@ -54,6 +55,18 @@ NEW_SKILLS_LINE = (
 )
 
 # Paragraphs to drop from the existing resume body. Matched by exact text prefix.
+#
+# FROZEN LEDGER (as of v2.22): this is the historical record of one-time
+# content removals (e.g. the BMC Pharmacy entry, low-signal Lynx bullets)
+# plus page-fit cuts made before the resume_priority + RESUME_MAX_PROJECTS
+# cap existed. On the current (already-curated) docx these entries are
+# mostly no-ops — the content is already gone.
+#
+# DO NOT add new page-fit cuts here. Page-fit is now handled declaratively
+# by resume_priority + the cap in build_new_section(): adding a project
+# competes for the capped slots instead of forcing cuts elsewhere. Add an
+# entry here only to permanently exclude a piece of *static* resume
+# content (something in SUMMARY/EDUCATION/EXPERIENCE you never want shown).
 PARAGRAPHS_TO_DROP = [
     # Lynx Equity bullets (lower-signal items)
     "Designed Monday.com form that prefills",
@@ -131,23 +144,46 @@ PARAGRAPHS_TO_DROP = [
     "Implemented a Minimax-based algorithm for the computer opponent",
 ]
 
+# The resume's PERSONAL PROJECTS section shows at most this many
+# projects. Selection is by resume_priority (highest first); display
+# order is projects.yml order. This is the curation lever that replaces
+# the old "include everything, then trim collateral to fit" model —
+# adding a project competes for these slots instead of forcing manual
+# cuts to EXPERIENCE/EDUCATION. Bump this only if the page genuinely
+# has room (verify the PDF stays 1 page).
+RESUME_MAX_PROJECTS = 4
+
+
 def build_new_section() -> list[tuple[str, str]]:
     """Read projects.yml and produce the (kind, text) tuples that the
     walk-anchor logic consumes. The first tuple is always
-    ("heading", "PERSONAL PROJECTS"). Each project with a resume:
-    block produces ("role", role) followed by ("bullet", b) for each
-    bullet. Projects without a resume: block are skipped.
+    ("heading", "PERSONAL PROJECTS").
 
-    Order matches projects.yml order, so re-ordering on the website
-    re-orders the resume too. The walk-anchor logic in main()
-    handles per-entry idempotency, so adding/removing projects in
-    projects.yml just works."""
+    Curation: among projects that have a resume: block (candidates),
+    select the top RESUME_MAX_PROJECTS by resume_priority (highest
+    first), then emit them in projects.yml display order so the resume's
+    project order matches the website's. Each selected project produces
+    ("role", role) followed by ("bullet", b) for each bullet.
+
+    This makes adding a project safe: a new candidate competes for the
+    capped slots by priority rather than forcing page-fit cuts
+    elsewhere. The walk-anchor logic in main() handles per-entry
+    idempotency."""
     projects = yaml.safe_load(PROJECTS_YML.read_text(encoding="utf-8"))
+    candidates = [p for p in projects if p.get("resume")]
+    # Select top-N by priority (stable: ties keep projects.yml order).
+    ranked = sorted(
+        candidates,
+        key=lambda p: p.get("resume_priority", 0),
+        reverse=True,
+    )
+    selected_keys = {p["key"] for p in ranked[:RESUME_MAX_PROJECTS]}
+    # Emit in projects.yml display order, restricted to the selected set.
     section: list[tuple[str, str]] = [("heading", "PERSONAL PROJECTS")]
     for p in projects:
-        resume = p.get("resume")
-        if not resume:
+        if p["key"] not in selected_keys:
             continue
+        resume = p["resume"]
         section.append(("role", resume["role"]))
         for bullet in resume.get("bullets", []):
             section.append(("bullet", bullet))
@@ -355,13 +391,24 @@ def insert_writing_line(doc) -> bool:
 
 # ------------- main -------------
 
+# Fixed sentinel date for scrubbed timestamps — avoids leaking the
+# real edit-history dates and keeps re-saves deterministic.
+_SCRUB_DATE = datetime(2020, 1, 1, tzinfo=timezone.utc)
+
+
 def scrub_metadata(doc) -> None:
-    """Clear Office metadata fields that leak identity / history.
+    """Clear Office core-properties that leak identity / history.
 
     The committed PDF is the only public artifact; the docx stays local
     after v2.12, but we still scrub on every run so any accidental
-    re-tracking of the docx doesn't ship a stranger's name in the
-    author field. Idempotent."""
+    re-tracking of the docx doesn't ship a stranger's name or the real
+    edit-history dates. Author is set to the user's own name (already on
+    the resume); created/modified are pinned to a fixed sentinel.
+
+    Note: this covers core.xml only. A fully privacy-clean *committed*
+    docx would also need app.xml (application/company) and any
+    custom.xml scrubbed — see the v2.22 spec's reproducibility section.
+    Idempotent."""
     cp = doc.core_properties
     cp.author = "Jake Hoffman"
     cp.last_modified_by = "Jake Hoffman"
@@ -373,6 +420,9 @@ def scrub_metadata(doc) -> None:
     cp.identifier = ""
     cp.version = ""
     cp.content_status = ""
+    cp.created = _SCRUB_DATE
+    cp.modified = _SCRUB_DATE
+    cp.revision = 1
 
 
 def main() -> None:
