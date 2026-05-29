@@ -107,7 +107,7 @@
 
           <p class="hero__metrics">
             <span class="metrics__prefix">//</span>
-            <span>3 production systems</span>
+            <span>3 unattended systems</span>
             <span>10 bookmakers ingested</span>
             <span>6 scheduled agents</span>
             <span>dean&rsquo;s scholar</span>
@@ -160,10 +160,10 @@
                 <span class="project__last-commit" data-meta="trader.last_commit">last commit: today</span>
               </header>
               <h3 class="project__name">trader <span class="project__private">private</span></h3>
-              <p class="project__what">24/7 AI swing-trading agent for S&amp;P 500 equities, driven by six scheduled Claude Code routines.</p>
+              <p class="project__what">24/7 AI swing-trading agent for S&amp;P 500 equities, driven by six scheduled, idempotent routines.</p>
               <p class="project__body">Paper-traded on IBKR + Finnhub news; graduates to live only after 30 paper days of documented outperformance. Designed the risk model, journaling, and kill-switch from day one.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> s&amp;p 500 &middot; 6 scheduled agents &middot; ibkr paper</p>
-              <p class="project__chips">python &middot; pytest &middot; ib_async &middot; finnhub &middot; claude code</p>
+              <p class="project__chips">python &middot; pytest &middot; ib_async &middot; finnhub</p>
               <pre class="project__sample" aria-label="Example daemon log"><span class="sample__dim">// example daemon log</span>
 <span class="sample__dim">[2026-05-12 09:31:02]</span> <span class="sample__ok">scan_premarket</span>: 14 candidates &rarr; <span class="sample__hi">3 passed</span> (volatility gate)
 <span class="sample__dim">[2026-05-12 09:31:18]</span> <span class="sample__ok">place_orders</span>: limit buy 100 NVDA @ 132.40 (paper)
@@ -198,7 +198,7 @@
               </header>
               <h3 class="project__name">tax-rebalance <span class="project__private">private</span></h3>
               <p class="project__what">Python CLI that monitors a Canadian TFSA + RRSP portfolio for allocation drift and emails weekly digests with cost-aware rebalance verdicts.</p>
-              <p class="project__body">Read-only &mdash; never places trades; the user takes the action in their broker. Async end-to-end: SQLAlchemy 2.0 + aiosqlite, httpx, aiosmtplib, jinja2, structlog. Spec-driven development &mdash; every feature traces to a written design spec and a 21-task TDD implementation plan executed task-by-task with fresh-context subagent review (spec compliance, then code quality).</p>
+              <p class="project__body">Read-only &mdash; never places trades; the user takes the action in their broker. Async end-to-end: SQLAlchemy 2.0 + aiosqlite, httpx, aiosmtplib, jinja2, structlog. Spec-driven development &mdash; every feature traces to a written design spec and a 21-task TDD implementation plan executed task-by-task with a two-stage independent review (spec compliance, then code quality).</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> 117 tests &middot; ruff-clean &middot; ci on py 3.11 + 3.13</p>
               <p class="project__chips">python &middot; async sqlalchemy 2 &middot; httpx &middot; aiosmtplib &middot; jinja2 &middot; pytest</p>
               <pre class="project__sample" aria-label="Example weekly digest"><span class="sample__dim">// example weekly digest excerpt</span>
@@ -301,7 +301,7 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
           <p class="section__label"># case study</p>
           <h2>trader &mdash; a 24/7 ai swing-trading agent</h2>
           <p class="case-study__lede">
-            Six scheduled Claude Code routines on IBKR paper + Finnhub news.
+            Six scheduled, idempotent routines on IBKR paper + Finnhub news.
             Paper-trading the S&amp;P 500, graduating to live only after 30 paper
             days of documented outperformance.
           </p>
