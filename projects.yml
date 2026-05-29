@@ -36,10 +36,10 @@
   meta_key: trader.last_commit
   auto_meta: true
   hardcoded_date: "last commit: today"
-  what: "24/7 AI swing-trading agent for S&amp;P 500 equities, driven by six scheduled Claude Code routines."
+  what: "24/7 AI swing-trading agent for S&amp;P 500 equities, driven by six scheduled, idempotent routines."
   body: "Paper-traded on IBKR + Finnhub news; graduates to live only after 30 paper days of documented outperformance. Designed the risk model, journaling, and kill-switch from day one."
   metrics: "s&amp;p 500 &middot; 6 scheduled agents &middot; ibkr paper"
-  chips: "python &middot; pytest &middot; ib_async &middot; finnhub &middot; claude code"
+  chips: "python &middot; pytest &middot; ib_async &middot; finnhub"
   sample:
     label: "Example daemon log"
     html: |-
@@ -52,7 +52,7 @@
   resume:
     role: "trader (Python · IBKR · Finnhub · pytest)"
     bullets:
-      - "24/7 AI swing-trading agent for S&P 500 equities, driven by six scheduled Claude Code routines."
+      - "24/7 AI swing-trading agent for S&P 500 equities, driven by six scheduled, idempotent routines."
 
 - key: arbitrage
   name: Odds Aggregator
@@ -93,7 +93,7 @@
   auto_meta: true
   hardcoded_date: "last commit: today"
   what: "Python CLI that monitors a Canadian TFSA + RRSP portfolio for allocation drift and emails weekly digests with cost-aware rebalance verdicts."
-  body: "Read-only &mdash; never places trades; the user takes the action in their broker. Async end-to-end: SQLAlchemy 2.0 + aiosqlite, httpx, aiosmtplib, jinja2, structlog. Spec-driven development &mdash; every feature traces to a written design spec and a 21-task TDD implementation plan executed task-by-task with fresh-context subagent review (spec compliance, then code quality)."
+  body: "Read-only &mdash; never places trades; the user takes the action in their broker. Async end-to-end: SQLAlchemy 2.0 + aiosqlite, httpx, aiosmtplib, jinja2, structlog. Spec-driven development &mdash; every feature traces to a written design spec and a 21-task TDD implementation plan executed task-by-task with a two-stage independent review (spec compliance, then code quality)."
   metrics: "117 tests &middot; ruff-clean &middot; ci on py 3.11 + 3.13"
   chips: "python &middot; async sqlalchemy 2 &middot; httpx &middot; aiosmtplib &middot; jinja2 &middot; pytest"
   sample:
@@ -108,7 +108,7 @@
   resume:
     role: "tax-rebalance (Python · async SQLAlchemy 2 · httpx · pytest)"
     bullets:
-      - "Canadian TFSA + RRSP portfolio drift monitor — emails weekly digests with cost-aware rebalance verdicts (read-only; never places trades). Spec-driven TDD: 21-task plan, two-stage subagent review, 117 tests, ruff-clean, CI on Py 3.11 + 3.13. Questrade IQ API with OAuth refresh-token rotation."
+      - "Canadian TFSA + RRSP portfolio drift monitor — emails weekly digests with cost-aware rebalance verdicts (read-only; never places trades). Spec-driven TDD: 21-task plan, two-stage independent review, 117 tests, ruff-clean, CI on Py 3.11 + 3.13. Questrade IQ API with OAuth refresh-token rotation."
 
 - key: trades-agency
   name: trades-agency
