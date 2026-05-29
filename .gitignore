@@ -13,8 +13,12 @@ Thumbs.db
 
 # AI sync working files are committed; nothing to ignore there
 
-# Resume source docx is local-only after v2.12 (Office metadata privacy).
-# The canonical published artifact is resume.pdf, regenerated via
-# scripts/refresh-resume.py + LibreOffice on the user's machine.
+# resume-source.docx is a DERIVED artifact (gitignored). As of v2.23 it
+# is built from scratch by scripts/build-resume.py from two tracked,
+# diffable text sources — resume-static.yml + projects.yml — so the
+# resume is fully reproducible without committing a binary (and without
+# the Office-metadata-privacy concern that kept it local since v2.12).
+# The canonical published artifact is resume.pdf (LibreOffice converts
+# the freshly-built docx).
 *.docx
 __pycache__/

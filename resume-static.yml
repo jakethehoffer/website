@@ -1,0 +1,65 @@
+# resume-static.yml — tracked source for the resume's STATIC sections
+# (contact header, summary, education, experience).
+#
+# PERSONAL PROJECTS and the Writing line are NOT here — they are
+# generated from projects.yml (resume_priority + cap). The builder,
+# scripts/build-resume.py, combines this file + projects.yml into
+# resume-source.docx, then LibreOffice converts it to resume.pdf.
+#
+# This file + projects.yml are the full, tracked, diffable source of the
+# resume. The docx is now a derived/ephemeral artifact (gitignored).
+
+contact:
+  name: "Jake Hoffman"
+  # Items rendered left-to-right, tab-separated, across the page width.
+  # type: text | link
+  line:
+    - { type: text, text: "Toronto, ON" }
+    - { type: link, text: "14jakehoffman@gmail.com", url: "mailto:14jakehoffman@gmail.com" }
+    - { type: text, text: "Tel: 647-823-4504" }
+    - { type: link, text: "LinkedIn", url: "https://www.linkedin.com/in/jake-hoffman-7117692a5/" }
+    - { type: link, text: "jakethehoffer.github.io/website", url: "https://jakethehoffer.github.io/website/" }
+
+# Each section: a centered bold heading + an ordered list of blocks.
+# Block types:
+#   role    bold line with an optional right-aligned date
+#   org     italic line (company / project subtitle)
+#   bullets list of '●' bullet items
+sections:
+  - heading: "SUMMARY OF QUALIFICATIONS"
+    blocks:
+      - type: bullets
+        items:
+          - "Computer Engineering student with a strong foundation in software engineering principles, technical problem solving, and design analysis."
+          - "Proficient in Python, Java, C, C#, C++, SQL, Git, Word, Excel, JavaScript, Dart, Unity, FastAPI, Playwright, Monday.com, and Google Apps Script."
+          - "Writes clean and maintainable code with attention to testing, logging, and performance."
+
+  - heading: "EDUCATION"
+    blocks:
+      - { type: role, text: "3rd Year at Queen’s University", date: "September 2023 – Present" }
+      - { type: org, text: "Computer Engineering" }
+      - type: bullets
+        items:
+          - "Cumulative GPA of 3.85 with distinction of Dean’s Scholar."
+          - "Developed a pathfinding algorithm in Python for autonomous operation of a rover."
+
+  - heading: "EXPERIENCE"
+    blocks:
+      - { type: role, text: "IT Intern", date: "Jun 2024 – Aug 2024; Jun 2025 – Aug 2025" }
+      - { type: org, text: "Lynx Equity Limited" }
+      - type: bullets
+        items:
+          - "Developed a task management system on Monday.com, streamlining communication between subsidiary companies and internal departments by automating issue routing to the appropriate workflow queue."
+          - "Built an On/Off-Boarding workflow in Monday.com, standardizing role-based tasks, handoffs, and approvals; delivered a stakeholder demo and incorporated feedback into the final product."
+          - "Developed Google Apps Script solutions in JavaScript that select and import data from multiple Excel exports into a single Google Sheet, apply pricing logic, and track unmatched keys for reconciliation. Added a Sheets custom menu and routines to handle large datasets, plus logic to dynamically accept changing Excel file IDs."
+      - { type: role, text: "Game Developer (Independent)", date: "January 2024 – March 2024" }
+      - { type: org, text: "Mega Tic-Tac-Toe" }
+      - type: bullets
+        items:
+          - "Designed and programmed a Unity game built on a 3×3 grid of linked Tic-Tac-Toe boards where each move determines the opponent’s next board, and winning a board claims one square on the grid."
+          - "Supports local and online multiplayer, and single player vs. computer with multiple difficulty levels."
+      - { type: role, text: "Design Team Member", date: "October 2023 – March 2024" }
+      - { type: org, text: "QMIND – Queen’s AI Hub" }
+      - type: bullets
+        items:
+          - "Worked on a team project to train an agent to play Blackjack using reinforcement learning."
