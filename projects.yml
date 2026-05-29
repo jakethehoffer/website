@@ -2,7 +2,7 @@
 #
 # Add a new project by appending an entry below. Then run:
 #   python scripts/build-site.py
-# which calls generate-cards.py + refresh-resume.py + refresh-meta.py in order.
+# which calls generate-cards.py + build-resume.py + refresh-meta.py in order.
 # Regenerate the PDF separately via the documented LibreOffice command.
 #
 # Schema (each entry):

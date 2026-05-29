@@ -27,21 +27,33 @@ This calls three generators in order:
 
 - `scripts/generate-cards.py` &mdash; rewrites the `<div class="projects">`
   block of `index.html` from `projects.yml`.
-- `scripts/refresh-resume.py` &mdash; updates `resume-source.docx`
-  PERSONAL PROJECTS section from each project's `resume:` block.
+- `scripts/build-resume.py` &mdash; builds `resume-source.docx` **from
+  scratch** out of two tracked text files: `resume-static.yml` (contact
+  header, summary, education, experience) + `projects.yml` (the
+  PERSONAL PROJECTS section, by `resume_priority` + cap). No binary
+  template; the docx is fully reproducible from text.
 - `scripts/refresh-meta.py` &mdash; refreshes `last-commit` timestamps
   for projects with `auto_meta: true` and stamps the footer
   `last_deployed`.
 
-All three are idempotent. After running `build-site.py`, regenerate
-the PDF:
+After running `build-site.py`, regenerate the PDF:
 
 ```bash
 "C:/Program Files/LibreOffice/program/soffice.exe" --headless --convert-to pdf --outdir . resume-source.docx
 mv resume-source.pdf resume.pdf
 ```
 
-Commit `index.html`, `projects.yml`, and `resume.pdf` together.
+Commit `index.html`, the YAML you changed, and `resume.pdf` together.
+`resume-source.docx` is gitignored &mdash; it's a derived artifact, not a
+source.
+
+### Editing the resume
+
+- **Projects** on the resume: edit `projects.yml` (`resume:` block +
+  `resume_priority`). See "Resume curation" below.
+- **Everything else** (contact line, summary, education, experience):
+  edit `resume-static.yml`. It's plain, diffable text; the formatting
+  (Garamond, margins, bullet/date layout) lives in `build-resume.py`.
 
 ## projects.yml schema
 
@@ -73,7 +85,7 @@ Project order in the rendered page matches order in `projects.yml`.
 ### Resume curation (one-page guarantee)
 
 The **website** shows every project. The **resume** shows only the top
-`RESUME_MAX_PROJECTS` (in `scripts/refresh-resume.py`, currently 4) of
+`RESUME_MAX_PROJECTS` (in `scripts/build-resume.py`, currently 4) of
 the projects that have a `resume:` block, ranked by `resume_priority`
 (highest first) and displayed in `projects.yml` order.
 
@@ -81,9 +93,9 @@ This means adding a project never forces manual cuts to
 EXPERIENCE/EDUCATION to keep the resume on one page — a new project
 simply competes for the capped slots. To feature a new project on the
 resume, give it a `resume:` block and a `resume_priority` higher than
-whichever project it should displace. (The old `PARAGRAPHS_TO_DROP`
-list in `refresh-resume.py` is now a frozen historical ledger — don't
-add page-fit cuts there.)
+whichever project it should displace. (Because the docx is now built
+from scratch from text, the old `PARAGRAPHS_TO_DROP` trim-list — ~75
+lines of page-fit hacks — is gone entirely.)
 
 ## Automated weekly refresh
 
@@ -107,16 +119,14 @@ Without the secret the workflow stays inert &mdash; the default
 `GITHUB_TOKEN` can only read the current repo, so every project with
 `auto_meta: true` logs `[skip]`.
 
-## Refresh `resume.pdf`
+## The `resume.pdf` pipeline
 
-`resume-source.docx` is **not tracked** by git (Office metadata
-privacy &mdash; the binary captures creator/last-modified info). It lives
-locally next to `resume.pdf`. `scripts/refresh-resume.py` reads,
-edits, and scrubs metadata before saving.
-
-The full refresh sequence is documented above in the "Adding or
-editing projects" section. The committed `resume.pdf` is the only
-public-facing artifact.
+`resume-source.docx` is a **derived artifact** (gitignored). It's built
+from scratch by `scripts/build-resume.py` out of `resume-static.yml` +
+`projects.yml`, then LibreOffice converts it to `resume.pdf`. The full
+sequence is documented above in "Adding or editing projects". The
+committed `resume.pdf` is the only public-facing binary; the docx can
+always be regenerated from the tracked text sources.
 
 ## Deploy
 
@@ -125,14 +135,17 @@ then in **Settings &rarr; Pages**, source = `main` branch / root.
 
 ## Files
 
-- `projects.yml` &mdash; single source of truth for featured projects.
+- `projects.yml` &mdash; single source of truth for featured projects (site + resume).
+- `resume-static.yml` &mdash; tracked source for the resume's static
+  sections (contact, summary, education, experience).
 - `index.html` &mdash; semantic single-page markup; projects block
   generated from `projects.yml`.
 - `styles.css` &mdash; all-mono design system, dark default + parchment light.
 - `script.js` &mdash; boot animation, mobile nav, theme toggle, IntersectionObserver reveal.
 - `scripts/build-site.py` &mdash; orchestrator (runs the three generators).
-- `scripts/generate-cards.py` &mdash; renders the projects block.
-- `scripts/refresh-resume.py` &mdash; rewrites `resume-source.docx`.
+- `scripts/generate-cards.py` &mdash; renders the projects block of `index.html`.
+- `scripts/build-resume.py` &mdash; builds `resume-source.docx` from scratch
+  out of `resume-static.yml` + `projects.yml`.
 - `scripts/refresh-meta.py` &mdash; refreshes last-commit timestamps.
-- `resume.pdf` &mdash; downloadable PDF.
+- `resume.pdf` &mdash; downloadable PDF (the committed published artifact).
 - `docs/superpowers/` &mdash; design specs and implementation plans.
