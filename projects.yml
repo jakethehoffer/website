@@ -110,6 +110,38 @@
     bullets:
       - "Canadian TFSA + RRSP portfolio drift monitor — emails weekly digests with cost-aware rebalance verdicts (read-only; never places trades). Spec-driven TDD: 21-task plan, two-stage independent review, 117 tests, ruff-clean, CI on Py 3.11 + 3.13. Questrade IQ API with OAuth refresh-token rotation."
 
+- key: market-bot
+  name: market-bot
+  resume_priority: 72
+  status: shipped
+  url: https://github.com/jakethehoffer/market-bot
+  private: true
+  meta_key: null
+  auto_meta: false
+  hardcoded_date: "verdict delivered &middot; 2026"
+  what: "Telemetry-first market-making feasibility bot for NDAX (a Canadian crypto exchange) &mdash; collected real 24/7 venue data, ran it through a pre-trade synthesizer, and delivered a data-backed NOT_READY verdict."
+  body: "Collects gap-free 24/7 order-book and trade telemetry over NDAX&rsquo;s REST + WebSocket feeds into a SQLite WAL store, then scores every pair against a 9-criterion pre-trade synthesizer. After 7 covered days, the verdict was NOT_READY across all 75 CAD pairs &mdash; a rigorous, data-backed refutation of retail-passive market making at a flat 0.20%/fill (40 bps round-trip) venue. A queue-aware paper-fill model confirmed it; the one pair that initially passed was bootstrap-validated and rejected as a thin-sample artifact. The negative verdict IS the deliverable. 254 tests; runs unattended on a systemd cloud host."
+  metrics: "75 pairs &middot; 7 days 24/7 data &middot; 254 tests"
+  chips: "python &middot; sqlite/wal &middot; websocket &middot; structlog &middot; pydantic &middot; typer"
+  sample:
+    label: "Excerpt from the pre-trade synthesizer verdict"
+    html: |-
+      <span class="sample__dim">// market-bot synth — 7 days 24/7 data, 75 ndax cad pairs</span>
+      <span class="sample__dim">[PENGU/CAD]</span> median +239 bps  p10 &minus;408 bps  &rarr; <span class="sample__hi">NOT_READY</span> (thin tail, $9.5k/day)
+      <span class="sample__dim">[BTC/CAD]</span>   spread &lt; 40 bps round-trip fee  &rarr; <span class="sample__hi">NOT_READY</span> (no edge)
+      <span class="sample__dim">[HYPE/CAD]</span>  passed 9/9 on 50 fills          &rarr; <span class="sample__hi">NOT_READY</span> (min_used_fills gate)
+      <span class="sample__dim">// realized_net_p10 &ge; 0 held for 0 of 61 pairs &rarr; NOT_READY &times; 75</span>
+  media: null
+  cta: null
+  # Website-only (v2.26): resume keeps equity-arbs as its single
+  # negative result (review #3). market-bot is the stronger/newer
+  # negative result (resume_priority 72 > equity-arbs 70) but is not
+  # pushed to GitHub yet, so equity-arbs wins the resume slot on
+  # verifiability (review #1). To feature market-bot on the resume
+  # instead, give it a `resume:` block — at priority 72 it auto-displaces
+  # equity-arbs in the top-4 cap.
+  resume: null
+
 - key: trades-agency
   name: trades-agency
   resume_priority: 65
