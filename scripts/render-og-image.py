@@ -17,11 +17,22 @@ import os
 
 from PIL import Image, ImageDraw, ImageFont
 
-# v2 design tokens
+# v2 design tokens (keep in sync with styles.css :root)
 BG = (10, 14, 20)            # #0a0e14
 FG = (214, 222, 230)         # #d6dee6
-DIM = (90, 101, 115)         # #5a6573
+DIM = (118, 130, 143)        # #76828f (--text-mute, AA-adjusted)
 ACCENT = (245, 179, 66)      # #f5b342
+
+# Text content shown on the share card. Keep claims in sync with the
+# hero in index.html — scripts/verify-site.py cross-checks each
+# "·"-separated METRICS phrase against the hero metrics block.
+EYEBROW = "computer engineering @ queen's · class of 2027"
+BODY_LINES = [
+    "> i build production-grade software — trading",
+    "> agents, arbitrage daemons, and ML",
+    "> pipelines.",
+]
+METRICS = "//  3 unattended systems  ·  10 bookmakers  ·  dean's scholar"
 
 ROOT = Path(__file__).resolve().parent.parent
 OG_OUT = ROOT / "assets" / "og-image.png"
@@ -89,25 +100,19 @@ def render_og() -> None:
     d.text((dot_cx - dot_r - 110, dot_cy - 13), "ACTIVE", font=eyebrow_font, fill=DIM)
 
     # Eyebrow
-    d.text((PAD, PAD + 92), "computer engineering @ queen's · class of 2027", font=eyebrow_font, fill=DIM)
+    d.text((PAD, PAD + 92), EYEBROW, font=eyebrow_font, fill=DIM)
 
     # Terminal-flavored body
     y = PAD + 92 + 50
     d.text((PAD, y), "$ whoami", font=prompt_font, fill=ACCENT)
     y += 50
-    body_lines = [
-        "> i build production-grade software — trading",
-        "> agents, arbitrage daemons, and ML",
-        "> pipelines.",
-    ]
-    for line in body_lines:
+    for line in BODY_LINES:
         d.text((PAD, y), line, font=body_font, fill=FG)
         y += 42
 
     # Metrics
     y += 28
-    metrics = "//  3 production systems  ·  10 bookmakers  ·  dean's scholar"
-    d.text((PAD, y), metrics, font=metrics_font, fill=DIM)
+    d.text((PAD, y), METRICS, font=metrics_font, fill=DIM)
 
     # Footer URL (bottom-right)
     url = "jakethehoffer.github.io/website"
