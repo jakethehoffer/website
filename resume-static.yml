@@ -57,9 +57,10 @@ sections:
       - type: bullets
         items:
           - "Designed and programmed a Unity game built on a 3×3 grid of linked Tic-Tac-Toe boards where each move determines the opponent’s next board, and winning a board claims one square on the grid."
-          - "Supports local and online multiplayer, and single player vs. computer with multiple difficulty levels."
+          - "Supports local and online multiplayer, and single player vs. a Minimax-based AI with multiple difficulty levels."
       - { type: role, text: "Design Team Member", date: "October 2023 – March 2024" }
       - { type: org, text: "QMIND – Queen’s AI Hub" }
       - type: bullets
         items:
           - "Worked on a team project to train an agent to play Blackjack using reinforcement learning."
+          - "Built a tabular Q-learning baseline with training loop and basic tests, then helped migrate the system to a Deep Q-learning version so the model could learn policies beyond a simple lookup table."
