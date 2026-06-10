@@ -17,6 +17,7 @@ Modifies: index.html (between <!-- BEGIN projects-block --> markers)
 
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -41,14 +42,34 @@ def render_status(status: str) -> tuple[str, str]:
     raise ValueError(f"Unknown status: {status}")
 
 
-def render_header(project: dict) -> str:
+def extract_current_meta(html: str, meta_key: str) -> str | None:
+    """Return the current text of <span data-meta="{meta_key}"> in index.html.
+
+    The data-meta spans are owned by refresh-meta.py — regenerating the
+    cards must not reset a live "last commit: 2d ago" back to the YAML
+    placeholder (which would publish a false freshness claim whenever
+    the build runs without gh access to the private repos).
+    """
+    m = re.search(
+        r'<span[^>]*data-meta="' + re.escape(meta_key) + r'"[^>]*>([^<]*)</span>',
+        html,
+    )
+    return m.group(1) if m else None
+
+
+def render_header(project: dict, current_meta: str | None = None) -> str:
     """Render the <header class='project__head'> with status pill and last-commit."""
     status_class, status_label = render_status(project["status"])
     if project.get("auto_meta"):
         # auto_meta=true: render the data-meta sentinel so refresh-meta.py
-        # can update the text; initial text is the hardcoded fallback.
+        # can update the text. Preserve the value already on the page;
+        # the YAML placeholder is only for a brand-new card.
         meta_key = project["meta_key"]
-        initial_text = project.get("hardcoded_date") or "last commit: today"
+        initial_text = (
+            current_meta
+            or project.get("hardcoded_date")
+            or "last commit: &mdash;"
+        )
         last_commit_span = (
             f'<span class="project__last-commit" data-meta="{meta_key}">'
             f"{initial_text}</span>"
@@ -139,11 +160,11 @@ def render_case_study_cta(project: dict) -> str | None:
     )
 
 
-def render_card(project: dict) -> str:
+def render_card(project: dict, current_meta: str | None = None) -> str:
     """Render one full <article class='project'> block."""
     parts = [
         '            <article class="project">',
-        render_header(project),
+        render_header(project, current_meta),
         render_name(project),
         f'              <p class="project__what">{project["what"]}</p>',
         f'              <p class="project__body">{project["body"]}</p>',
@@ -166,12 +187,19 @@ def render_card(project: dict) -> str:
     return "\n".join(parts)
 
 
-def render_projects_block(projects: list[dict]) -> str:
+def render_projects_block(projects: list[dict], html: str) -> str:
     """Render the full content between BEGIN_MARKER and END_MARKER.
 
     Order: matches projects.yml. Separated by a blank line between cards.
     """
-    cards = [render_card(p) for p in projects]
+    cards = []
+    for p in projects:
+        current = (
+            extract_current_meta(html, p["meta_key"])
+            if p.get("auto_meta") and p.get("meta_key")
+            else None
+        )
+        cards.append(render_card(p, current))
     return "\n\n".join(cards)
 
 
@@ -208,7 +236,7 @@ def main() -> None:
         raise SystemExit("projects.yml is empty or not a list")
 
     html = INDEX.read_text(encoding="utf-8")
-    new_inner = render_projects_block(projects)
+    new_inner = render_projects_block(projects, html)
     new_html = replace_block(html, new_inner)
 
     if new_html == html:

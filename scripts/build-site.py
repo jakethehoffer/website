@@ -1,8 +1,11 @@
-"""build-site.py — orchestrator that runs all three generators.
+"""build-site.py — orchestrator that runs all four generators.
 
 After editing projects.yml (or resume-static.yml), run this to regenerate:
 - index.html projects block (generate-cards.py)
 - resume-source.docx, built from scratch (build-resume.py)
+- og-image.png + favicons (render-og-image.py; claims stay in sync
+  with the hero — a share card once carried a hero claim retracted
+  weeks earlier because this step wasn't part of the build)
 - index.html data-meta sentinels and footer last_deployed (refresh-meta.py)
 
 Then run the documented LibreOffice command to regenerate resume.pdf
@@ -32,6 +35,7 @@ def run(script_name: str) -> None:
 if __name__ == "__main__":
     run("generate-cards.py")
     run("build-resume.py")
+    run("render-og-image.py")
     run("refresh-meta.py")
     print(
         "\nDone. resume-source.docx updated; regenerate resume.pdf via:\n"
