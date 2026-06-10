@@ -1,0 +1,33 @@
+# Rendered-artifact verification: structure, OG claim sync, resume PDF,
+# and a real browser layout check (horizontal-overflow budget at phone /
+# tablet / laptop widths). Slower than public-safety (~1-2 min because
+# of the chromium install), which is why it's a separate workflow.
+name: verify-site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          pip install pyyaml pypdf playwright
+          playwright install --with-deps chromium
+
+      - name: Run verify-site.py
+        run: python scripts/verify-site.py
