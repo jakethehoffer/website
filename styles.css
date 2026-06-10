@@ -18,7 +18,9 @@
   --bg-grid:   #1c2330;
   --text:      #d6dee6;
   --text-dim:  #8a96a3;
-  --text-mute: #5a6573;
+  /* --text-mute #76828f -> 4.9:1 on --bg, 4.6:1 on --bg-elev (AA pass;
+     the previous #5a6573 measured ~3.1:1). */
+  --text-mute: #76828f;
   --accent:    #f5b342;
   --accent-2:  #7fbf7f;
   --accent-3:  #e07a7a;
@@ -58,7 +60,9 @@
 
 /* ---------- Reset ---------- */
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
 body {
   margin: 0;
   font-family: var(--font-mono);
@@ -108,6 +112,17 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 }
 
 /* ---------- Accessibility ---------- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
 .skip-link {
   position: absolute;
   left: -9999px;
@@ -276,6 +291,10 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 }
 
 .project {
+  /* min-width: 0 overrides the grid item's automatic minimum size —
+     without it the wide <pre> samples force the 1fr tracks open and
+     the whole page overflows horizontally (broken on phones). */
+  min-width: 0;
   background: var(--bg-elev);
   border: 1px solid var(--bg-grid);
   border-radius: var(--radius);
@@ -636,7 +655,7 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1rem;
   list-style: none;
   margin: 0 0 0 auto;
   padding: 0;
@@ -675,7 +694,9 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 }
 .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
 
-@media (max-width: 768px) {
+/* The 9-item menu needs ~860px; below that, collapse to the hamburger.
+   (768px left a 769–880px band where the nav overflowed the page.) */
+@media (max-width: 960px) {
   .nav-toggle { display: flex; }
   .nav-menu {
     position: absolute;

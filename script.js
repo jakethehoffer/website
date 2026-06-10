@@ -35,10 +35,10 @@
     }
 
     if (skipBtn) {
-      skipBtn.hidden = false;
       skipBtn.addEventListener("click", finish);
-      // Auto-hide skip after 800ms.
-      setTimeout(() => { if (skipBtn && !cancelled) skipBtn.hidden = false; }, 800);
+      // Reveal skip only once the animation has run long enough to be
+      // worth skipping (it stays hidden if the boot already finished).
+      setTimeout(() => { if (!cancelled) skipBtn.hidden = false; }, 800);
     }
 
     const charDelay = 14;   // ms per character
