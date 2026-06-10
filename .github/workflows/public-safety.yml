@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # Banned terms are assembled from string fragments so the workflow
       # source itself isn't a leak. If you ever need to add a term,
