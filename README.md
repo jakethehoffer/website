@@ -23,18 +23,23 @@ Project content (cards on the site + entries on the resume) lives in
 python scripts/build-site.py
 ```
 
-This calls three generators in order:
+This calls four generators in order:
 
 - `scripts/generate-cards.py` &mdash; rewrites the `<div class="projects">`
-  block of `index.html` from `projects.yml`.
+  block of `index.html` from `projects.yml`. Live `last commit:` pill
+  values already on the page are preserved (the YAML placeholder is
+  only used for a brand-new card).
 - `scripts/build-resume.py` &mdash; builds `resume-source.docx` **from
   scratch** out of two tracked text files: `resume-static.yml` (contact
   header, summary, education, experience) + `projects.yml` (the
   PERSONAL PROJECTS section, by `resume_priority` + cap). No binary
   template; the docx is fully reproducible from text.
+- `scripts/render-og-image.py` &mdash; renders `assets/og-image.png` +
+  favicons from constants in the script (Pillow). Part of the build so
+  the share card can't drift from the hero claims again.
 - `scripts/refresh-meta.py` &mdash; refreshes `last-commit` timestamps
   for projects with `auto_meta: true` and stamps the footer
-  `last_deployed`.
+  `last_deployed` + the sitemap `lastmod`.
 
 After running `build-site.py`, regenerate the PDF:
 
@@ -115,9 +120,12 @@ To set it up:
    <https://github.com/jakethehoffer/website/settings/secrets/actions>
    as `META_REFRESH_TOKEN`.
 
-Without the secret the workflow stays inert &mdash; the default
-`GITHUB_TOKEN` can only read the current repo, so every project with
-`auto_meta: true` logs `[skip]`.
+If the PAT is missing or expired, the weekly run **fails loudly**
+(refresh-meta.py exits non-zero in CI when every lookup fails) instead
+of silently freezing the `last commit:` pills at their last value.
+The cron also only commits when a pill actually changed &mdash; the
+footer/sitemap date stamps alone no longer generate weekly
+`[auto]` commits.
 
 ## The `resume.pdf` pipeline
 
@@ -142,10 +150,14 @@ then in **Settings &rarr; Pages**, source = `main` branch / root.
   generated from `projects.yml`.
 - `styles.css` &mdash; all-mono design system, dark default + parchment light.
 - `script.js` &mdash; boot animation, mobile nav, theme toggle, IntersectionObserver reveal.
-- `scripts/build-site.py` &mdash; orchestrator (runs the three generators).
+- `scripts/build-site.py` &mdash; orchestrator (runs the four generators).
 - `scripts/generate-cards.py` &mdash; renders the projects block of `index.html`.
 - `scripts/build-resume.py` &mdash; builds `resume-source.docx` from scratch
   out of `resume-static.yml` + `projects.yml`.
+- `scripts/render-og-image.py` &mdash; renders the OG share card + favicons.
 - `scripts/refresh-meta.py` &mdash; refreshes last-commit timestamps.
+- `scripts/verify-site.py` &mdash; rendered-artifact checks (HTML structure,
+  resume PDF, OG-image claim sync, layout overflow via Playwright); run
+  by `.github/workflows/verify-site.yml` on every push.
 - `resume.pdf` &mdash; downloadable PDF (the committed published artifact).
 - `docs/superpowers/` &mdash; design specs and implementation plans.

@@ -3,7 +3,18 @@
 For each project in projects.yml with auto_meta: true, fetch
 `pushed_at` via `gh api` and rewrite the text content of
 <span data-meta="<meta_key>"> in index.html. Also stamps the footer
-<span data-meta="last_deployed"> with today's ISO date.
+<span data-meta="last_deployed"> and the sitemap <lastmod> with
+today's ISO date.
+
+Failure behavior (deliberate):
+- In CI (GITHUB_ACTIONS set), if every gh lookup fails the script
+  exits non-zero so the workflow goes red — an expired PAT must be
+  noticed within a week, not silently freeze the freshness pills.
+- In CI, the footer/sitemap stamps are skipped unless a pill actually
+  changed, so the weekly cron no longer creates footer-date-only
+  commits (those caused repeated rebase conflicts with local work).
+- Locally the stamps always run (a local build precedes a real push,
+  i.e. an actual deploy) and lookup failures only warn.
 
 Replaces the older refresh-meta.mjs (Node) — Python lets us share
 YAML parsing with the other generators and removes the only Node
@@ -21,8 +32,10 @@ Requires:
 from __future__ import annotations
 
 import json
+import os
 import re
 import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -30,6 +43,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 INDEX = ROOT / "index.html"
+SITEMAP = ROOT / "sitemap.xml"
 PROJECTS_YML = ROOT / "projects.yml"
 
 
@@ -92,10 +106,30 @@ def replace_meta(html: str, key: str, value: str | None) -> tuple[str, bool, boo
     return new_html, matched, changed
 
 
+def stamp_sitemap(today: str) -> bool:
+    """Set the sitemap <lastmod> to today. Returns True if it changed."""
+    if not SITEMAP.exists():
+        print("[miss] sitemap.xml not found")
+        return False
+    xml = SITEMAP.read_text(encoding="utf-8")
+    new_xml = re.sub(
+        r"<lastmod>[^<]*</lastmod>", f"<lastmod>{today}</lastmod>", xml
+    )
+    if new_xml == xml:
+        print(f"[same] sitemap lastmod = {today} (unchanged)")
+        return False
+    SITEMAP.write_text(new_xml, encoding="utf-8")
+    print(f"[ok]   sitemap lastmod = {today}")
+    return True
+
+
 def main() -> None:
+    in_ci = bool(os.environ.get("GITHUB_ACTIONS"))
     projects = yaml.safe_load(PROJECTS_YML.read_text(encoding="utf-8"))
     html = INDEX.read_text(encoding="utf-8")
     touched = 0
+    attempted = 0
+    succeeded = 0
 
     for proj in projects:
         if not proj.get("auto_meta"):
@@ -110,9 +144,11 @@ def main() -> None:
             print(f"[skip] {proj['key']}: url does not match github.com/<owner>/<name>")
             continue
         owner, name = m.group(1), m.group(2)
+        attempted += 1
         value = humanize(gh_pushed_at(owner, name))
         if value is None:
             continue
+        succeeded += 1
         new_html, matched, changed = replace_meta(html, meta_key, value)
         if not matched:
             print(f"[miss] {meta_key} (no sentinel found in index.html)")
@@ -124,18 +160,36 @@ def main() -> None:
         else:
             print(f'[same] {meta_key} = "{value}" (unchanged)')
 
-    # Footer last_deployed stamp — always set to today.
+    # All lookups failing means the pills silently freeze at their last
+    # value — the exact false-freshness problem they exist to solve.
+    # In CI that's a red run (expired/missing PAT); locally just warn.
+    if attempted > 0 and succeeded == 0:
+        msg = (
+            f"all {attempted} gh lookup(s) failed — "
+            "META_REFRESH_TOKEN expired/missing or gh unauthenticated?"
+        )
+        if in_ci:
+            print(f"\n[FAIL] {msg}")
+            sys.exit(1)
+        print(f"\n[warn] {msg} Pills keep their last committed value.")
+
+    # Footer + sitemap date stamps. In CI, only stamp when a pill
+    # changed — otherwise the weekly cron commits a date-only diff.
     today = datetime.now(timezone.utc).date().isoformat()
-    value = f"last_deployed: {today}"
-    new_html, matched, changed = replace_meta(html, "last_deployed", value)
-    if not matched:
-        print("[miss] last_deployed (no sentinel found in index.html)")
-    elif changed:
-        touched += 1
-        print(f"[ok]   last_deployed = {today}")
-        html = new_html
+    if in_ci and touched == 0:
+        print("[skip] last_deployed/sitemap stamps (CI run, no pill changes)")
     else:
-        print(f"[same] last_deployed = {today} (unchanged)")
+        value = f"last_deployed: {today}"
+        new_html, matched, changed = replace_meta(html, "last_deployed", value)
+        if not matched:
+            print("[miss] last_deployed (no sentinel found in index.html)")
+        elif changed:
+            touched += 1
+            print(f"[ok]   last_deployed = {today}")
+            html = new_html
+        else:
+            print(f"[same] last_deployed = {today} (unchanged)")
+        stamp_sitemap(today)
 
     if touched > 0:
         INDEX.write_text(html, encoding="utf-8")
