@@ -566,6 +566,9 @@ h1, h2, h3 { letter-spacing: -0.01em; }
   color: var(--text);
 }
 .timeline__bullets li { margin: 0.375rem 0; max-width: 70ch; }
+/* Inline links inside bullet prose need a non-color cue (axe:
+   link-in-text-block) — the site's bare link style is color-only. */
+.timeline__bullets a { text-decoration: underline; text-underline-offset: 3px; }
 
 /* ---------- Education ---------- */
 .education__head {

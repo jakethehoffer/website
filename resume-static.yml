@@ -45,13 +45,19 @@ sections:
 
   - heading: "EXPERIENCE"
     blocks:
+      - { type: role, text: "Independent Software Engineer – Trading & Automation Systems", date: "May 2026 – Present" }
+      - { type: org, text: "Self-directed, full-time" }
+      - type: bullets
+        items:
+          - "Operate two 24/7 production systems: trader, an S&P 500 paper-trading agent (750+ commits since April 2026), and a ten-bookmaker arbitrage daemon in production since November 2025 (3,900+ commits)."
+          - "Took market-bot (crypto market-making feasibility study) from first commit to shipped verdict in three weeks: 7 days of 24/7 venue telemetry, 9-criterion pre-trade synthesizer, data-backed NOT_READY verdict across all 75 pairs."
       - { type: role, text: "IT Intern", date: "Jun 2024 – Aug 2024; Jun 2025 – Aug 2025" }
       - { type: org, text: "Lynx Equity Limited" }
       - type: bullets
         items:
           - "Developed a task management system on Monday.com, streamlining communication between subsidiary companies and internal departments by automating issue routing to the appropriate workflow queue."
           - "Built an On/Off-Boarding workflow in Monday.com, standardizing role-based tasks, handoffs, and approvals; delivered a stakeholder demo and incorporated feedback into the final product."
-          - "Developed Google Apps Script solutions in JavaScript that select and import data from multiple Excel exports into a single Google Sheet, apply pricing logic, and track unmatched keys for reconciliation. Added a Sheets custom menu and routines to handle large datasets, plus logic to dynamically accept changing Excel file IDs."
+          - "Wrote Google Apps Script (JavaScript) that consolidates multiple Excel exports into one Google Sheet, applies pricing logic, and tracks unmatched keys for reconciliation, with a custom Sheets menu and dynamic file-ID handling."
       - { type: role, text: "Game Developer (Independent)", date: "January 2024 – March 2024" }
       - { type: org, text: "Mega Tic-Tac-Toe" }
       - type: bullets
