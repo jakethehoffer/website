@@ -32,7 +32,6 @@ sections:
         items:
           - "Computer Engineering student with a strong foundation in software engineering principles, technical problem solving, and design analysis."
           - "Proficient in Python, Java, C, C#, C++, SQL, Git, Word, Excel, JavaScript, Dart, Unity, FastAPI, Playwright, Monday.com, and Google Apps Script."
-          - "Writes clean and maintainable code with attention to testing, logging, and performance."
 
   - heading: "EDUCATION"
     blocks:
@@ -41,22 +40,24 @@ sections:
       - type: bullets
         items:
           - "Cumulative GPA of 3.85 with distinction of Dean’s Scholar."
-          - "Developed a pathfinding algorithm in Python for autonomous operation of a rover."
 
   - heading: "EXPERIENCE"
     blocks:
-      - { type: role, text: "Independent Software Engineer – Trading & Automation Systems", date: "May 2026 – Present" }
-      - { type: org, text: "Self-directed, full-time" }
+      - { type: role, text: "Operations Technology Intern – Digital Operations Improvement", date: "Jun 2026 – Present" }
+      - { type: org, text: "Lynx Equity Limited (3rd consecutive summer)" }
       - type: bullets
         items:
-          - "Operate two 24/7 production systems: trader, an S&P 500 paper-trading agent (750+ commits since April 2026), and a ten-bookmaker arbitrage daemon in production since November 2025 (3,900+ commits)."
-          - "Took market-bot (crypto market-making feasibility study) from first commit to shipped verdict in three weeks: 7 days of 24/7 venue telemetry, 9-criterion pre-trade synthesizer, data-backed NOT_READY verdict across all 75 pairs."
+          - "Build and test automated workflows across a multi-subsidiary portfolio (Power Automate, Zapier, Monday.com); support SQL reporting and AI-assisted tooling."
+      - { type: role, text: "Independent Software Engineer – Trading & Automation Systems", date: "Nov 2025 – Present" }
+      - type: bullets
+        items:
+          - "Operate two 24/7 production systems, an S&P 500 paper-trading agent and a ten-bookmaker arbitrage daemon (4,700+ combined commits; details under Personal Projects)."
+          - "Shipped market-bot, a crypto market-making feasibility study, in three weeks: 7 days of 24/7 venue telemetry ending in a data-backed NOT_READY verdict across all 75 pairs."
       - { type: role, text: "IT Intern", date: "Jun 2024 – Aug 2024; Jun 2025 – Aug 2025" }
       - { type: org, text: "Lynx Equity Limited" }
       - type: bullets
         items:
           - "Developed a task management system on Monday.com, streamlining communication between subsidiary companies and internal departments by automating issue routing to the appropriate workflow queue."
-          - "Built an On/Off-Boarding workflow in Monday.com, standardizing role-based tasks, handoffs, and approvals; delivered a stakeholder demo and incorporated feedback into the final product."
           - "Wrote Google Apps Script (JavaScript) that consolidates multiple Excel exports into one Google Sheet, applies pricing logic, and tracks unmatched keys for reconciliation, with a custom Sheets menu and dynamic file-ID handling."
       - { type: role, text: "Game Developer (Independent)", date: "January 2024 – March 2024" }
       - { type: org, text: "Mega Tic-Tac-Toe" }
