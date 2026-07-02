@@ -20,7 +20,7 @@
 #                   For auto_meta projects it is only the placeholder for a
 #                   BRAND-NEW card; on rebuilds generate-cards.py preserves the
 #                   last value refresh-meta.py fetched, so keep it non-claiming
-#                   ("last commit: &mdash;"), never a fake "today".
+#                   ("last commit: n/a"), never a fake "today".
 #   what            1-2 sentence project lede (HTML allowed)
 #   body            longer description, 80-120 words (HTML allowed)
 #   metrics         terse stats line (HTML entities pre-encoded)

@@ -68,7 +68,7 @@ def render_header(project: dict, current_meta: str | None = None) -> str:
         initial_text = (
             current_meta
             or project.get("hardcoded_date")
-            or "last commit: &mdash;"
+            or "last commit: n/a"
         )
         last_commit_span = (
             f'<span class="project__last-commit" data-meta="{meta_key}">'

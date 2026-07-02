@@ -31,6 +31,12 @@ receives:
   a11y     - axe-core pass on both pages in both schemes; violations
              with impact critical/serious fail, the rest warn
              (axe loads from CDN; unreachable CDN degrades to warning)
+  voice    - no em-dashes and no graded marketing adjectives
+             ("production-grade" etc.) anywhere in rendered prose:
+             index.html, 404.html, the prose fields of projects.yml /
+             resume-static.yml (comments exempt), and resume.pdf text.
+             These are standing content rules from the site owner
+             (2026-07-02); en-dashes in date ranges stay legal.
 
 Exit 0 = all checks pass. In CI every check is mandatory; locally,
 missing optional deps (pypdf/playwright) degrade to a warning so the
@@ -76,6 +82,21 @@ LAYOUT_WIDTHS = (320, 375, 768, 834, 1280)
 # if the CDN is unreachable the check degrades to a warning (an axe
 # CDN outage should not block a deploy — the next push re-runs it).
 AXE_URL = "https://cdn.jsdelivr.net/npm/axe-core@4.10.3/axe.min.js"
+
+# Voice rules (owner directives, 2026-07-02): em-dashes and graded
+# marketing adjectives are banned from all rendered prose. This list
+# is deliberately editable — but removing a word from it should be a
+# conscious commit, not a drift.
+EM_DASH_PATTERN = re.compile(r"—|&mdash;")
+VOICE_BANNED = (
+    "production-grade", "decision-grade", "telemetry-first", "gap-free",
+    "data-backed", "battle-tested", "rigorous", "robust", "seamless",
+    "scalable", "comprehensive", "lightweight",
+)
+VOICE_BANNED_PATTERN = re.compile(
+    r"\b(" + "|".join(re.escape(w) for w in VOICE_BANNED) + r")\b",
+    re.IGNORECASE,
+)
 
 failures: list[str] = []
 warnings: list[str] = []
@@ -325,6 +346,53 @@ def check_resume(projects: list[dict]) -> None:
                  "re-run scripts/build-site.py and commit the new resume.pdf")
 
 
+# ---------------- voice rules ----------------
+
+def strip_yaml_comments(text: str) -> str:
+    """Drop full-line comments — they're source docs, not rendered prose."""
+    return "\n".join(
+        line for line in text.splitlines()
+        if not line.lstrip().startswith("#")
+    )
+
+
+def check_voice() -> None:
+    """No em-dashes, no graded marketing adjectives, in anything a
+    visitor reads. The July 2026 voice pass removed every instance;
+    this check keeps a late-night edit from quietly regressing it."""
+    surfaces = {
+        "index.html": INDEX.read_text(encoding="utf-8"),
+        "404.html": (ROOT / "404.html").read_text(encoding="utf-8"),
+        "projects.yml (prose)": strip_yaml_comments(
+            PROJECTS_YML.read_text(encoding="utf-8")),
+        "resume-static.yml (prose)": strip_yaml_comments(
+            RESUME_STATIC.read_text(encoding="utf-8")),
+    }
+    try:
+        from pypdf import PdfReader
+        reader = PdfReader(str(RESUME))
+        surfaces["resume.pdf (text)"] = " ".join(
+            p.extract_text() or "" for p in reader.pages)
+    except ImportError:
+        soft_dep_missing("pypdf", "resume.pdf voice checks")
+
+    for name, text in surfaces.items():
+        dashes = len(EM_DASH_PATTERN.findall(text))
+        if dashes:
+            fail(f"voice: {dashes} em-dash(es) in {name} — banned in "
+                 "rendered prose (use a period, comma, or middot)")
+        else:
+            ok(f"voice: no em-dashes in {name}")
+
+        hits = sorted({m.group(0).lower()
+                       for m in VOICE_BANNED_PATTERN.finditer(text)})
+        if hits:
+            fail(f"voice: banned marketing adjective(s) in {name}: "
+                 f"{', '.join(hits)} — say the concrete thing instead")
+        else:
+            ok(f"voice: no banned adjectives in {name}")
+
+
 # ---------------- rendered layout + a11y (playwright) ----------------
 
 def run_axe(page, label: str) -> None:
@@ -431,6 +499,7 @@ def main() -> int:
     check_og_provenance()
     check_sitemap()
     check_resume(projects)
+    check_voice()
     check_layout_and_a11y()
 
     print()

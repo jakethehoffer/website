@@ -183,8 +183,10 @@ then in **Settings &rarr; Pages**, source = `main` branch / root.
 - `scripts/verify-site.py` &mdash; rendered-artifact checks (HTML structure,
   resume PDF page/link/content sync, OG-image claim sync + provenance
   chunk, layout overflow at 320&ndash;1280px in both color schemes for
-  `index.html` and `404.html`, axe-core accessibility gate); run by
-  `.github/workflows/verify-site.yml` on every push and by
-  `refresh-meta.yml` before each auto-commit.
+  `index.html` and `404.html`, axe-core accessibility gate, and the
+  voice rules: no em-dashes and no graded marketing adjectives in any
+  rendered prose &mdash; the `VOICE_BANNED` list in the script is the
+  source of truth); run by `.github/workflows/verify-site.yml` on
+  every push and by `refresh-meta.yml` before each auto-commit.
 - `resume.pdf` &mdash; downloadable PDF (the committed published artifact).
 - `docs/superpowers/` &mdash; design specs and implementation plans.
