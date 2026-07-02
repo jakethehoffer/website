@@ -109,13 +109,18 @@ def render_name(project: dict) -> str:
 
 
 def render_sample(sample: dict | None) -> str | None:
-    """Render the <pre class='project__sample'> block, or None if absent."""
+    """Render the <pre class='project__sample'> block, or None if absent.
+
+    tabindex="0": the samples scroll horizontally on narrow viewports
+    (overflow-x: auto), and a scrollable region must be reachable by
+    keyboard (axe: scrollable-region-focusable, serious).
+    """
     if not sample:
         return None
     label = sample["label"]
     html = sample["html"]  # multi-line; literal-block preserves newlines
     return (
-        f'              <pre class="project__sample" aria-label="{label}">{html}</pre>'
+        f'              <pre class="project__sample" aria-label="{label}" tabindex="0">{html}</pre>'
     )
 
 

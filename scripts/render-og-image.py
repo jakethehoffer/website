@@ -15,7 +15,7 @@ Writes:
 from pathlib import Path
 import os
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, PngImagePlugin
 
 # v2 design tokens (keep in sync with styles.css :root)
 BG = (10, 14, 20)            # #0a0e14
@@ -121,7 +121,12 @@ def render_og() -> None:
     d.text((W - PAD - url_w, H - PAD - 20), url, font=url_font, fill=DIM)
 
     OG_OUT.parent.mkdir(parents=True, exist_ok=True)
-    img.save(OG_OUT, "PNG", optimize=True)
+    # Provenance chunk: verify-site.py compares this against the METRICS
+    # constant above, so a script edit committed without a re-render
+    # fails CI instead of shipping a stale share card.
+    meta = PngImagePlugin.PngInfo()
+    meta.add_text("jh:metrics", METRICS)
+    img.save(OG_OUT, "PNG", optimize=True, pnginfo=meta)
     print(f"wrote {OG_OUT}  ({OG_OUT.stat().st_size:,} bytes)")
 
 

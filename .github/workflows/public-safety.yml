@@ -18,38 +18,44 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      # Banned terms are assembled from string fragments so the workflow
-      # source itself isn't a leak. If you ever need to add a term,
-      # split it across two echos / variables the same way.
+      # The banned terms live in the BANNED_TERMS repo secret (one term
+      # per line), NOT in this file. Keeping them out of the tracked
+      # tree matters: this workflow is public, and any literal (or
+      # trivially-reassembled) term here IS the leak it exists to
+      # prevent. GitHub masks each line of a multiline secret in logs,
+      # so even matched-line output below can't reprint a term.
       - name: Reject banned terms in tracked files
+        env:
+          BANNED_TERMS: ${{ secrets.BANNED_TERMS }}
         run: |
           set -e
-          # Project identifier ([removed]) — the hidden private platform
-          T1="[removed]"
-          T1_LOWER="[removed]"
-          T1_UNDERSCORE="[removed]"
-          # Org name
-          T2="[removed-org]"
-          # Old address street name
-          T3="[removed-street]"
-          # Identifying domain phrase
-          T4="[removed-domain]"
+          if [ -z "$BANNED_TERMS" ]; then
+            echo "::error::BANNED_TERMS secret is missing or empty — the banned-terms check cannot run. Restore it (one term per line) at Settings > Secrets and variables > Actions."
+            exit 1
+          fi
 
           fail=0
-          for term in "$T1" "$T1_LOWER" "$T1_UNDERSCORE" "$T2" "$T3" "$T4"; do
-            hits=$(git grep -in -F "$term" -- ':!.github/workflows/public-safety.yml' || true)
+          n=0
+          while IFS= read -r term; do
+            [ -z "$term" ] && continue
+            n=$((n + 1))
+            hits=$(git grep -in -F "$term" || true)
             if [ -n "$hits" ]; then
-              echo "::error::banned-term hit:"
+              echo "::error::banned-term hit (term #$n):"
               echo "$hits"
               fail=1
             fi
-          done
+          done <<< "$BANNED_TERMS"
 
+          if [ "$n" -eq 0 ]; then
+            echo "::error::BANNED_TERMS secret parsed to zero terms — check its formatting (one term per line)."
+            exit 1
+          fi
           if [ "$fail" -eq 1 ]; then
             echo "::error::public-safety failed — banned terms found in tracked files"
             exit 1
           fi
-          echo "banned-terms: clean"
+          echo "banned-terms: clean ($n terms checked)"
 
       - name: Verify 404.html subpath paths
         run: |

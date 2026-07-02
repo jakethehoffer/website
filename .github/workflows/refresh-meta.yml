@@ -2,8 +2,11 @@ name: refresh-meta
 
 on:
   schedule:
-    # Monday 12:00 UTC weekly.
-    - cron: "0 12 * * 1"
+    # Daily at 11:23 UTC. Daily (not weekly) because the pills carry
+    # day-granularity text ("last commit: today") — refreshed weekly,
+    # that claim is wrong up to six days out of seven. The run is ~2
+    # minutes and only commits when a pill actually changed.
+    - cron: "23 11 * * *"
   workflow_dispatch:
 
 permissions:
@@ -21,8 +24,10 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Install PyYAML
-        run: pip install pyyaml
+      - name: Install dependencies
+        run: |
+          pip install pyyaml pypdf playwright
+          playwright install --with-deps chromium
 
       - name: Run refresh-meta.py
         env:
@@ -34,6 +39,14 @@ jobs:
           # red run instead of silently freezing the freshness pills.
           GH_TOKEN: ${{ secrets.META_REFRESH_TOKEN || github.token }}
         run: python scripts/refresh-meta.py
+
+      # Pushes made below with GITHUB_TOKEN do NOT trigger other
+      # workflows (GitHub's recursion guard), so verify-site.yml never
+      # runs on the auto-commits. Verify the mutated tree HERE, before
+      # it can ship: a refresh-meta bug must fail this run, not deploy
+      # a broken index.html straight to Pages.
+      - name: Verify site before committing
+        run: python scripts/verify-site.py
 
       - name: Commit if changed
         run: |

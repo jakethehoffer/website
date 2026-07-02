@@ -41,7 +41,9 @@ This calls four generators in order:
   for projects with `auto_meta: true` and stamps the footer
   `last_deployed` + the sitemap `lastmod`.
 
-After running `build-site.py`, regenerate the PDF:
+`build-site.py` then rebuilds `resume.pdf` automatically when
+LibreOffice is installed (soffice on PATH or the default Windows
+install location). Without LibreOffice it prints the manual command:
 
 ```bash
 "C:/Program Files/LibreOffice/program/soffice.exe" --headless --convert-to pdf --outdir . resume-source.docx
@@ -49,6 +51,9 @@ mv resume-source.pdf resume.pdf
 ```
 
 Commit `index.html`, the YAML you changed, and `resume.pdf` together.
+Forgetting the PDF is now caught in CI: `verify-site.py` asserts the
+PDF's text contains the name, GPA, and every project name the resume
+is supposed to feature from the current sources.
 `resume-source.docx` is gitignored &mdash; it's a derived artifact, not a
 source.
 
@@ -102,11 +107,20 @@ whichever project it should displace. (Because the docx is now built
 from scratch from text, the old `PARAGRAPHS_TO_DROP` trim-list — ~75
 lines of page-fit hacks — is gone entirely.)
 
-## Automated weekly refresh
+## Automated daily refresh
 
 A GitHub Action at `.github/workflows/refresh-meta.yml` runs
-`refresh-meta.py` every Monday at 12:00 UTC (and on manual
+`refresh-meta.py` daily at 11:23 UTC (and on manual
 `gh workflow run`). It commits any changes back to `main` automatically.
+Daily, not weekly: the pills carry day-granularity text
+("last commit: today"), so a weekly refresh serves that claim up to
+six days stale.
+
+Because the auto-commit is pushed with `GITHUB_TOKEN`, it does **not**
+trigger the `verify-site` / `public-safety` workflows (GitHub's
+recursion guard). The refresh workflow therefore runs
+`scripts/verify-site.py` itself, after mutating the tree and before
+committing — an auto-commit can't ship an unverified `index.html`.
 
 The action reads `META_REFRESH_TOKEN` (a fine-grained PAT) from secrets.
 To set it up:
@@ -120,12 +134,22 @@ To set it up:
    <https://github.com/jakethehoffer/website/settings/secrets/actions>
    as `META_REFRESH_TOKEN`.
 
-If the PAT is missing or expired, the weekly run **fails loudly**
+If the PAT is missing or expired, the daily run **fails loudly**
 (refresh-meta.py exits non-zero in CI when every lookup fails) instead
 of silently freezing the `last commit:` pills at their last value.
 The cron also only commits when a pill actually changed &mdash; the
-footer/sitemap date stamps alone no longer generate weekly
-`[auto]` commits.
+footer/sitemap date stamps alone don't generate `[auto]` commits.
+
+## The public-safety banned-terms check
+
+`.github/workflows/public-safety.yml` greps every tracked file for a
+set of banned privacy terms on each push/PR. The terms live in the
+`BANNED_TERMS` repo secret (one term per line, set at
+<https://github.com/jakethehoffer/website/settings/secrets/actions>) —
+**never** in any tracked file, including that workflow: this repo is
+public, so a term written in the workflow (even split into fragments)
+is itself the leak the check exists to prevent. If the secret goes
+missing the check fails loudly rather than passing empty.
 
 ## The `resume.pdf` pipeline
 
@@ -157,7 +181,10 @@ then in **Settings &rarr; Pages**, source = `main` branch / root.
 - `scripts/render-og-image.py` &mdash; renders the OG share card + favicons.
 - `scripts/refresh-meta.py` &mdash; refreshes last-commit timestamps.
 - `scripts/verify-site.py` &mdash; rendered-artifact checks (HTML structure,
-  resume PDF, OG-image claim sync, layout overflow via Playwright); run
-  by `.github/workflows/verify-site.yml` on every push.
+  resume PDF page/link/content sync, OG-image claim sync + provenance
+  chunk, layout overflow at 320&ndash;1280px in both color schemes for
+  `index.html` and `404.html`, axe-core accessibility gate); run by
+  `.github/workflows/verify-site.yml` on every push and by
+  `refresh-meta.yml` before each auto-commit.
 - `resume.pdf` &mdash; downloadable PDF (the committed published artifact).
 - `docs/superpowers/` &mdash; design specs and implementation plans.
