@@ -51,11 +51,28 @@ jobs:
             echo "::error::BANNED_TERMS secret parsed to zero terms — check its formatting (one term per line)."
             exit 1
           fi
+
+          # Wrap-proof pass: git grep matches line by line, so a term
+          # split across a line break slips through — exactly how one
+          # phrase survived in history until the July 2026 rewrite.
+          # Concatenate all tracked files, fold every whitespace run to
+          # a single space, and re-scan.
+          norm=$(git ls-files -z | xargs -0 cat 2>/dev/null | tr -s '[:space:]' ' ')
+          i=0
+          while IFS= read -r term; do
+            [ -z "$term" ] && continue
+            i=$((i + 1))
+            if printf '%s' "$norm" | grep -qiF "$term"; then
+              echo "::error::banned-term hit in whitespace-normalized scan (term #$i — likely line-wrapped; search tracked files for its words individually)"
+              fail=1
+            fi
+          done <<< "$BANNED_TERMS"
+
           if [ "$fail" -eq 1 ]; then
             echo "::error::public-safety failed — banned terms found in tracked files"
             exit 1
           fi
-          echo "banned-terms: clean ($n terms checked)"
+          echo "banned-terms: clean ($n terms, line + normalized scans)"
 
       - name: Verify 404.html subpath paths
         run: |
