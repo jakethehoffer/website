@@ -58,7 +58,7 @@ WRITING = {
     "prefix": "Writing: ",
     "link_text": "jakethehoffer.github.io/website/#writing",
     "link_url": "https://jakethehoffer.github.io/website/#writing",
-    "suffix": " — short essays on engineering tradeoffs.",
+    "suffix": ", short essays on engineering tradeoffs.",
 }
 _SCRUB_DATE = datetime(2020, 1, 1, tzinfo=timezone.utc)
 

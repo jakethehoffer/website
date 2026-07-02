@@ -28,9 +28,9 @@ ACCENT = (245, 179, 66)      # #f5b342
 # "·"-separated METRICS phrase against the hero metrics block.
 EYEBROW = "computer engineering @ queen's · class of 2027"
 BODY_LINES = [
-    "> i build production-grade software — trading",
-    "> agents, arbitrage daemons, and ML",
-    "> pipelines.",
+    "> i build software that runs unattended.",
+    "> trading agents, arbitrage daemons,",
+    "> and ML pipelines.",
 ]
 METRICS = "//  3 unattended systems  ·  10 bookmakers  ·  dean's scholar"
 

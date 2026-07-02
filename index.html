@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Jake Hoffman — Computer Engineering @ Queen's University</title>
+    <title>Jake Hoffman · Computer Engineering @ Queen's University</title>
     <script>
       (function () {
         try {
@@ -14,17 +14,17 @@
         } catch (e) {}
       })();
     </script>
-    <meta name="description" content="Jake Hoffman — Computer Engineering student at Queen's University (class of 2027). Builds production-grade software in Python, JavaScript, C/C++, Java, and Dart." />
+    <meta name="description" content="Jake Hoffman, Computer Engineering student at Queen's University (class of 2027). Builds trading agents, arbitrage daemons, and ML pipelines in Python, JavaScript, C/C++, Java, and Dart." />
     <link rel="preload" href="assets/fonts/jetbrains-mono-variable.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="styles.css" />
     <meta property="og:type" content="profile" />
-    <meta property="og:title" content="Jake Hoffman — Computer Engineering @ Queen's University" />
+    <meta property="og:title" content="Jake Hoffman · Computer Engineering @ Queen's University" />
     <meta property="og:description" content="Computer Engineering student, class of 2027. Builds trading agents, arbitrage daemons, and ML pipelines." />
     <meta property="og:url" content="https://jakethehoffer.github.io/website/" />
     <meta property="og:image" content="https://jakethehoffer.github.io/website/assets/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Jake Hoffman — engineering-log style portfolio preview" />
+    <meta property="og:image:alt" content="Jake Hoffman, engineering-log style portfolio preview" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://jakethehoffer.github.io/website/assets/og-image.png" />
     <meta name="theme-color" content="#0a0e14" media="(prefers-color-scheme: dark)" />
@@ -88,13 +88,13 @@
     <main id="main">
       <section id="top" class="hero">
         <div class="container hero__inner">
-          <h1 class="visually-hidden">Jake Hoffman &mdash; Computer Engineering @ Queen&rsquo;s University</h1>
+          <h1 class="visually-hidden">Jake Hoffman &middot; Computer Engineering @ Queen&rsquo;s University</h1>
           <pre class="hero__boot" aria-label="Profile boot sequence">
 <span class="boot__prompt">$ whoami</span>
 <span class="boot__line"><span class="boot__caret-mark">&gt;</span> <span data-boot-line>jake hoffman &middot; computer engineering @ queen&rsquo;s &middot; class of 2027</span></span>
 
 <span class="boot__prompt">$ summary</span>
-<span class="boot__line"><span class="boot__caret-mark">&gt;</span> <span data-boot-line>i build production-grade software &mdash; trading agents, arbitrage daemons, and ML pipelines. paper-trading the s&amp;p 500 on real infrastructure; running a 24/7 odds daemon across ten bookmakers.</span></span>
+<span class="boot__line"><span class="boot__caret-mark">&gt;</span> <span data-boot-line>i build software that runs unattended. trading agents, arbitrage daemons, and ML pipelines. paper-trading the s&amp;p 500 on real infrastructure and running a 24/7 odds daemon across ten bookmakers.</span></span>
 
 <span class="boot__prompt">$ <span data-boot-line>contact</span><span class="boot__caret" aria-hidden="true">_</span></span>
           </pre>
@@ -122,9 +122,9 @@
           <p class="section__label"># about</p>
           <h2>What I work on</h2>
           <div class="about">
-            <p>Computer engineering at Queen&rsquo;s. I&rsquo;m most at home building systems that run unattended &mdash; trading agents that paper-trade the S&amp;P 500, an arbitrage daemon ingesting ten bookmakers every minute, and the automation glue that keeps both running unattended.</p>
+            <p>Computer engineering at Queen&rsquo;s. I&rsquo;m most at home building systems that run unattended. Trading agents that paper-trade the S&amp;P 500, an arbitrage daemon ingesting ten bookmakers every minute, and the automation glue that keeps both alive.</p>
             <p>What I&rsquo;m best at: turning a messy real-world domain (sports-book pricing, broker order flow) into clean abstractions and a service that doesn&rsquo;t wake me up at 3am.</p>
-            <p>Looking for an internship or co-op where I can ship production code &mdash; ideally somewhere with hard correctness requirements: trading, infrastructure, financial systems, or developer tools.</p>
+            <p>Looking for an internship or co-op where I can ship production code, ideally somewhere with hard correctness requirements like trading, infrastructure, financial systems, or developer tools.</p>
           </div>
         </div>
       </section>
@@ -199,7 +199,7 @@
               </header>
               <h3 class="project__name">tax-rebalance <span class="project__private">private</span></h3>
               <p class="project__what">Python CLI that monitors a Canadian TFSA + RRSP portfolio for allocation drift and emails weekly digests with cost-aware rebalance verdicts.</p>
-              <p class="project__body">Read-only &mdash; never places trades; the user takes the action in their broker. Async end-to-end: SQLAlchemy 2.0 + aiosqlite, httpx, aiosmtplib, jinja2, structlog. Spec-driven development &mdash; every feature traces to a written design spec and a 21-task TDD implementation plan executed task-by-task with a two-stage independent review (spec compliance, then code quality).</p>
+              <p class="project__body">Read-only, so it never places trades. The user takes the action in their broker. Async end to end with SQLAlchemy 2.0 + aiosqlite, httpx, aiosmtplib, jinja2, and structlog. Spec-driven development, where every feature traces to a written design spec and a 21-task TDD implementation plan executed task by task with a two-stage independent review for spec compliance and then code quality.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> 117 tests &middot; ruff-clean &middot; ci on py 3.11 + 3.13</p>
               <p class="project__chips">python &middot; async sqlalchemy 2 &middot; httpx &middot; aiosmtplib &middot; jinja2 &middot; pytest</p>
               <pre class="project__sample" aria-label="Example weekly digest" tabindex="0"><span class="sample__dim">// example weekly digest excerpt</span>
@@ -215,11 +215,11 @@
                 <span class="project__last-commit">verdict delivered &middot; 2026</span>
               </header>
               <h3 class="project__name">market-bot <span class="project__private">private</span></h3>
-              <p class="project__what">Telemetry-first market-making feasibility bot for NDAX (a Canadian crypto exchange) &mdash; collected real 24/7 venue data, ran it through a pre-trade synthesizer, and delivered a data-backed NOT_READY verdict.</p>
-              <p class="project__body">Collects gap-free 24/7 order-book and trade telemetry over NDAX&rsquo;s REST + WebSocket feeds into a SQLite WAL store, then scores every pair against a 9-criterion pre-trade synthesizer. After 7 covered days, the verdict was NOT_READY across all 75 CAD pairs &mdash; a rigorous, data-backed refutation of retail-passive market making at a flat 0.20%/fill (40 bps round-trip) venue. A queue-aware paper-fill model confirmed it; the one pair that initially passed was bootstrap-validated and rejected as a thin-sample artifact. The negative verdict IS the deliverable. 254 tests; runs unattended on a systemd cloud host.</p>
+              <p class="project__what">Market-making feasibility bot for NDAX, a Canadian crypto exchange. Collected real 24/7 venue data before any trading, ran it through a pre-trade synthesizer, and the verdict came back NOT_READY.</p>
+              <p class="project__body">Collects 24/7 order-book and trade telemetry with no coverage gaps over NDAX&rsquo;s REST + WebSocket feeds into a SQLite WAL store, then scores every pair against a 9-criterion pre-trade synthesizer. After 7 covered days the verdict was NOT_READY across all 75 CAD pairs. The data shows passive retail market making can't clear a flat 0.20%/fill (40 bps round-trip) venue. A queue-aware paper-fill model confirmed it; the one pair that initially passed was bootstrap-validated and rejected as an artifact of a thin sample. The negative verdict IS the deliverable. 254 tests; runs unattended on a systemd cloud host.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> 75 pairs &middot; 7 days 24/7 data &middot; 254 tests</p>
               <p class="project__chips">python &middot; sqlite/wal &middot; websocket &middot; structlog &middot; pydantic &middot; typer</p>
-              <pre class="project__sample" aria-label="Excerpt from the pre-trade synthesizer verdict" tabindex="0"><span class="sample__dim">// market-bot synth — 7 days 24/7 data, 75 ndax cad pairs</span>
+              <pre class="project__sample" aria-label="Excerpt from the pre-trade synthesizer verdict" tabindex="0"><span class="sample__dim">// market-bot synth - 7 days 24/7 data, 75 ndax cad pairs</span>
 <span class="sample__dim">[PENGU/CAD]</span> median +239 bps  p10 &minus;408 bps  &rarr; <span class="sample__hi">NOT_READY</span> (thin tail, $9.5k/day)
 <span class="sample__dim">[BTC/CAD]</span>   spread &lt; 40 bps round-trip fee  &rarr; <span class="sample__hi">NOT_READY</span> (no edge)
 <span class="sample__dim">[HYPE/CAD]</span>  passed 9/9 on 50 fills          &rarr; <span class="sample__hi">NOT_READY</span> (min_used_fills gate)
@@ -233,11 +233,11 @@
                 <span class="project__last-commit">abandoned &middot; 2026</span>
               </header>
               <h3 class="project__name"><a href="https://github.com/jakethehoffer/trades-agency" target="_blank" rel="noopener">trades-agency</a></h3>
-              <p class="project__what">AI receptionist + lead-gen service targeting Toronto trades &mdash; built the full stack, ran a real customer-discovery experiment, abandoned the venture on the data.</p>
-              <p class="project__body">Three Python subsystems: lead-gen via Google Places API, an LLM-driven SDR generating cold outreach, and a conversational receptionist agent (&ldquo;Riley&rdquo;) with booking and message-taking logic. Ran a 32-contact cold-outreach experiment over four days (18 SMS, 14 email) and got 0 positive replies. Wrote a Bayesian post-mortem ranking six hypotheses; the leading explanation was ICP/channel mismatch &mdash; small Toronto trades simply don&rsquo;t engage with cold outreach from strangers. Abandoned the venture rather than burning more credibility and time on a non-responsive niche.</p>
+              <p class="project__what">AI receptionist + lead-gen service targeting Toronto trades. Built the full stack, ran a real customer-discovery experiment, and abandoned the venture on the data.</p>
+              <p class="project__body">Three Python subsystems: lead-gen via Google Places API, an LLM-driven SDR generating cold outreach, and a conversational receptionist agent (&ldquo;Riley&rdquo;) with booking and message-taking logic. Ran a 32-contact cold-outreach experiment over four days (18 SMS, 14 email) and got 0 positive replies. Wrote a Bayesian post-mortem ranking six hypotheses; the leading explanation was ICP/channel mismatch. Small Toronto trades simply don&rsquo;t engage with cold outreach from strangers. Abandoned the venture rather than burning more credibility and time on a non-responsive niche.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> 32 contacts &middot; 0 positive replies &middot; 6 hypotheses ranked</p>
               <p class="project__chips">python &middot; google places api &middot; llm &middot; sdr &middot; receptionist agent</p>
-              <pre class="project__sample" aria-label="Excerpt from post-mortem hypothesis ranking" tabindex="0"><span class="sample__dim">// cold outreach batch 1 — 32 contacts, 0 positive replies</span>
+              <pre class="project__sample" aria-label="Excerpt from post-mortem hypothesis ranking" tabindex="0"><span class="sample__dim">// cold outreach batch 1 - 32 contacts, 0 positive replies</span>
 <span class="sample__dim">[H1]</span> wrong icp for cold inbound      <span class="sample__hi">strong</span> (0/32 across 2 channels)
 <span class="sample__dim">[H2]</span> send time wrong (sat 2pm)      <span class="sample__dim">weak</span>   (wouldn&rsquo;t explain 0%)
 <span class="sample__dim">[H6]</span> wrong offer (missed-call pmf)  <span class="sample__hi">strong</span> (never validated demand)
@@ -251,11 +251,11 @@
                 <span class="project__last-commit">v1.0 &middot; 2026</span>
               </header>
               <h3 class="project__name"><a href="https://github.com/jakethehoffer/equity-arbs" target="_blank" rel="noopener">equity-arbs</a></h3>
-              <p class="project__what">Async Python stat-arb research toolkit for TSX-listed equities and ETFs &mdash; documented a hard ceiling and retired at v1.0.</p>
-              <p class="project__body">Engle-Granger cointegration + OLS hedge ratio + Ornstein-Uhlenbeck half-life scoring across an 80-name TSX universe; rolling-window regime-stability sweep; configurable backtest engine with z-score entry/exit, hold-time cap, and stop-loss buffer. Six analysis arcs, 76 unit tests. Decision-grade backtest proved the strategy works mathematically (+$216 net across 6 ETF pairs at zero commissions) but caps at ~0.6% annual return on $5K capital &mdash; below the passive TSX index alternative. Shipped a correct negative; retired the project at v1.0 with the toolkit as a reusable research asset.</p>
+              <p class="project__what">Async Python stat-arb research toolkit for TSX-listed equities and ETFs. Documented a hard ceiling and retired at v1.0.</p>
+              <p class="project__body">Engle-Granger cointegration + OLS hedge ratio + Ornstein-Uhlenbeck half-life scoring across an 80-name TSX universe; rolling-window regime-stability sweep; configurable backtest engine with z-score entry/exit, hold-time cap, and stop-loss buffer. Six analysis arcs, 76 unit tests. The backtest proved the strategy works mathematically (+$216 net across 6 ETF pairs at zero commissions) but caps at ~0.6% annual return on $5K capital, below the passive TSX index alternative. Shipped a correct negative; retired the project at v1.0 with the toolkit as a reusable research asset.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> 76 tests &middot; 80 equities + 39 etfs &middot; 6 analysis arcs</p>
               <p class="project__chips">python &middot; asyncio &middot; sqlalchemy 2 &middot; statsmodels &middot; pydantic &middot; typer</p>
-              <pre class="project__sample" aria-label="Example backtest verdict" tabindex="0"><span class="sample__dim">// example backtest result — etf pairs, 7 years</span>
+              <pre class="project__sample" aria-label="Example backtest verdict" tabindex="0"><span class="sample__dim">// example backtest result - etf pairs, 7 years</span>
 <span class="sample__dim">[XIU/XIC]</span> coint p=0.001  half-life 22d  &rarr; <span class="sample__ok">+$84</span> (entries 14, hits 9)
 <span class="sample__dim">[XEG/XIT]</span> coint p=0.024  half-life 18d  &rarr; <span class="sample__hi">-$31</span> (entries 8, hits 3)
 <span class="sample__dim">// net 6 pairs over 7y: +$216 (zero fees) &rarr; ~$30/yr at retail capital → below tsx index</span></pre>
@@ -268,7 +268,7 @@
                 <span class="project__last-commit">mar 2024</span>
               </header>
               <h3 class="project__name"><a href="https://jakethehoffer.itch.io/mega-tictactoe" target="_blank" rel="noopener">Mega Tic-Tac-Toe</a></h3>
-              <p class="project__what">Unity game on a 3&times;3 grid of linked Tic-Tac-Toe boards &mdash; each move dictates the opponent&rsquo;s next board.</p>
+              <p class="project__what">Unity game on a 3&times;3 grid of linked Tic-Tac-Toe boards where each move dictates the opponent&rsquo;s next board.</p>
               <p class="project__body">Local + online multiplayer; single player vs. a Minimax-based AI with multiple difficulty levels. Self-shipped indie title on itch.io.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> unity &middot; c# &middot; minimax ai &middot; local + online mp</p>
               <p class="project__chips">unity &middot; c# &middot; minimax ai &middot; multiplayer</p>
@@ -289,7 +289,7 @@
               <p class="project__body">Users enter a destination; the app delivers on-screen prompts plus directional haptic feedback in the shoe itself.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> dart &middot; flutter &middot; bluetooth &middot; embedded haptics</p>
               <p class="project__chips">dart &middot; flutter &middot; bluetooth &middot; embedded</p>
-              <pre class="project__sample" aria-label="Example API call" tabindex="0"><span class="sample__dim">// example api call — turn right in 30m</span>
+              <pre class="project__sample" aria-label="Example API call" tabindex="0"><span class="sample__dim">// example api call - turn right in 30m</span>
 shoe.pulse(side: <span class="sample__hi">Side.right</span>,
            strength: 0.7,
            pattern: <span class="sample__hi">Pattern.doubleTap</span>);</pre>
@@ -303,7 +303,7 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
               </header>
               <h3 class="project__name">Walking / Jumping Classifier</h3>
               <p class="project__what">Python ML pipeline classifying accelerometer time-series as walking vs. jumping.</p>
-              <p class="project__body">End-to-end &mdash; data collection, feature engineering, model training, evaluation. Course capstone shipped with reproducible scripts.</p>
+              <p class="project__body">Covers the full pipeline, from data collection and feature engineering through model training and evaluation. Course capstone shipped with reproducible scripts.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> python &middot; accelerometer &middot; signal processing</p>
               <p class="project__chips">python &middot; numpy &middot; scikit-learn &middot; signal processing</p>
               <figure class="project__media">
@@ -318,7 +318,7 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
       <section id="case-study" class="section">
         <div class="container">
           <p class="section__label"># case study</p>
-          <h2>trader &mdash; a 24/7 ai swing-trading agent</h2>
+          <h2>trader &middot; a 24/7 ai swing-trading agent</h2>
           <p class="case-study__lede">
             Six scheduled, idempotent routines on IBKR paper + Finnhub news.
             Paper-trading the S&amp;P 500, graduating to live only after 30 paper
@@ -346,20 +346,20 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
             <p>A monolith trading bot is one place where every bug becomes a money bug. Splitting the work across six small, idempotent routines means each one can be tested in isolation, re-run safely on failure, and reasoned about on its own. <code>scan_premarket</code> only knows how to filter candidates; <code>gate</code> only knows the risk rules; <code>place_orders</code> only knows the IBKR API. They communicate through the journal, not in-process state.</p>
 
             <h3>The risk model</h3>
-            <p>Default is paper. The kill-switch is a single YAML key (<code>kill_switch.enabled: true</code>) read at the top of every routine &mdash; flip it and the system stops opening positions at the next scheduled tick. Risk counters (per-trade, per-day, per-week) live in committed JSON so the state survives restarts and is reviewable in a diff. The 30-day paper gate is enforced by <code>gate</code> reading a graduation file written only by the EOD routine.</p>
+            <p>Default is paper. The kill-switch is a single YAML key (<code>kill_switch.enabled: true</code>) read at the top of every routine. Flip it and the system stops opening positions at the next scheduled tick. Risk counters (per-trade, per-day, per-week) live in committed JSON so the state survives restarts and is reviewable in a diff. The 30-day paper gate is enforced by <code>gate</code> reading a graduation file written only by the EOD routine.</p>
 
             <h3>What I learned</h3>
-            <p>Three things I&rsquo;d repeat on the next agent like this: idempotent scheduled routines from day one (the monolith refactor I avoided would have eaten weeks); kill-switch and risk gates <em>before</em> any trading logic, so strategy iteration can&rsquo;t corrupt state; observability turned out to be the hardest engineering problem, not the math &mdash; knowing <em>why</em> the agent made each call was harder than getting it to make calls at all.</p>
+            <p>Three things I&rsquo;d repeat on the next agent like this: idempotent scheduled routines from day one (the monolith refactor I avoided would have eaten weeks); kill-switch and risk gates <em>before</em> any trading logic, so strategy iteration can&rsquo;t corrupt state; observability turned out to be the hardest engineering problem, not the math. Knowing <em>why</em> the agent made each call was harder than getting it to make calls at all.</p>
 
             <h3>What&rsquo;s next</h3>
-            <p>Graduation to live trading is contingent on documented outperformance vs. SPY across 30 paper days. The broker layer is already abstracted (<code>broker.py</code> &mdash; IBKR active, Alpaca preserved) so the live cutover is a config change. Building toward a backtester that replays the journal against historical Finnhub headlines to validate model changes before they touch a real fill.</p>
+            <p>Graduation to live trading is contingent on documented outperformance vs. SPY across 30 paper days. The broker layer is already abstracted (<code>broker.py</code>, with IBKR active and Alpaca preserved) so the live cutover is a config change. Building toward a backtester that replays the journal against historical Finnhub headlines to validate model changes before they touch a real fill.</p>
           </div>
         </div>
       </section>
       <section id="case-study-arb" class="section">
         <div class="container">
           <p class="section__label"># case study</p>
-          <h2>odds aggregator &mdash; a 24/7 cross-book arbitrage daemon</h2>
+          <h2>odds aggregator &middot; a 24/7 cross-book arbitrage daemon</h2>
           <p class="case-study__lede">
             Ten bookmakers, six sports, polled every minute. When prices on
             the same outcome diverge enough to clear the vig and transaction
@@ -385,13 +385,13 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
 
           <div class="case-study__prose">
             <h3>The problem</h3>
-            <p>A real-time cross-book ingester sounds simple and isn&rsquo;t. Each book formats markets differently, prices go stale within seconds, and books vary wildly in scrape-friendliness &mdash; <code>FanDuel</code> removed itself with bot detection; <code>Pinnacle</code> requires auth. An arb that&rsquo;s real on paper is often gone by the time you see it; an arb that looks &ldquo;available&rdquo; is often a stale price. The hard part isn&rsquo;t math, it&rsquo;s <em>fresh</em> math.</p>
+            <p>A real-time cross-book ingester sounds simple and isn&rsquo;t. Each book formats markets differently, prices go stale within seconds, and books vary wildly in scrape-friendliness. <code>FanDuel</code> removed itself with bot detection; <code>Pinnacle</code> requires auth. An arb that&rsquo;s real on paper is often gone by the time you see it; an arb that looks &ldquo;available&rdquo; is often a stale price. The hard part isn&rsquo;t math, it&rsquo;s <em>fresh</em> math.</p>
 
             <h3>The system</h3>
-            <p>Per-book ingest workers feed a normalization layer that canonicalizes markets (so <code>Moneyline</code> on BetMGM resolves to the same key as <code>h2h</code> on Pinnacle). The arb detector walks canonical odds for each event, converts to implied probabilities, and flags any cross-book combination where &Sigma; implied &lt; 1 minus a configurable edge floor. SQLite with Alembic handles schema evolution &mdash; over ten migrations so far. A separate journal table records every raw scrape, which means failures and false-positives are replayable against the exact inputs that produced them.</p>
+            <p>Per-book ingest workers feed a normalization layer that canonicalizes markets (so <code>Moneyline</code> on BetMGM resolves to the same key as <code>h2h</code> on Pinnacle). The arb detector walks canonical odds for each event, converts to implied probabilities, and flags any cross-book combination where &Sigma; implied &lt; 1 minus a configurable edge floor. SQLite with Alembic handles schema evolution. Over ten migrations so far. A separate journal table records every raw scrape, which means failures and false-positives are replayable against the exact inputs that produced them.</p>
 
             <h3>What I learned / what&rsquo;s next</h3>
-            <p>Production scrapers fail in interesting ways. The most underestimated work was <em>defensive ingestion</em> &mdash; per-book health scoring, automatic backoff on bot-detection, intermittent-cluster tolerance. The math layer was small; the operations layer was most of it. Next step: a paper-trading recorder that attributes realized P&amp;L to historical alerts without actually placing bets, so the alert pipeline can be calibrated against real outcomes.</p>
+            <p>Production scrapers fail in interesting ways. The most underestimated work was <em>defensive ingestion</em>, meaning per-book health scoring, automatic backoff on bot detection, and tolerance for intermittent clusters. The math layer was small; the operations layer was most of it. Next step: a paper-trading recorder that attributes realized P&amp;L to historical alerts without actually placing bets, so the alert pipeline can be calibrated against real outcomes.</p>
           </div>
         </div>
       </section>
@@ -400,17 +400,39 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
           <p class="section__label"># writing</p>
           <article class="writing-post">
             <header>
+              <p class="writing-post__meta">2026-07-02 &middot; ~3 min read</p>
+              <h2><code>NOT_READY</code> is a deliverable</h2>
+            </header>
+            <p>This year I shipped three projects whose final artifact is a decision not to proceed. A market-making feasibility bot ended in <code>NOT_READY</code> across all 75 pairs it scored. A stat-arb toolkit backtested to a ceiling of roughly 0.6% a year, so I retired it. A lead generation venture got 0 replies from 32 cold contacts, and I shut the whole thing down. That reads like a losing streak on a portfolio page. I think it was the most defensible engineering I did all year.</p>
+
+            <h3>The trap</h3>
+            <p>Nobody tweaks their way to a trustworthy no. If you keep adjusting parameters until something looks positive, you will eventually succeed, and what you end up with is a strategy that only works inside your own backtest. The failure mode isn&rsquo;t laziness, it&rsquo;s hope plus iteration. Every knob you turn after seeing the results converts evidence into curve fitting, and the project quietly stops asking whether the idea is viable and starts asking whether the chart can be made to go up.</p>
+            <p>The only defense I know is deciding what counts as a yes before looking at any data. The nine criteria a pair had to clear in market-bot&rsquo;s pre-trade synthesizer were written and tested before any telemetry existed. Seven days of 24/7 order book data later, the verdict was a lookup, not a judgment call.</p>
+
+            <h3>The one that almost passed</h3>
+            <p>One pair made it through all nine criteria on 50 fills. That&rsquo;s the dangerous moment. Three weeks of work wants that pair to be real, and there is always a story for why the small sample is fine. The pass went through bootstrap validation instead of celebration. Resampling the fills tells you how often a pair with no real edge produces a run this good, and the answer was often enough that it died as an artifact of a thin sample. The synthesizer got a floor on fill count so the next lucky streak dies on its own.</p>
+
+            <h3>What makes a no trustworthy</h3>
+            <p>Give the idea every advantage and let it lose anyway. The stat-arb backtest ran at zero commissions, which makes it a pure upper bound that no fee model can argue with, and it still netted only $216 over seven years across six ETF pairs. Call it $30 a year on retail capital, below just holding the index. When the ceiling is under the floor there is nothing left to argue about.</p>
+            <p>The venture experiment worked the same way. Zero replies out of 32 is data, but the deliverable was the post-mortem, which ranked six hypotheses for the silence by how well each one explains 0 for 32 across two channels. The leading explanation was that small trades businesses don&rsquo;t engage cold outreach from strangers, and no email template fixes that. Sending batch two would have been easier than writing that ranking. It also would have been the wrong move.</p>
+
+            <h3>What you keep</h3>
+            <p>A clean no isn&rsquo;t nothing. The toolkit survives. The cointegration scanner and backtest engine retired at v1.0 and stay reusable, and the telemetry collector runs anywhere a WebSocket feed exists. The verdicts survive too, since each one is a question I never have to ask again. Mostly you keep the time. The alternative to a defensible no is six more months of maybe, which costs more than any of these projects did.</p>
+            <p>The kill-switch essay below is the same instinct applied to running systems. This one is about starting them. Decide the stopping rule before you fall in love with the thing you would have to stop.</p>
+          </article>
+          <article class="writing-post">
+            <header>
               <p class="writing-post__meta">2026-05-18 &middot; ~3 min read</p>
               <h2>The cheapest kill-switch is a YAML key</h2>
             </header>
-            <p>You&rsquo;re building something that can blow up &mdash; money, data, state. You need a way to stop it. The instinct is to reach for &ldquo;real&rdquo; infrastructure: a feature flag service, an env var the operator sets at runtime, a row in a database the worker polls. I picked none of those for <code>trader</code>. I used a YAML key. Here&rsquo;s why.</p>
+            <p>You&rsquo;re building something that can blow up and take money, data, or state with it. You need a way to stop it. The instinct is to reach for &ldquo;real&rdquo; infrastructure: a feature flag service, an env var the operator sets at runtime, a row in a database the worker polls. I picked none of those for <code>trader</code>. I used a YAML key. Here&rsquo;s why.</p>
 
             <h3>The instinct</h3>
-            <p>Each of the &ldquo;serious&rdquo; options has real engineering behind it. A feature flag service like LaunchDarkly gives you per-user gates, scheduled rollouts, and audit logs &mdash; sophisticated and well-understood. An environment variable, set with <code>KILL_SWITCH=1</code> and a restart, is the textbook twelve-factor move. A row in a <code>kill_switches</code> table that the worker polls on every iteration is composable, supports per-strategy flags, and trivially grows a UI later.</p>
+            <p>Each of the &ldquo;serious&rdquo; options has real engineering behind it. A feature flag service like LaunchDarkly gives you per-user gates, scheduled rollouts, and audit logs. Sophisticated and well understood. An environment variable, set with <code>KILL_SWITCH=1</code> and a restart, is the textbook twelve-factor move. A row in a <code>kill_switches</code> table that the worker polls on every iteration is composable, supports per-strategy flags, and trivially grows a UI later.</p>
             <p>I have used all three in other contexts and I will use them again. None of them is right for this problem. The kill-switch on a trading agent is not a feature flag and not a deployment toggle. It is a stop button. The thing a stop button needs to do, more than anything else, is <em>work when you press it</em>.</p>
 
             <h3>Why those are wrong here</h3>
-            <p>The asymmetry is the whole argument. For a kill-switch, the cost of failing to stop is catastrophic &mdash; money moves, positions open, the agent keeps trading through the failure. The cost of being too simple &mdash; one global switch, no per-strategy granularity, no UI &mdash; is zero. The decision should optimize for <em>can I reliably stop?</em> and nothing else.</p>
+            <p>The asymmetry is the whole argument. For a kill-switch, the cost of failing to stop is catastrophic. Money moves, positions open, the agent keeps trading through the failure. The cost of being too simple is zero, even with one global switch, no per-strategy granularity, and no UI. The decision should optimize for <em>can I reliably stop?</em> and nothing else.</p>
             <p>Each &ldquo;serious&rdquo; option introduces a dependency between <em>I want to stop</em> and <em>I can stop</em>. The feature flag service needs the network; if the network is what&rsquo;s broken, the kill-switch is what&rsquo;s broken. The environment variable requires the operator to be present and the process to restart, and the restart is itself a risky action while a position is open. The database row requires the worker to be talking to the DB to read it, so a degraded DB connection is a degraded kill-switch.</p>
             <p>A YAML key in the repo has no failure mode that isn&rsquo;t also a failure mode of running the code at all.</p>
 
@@ -427,10 +449,10 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
             <p>Flipping the switch is <code>git commit -am 'kill' &amp;&amp; git push</code>. The next scheduled tick reads the new config and exits cleanly without opening a position. The state is in version control, the diff is the audit log, the rollback is <code>git revert</code>, and &ldquo;who triggered the kill&rdquo; is <code>git blame</code>.</p>
 
             <h3>What you give up</h3>
-            <p>No per-strategy flags. No scheduled windows. No UI. No ability to disable opening positions while still allowing closes &mdash; that one stings a little, and if I ever need it I&rsquo;ll add a second key, not a second system. All true tradeoffs. None of them answer the question the kill-switch exists to answer, which is: <em>is the agent allowed to trade right now?</em> That is the only question, and one global boolean answers it.</p>
+            <p>No per-strategy flags. No scheduled windows. No UI. No ability to disable opening positions while still allowing closes. That one stings a little, and if I ever need it I&rsquo;ll add a second key, not a second system. All true tradeoffs. None of them answer the question the kill-switch exists to answer, which is: <em>is the agent allowed to trade right now?</em> That is the only question, and one global boolean answers it.</p>
 
             <h3>The shape of the principle</h3>
-            <p>The cheapest tool that solves the actual problem beats the sophisticated tool that also solves problems you don&rsquo;t have. The trap is reaching for infrastructure because it feels more engineered, when the asymmetry of the failure modes points hard at the simple option. Kill-switches are the clearest case I&rsquo;ve worked through. The same shape shows up elsewhere &mdash; risk counters in committed JSON instead of SQLite, a 30-day paper-trade gate as a file write instead of a feature flag. Same instinct, same result.</p>
+            <p>The cheapest tool that solves the actual problem beats the sophisticated tool that also solves problems you don&rsquo;t have. The trap is reaching for infrastructure because it feels more engineered, when the asymmetry of the failure modes points hard at the simple option. Kill-switches are the clearest case I&rsquo;ve worked through. The same shape shows up elsewhere. Risk counters in committed JSON instead of SQLite, and a 30-day paper-trade gate as a file write instead of a feature flag. Same instinct, same result.</p>
           </article>
         </div>
       </section>
@@ -443,26 +465,26 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
             <li class="timeline__item">
               <header class="timeline__head">
                 <span class="status status--active" aria-hidden="true"></span>
-                <h3 class="timeline__role">Operations Technology Intern &mdash; Digital Operations Improvement</h3>
+                <h3 class="timeline__role">Operations Technology Intern &middot; Digital Operations Improvement</h3>
                 <span class="timeline__dates">jun 2026 &ndash; present</span>
               </header>
               <p class="timeline__org">Lynx Equity Limited</p>
               <ul class="timeline__bullets">
                 <li>Building and testing automated workflows across Lynx&rsquo;s multi-subsidiary portfolio (Power Automate, Zapier, Monday.com), plus SQL reporting and AI-assisted tooling for digital operations improvement.</li>
-                <li>Third consecutive summer at Lynx &mdash; the first two terms (below) were IT internships; this role was scoped around software, automation, and AI.</li>
+                <li>Third consecutive summer at Lynx. The first two terms below were IT internships, and this role was scoped around software, automation, and AI.</li>
               </ul>
             </li>
 
             <li class="timeline__item">
               <header class="timeline__head">
                 <span class="status status--active" aria-hidden="true"></span>
-                <h3 class="timeline__role">Independent Software Engineer &mdash; Trading &amp; Automation Systems</h3>
+                <h3 class="timeline__role">Independent Software Engineer &middot; Trading &amp; Automation Systems</h3>
                 <span class="timeline__dates">nov 2025 &ndash; present</span>
               </header>
               <p class="timeline__org">Self-directed, alongside school and work</p>
               <ul class="timeline__bullets">
                 <li>Operating two 24/7 production systems: <a href="#case-study">trader</a>, an S&amp;P 500 paper-trading agent (750+ commits since April), and a <a href="#case-study-arb">ten-bookmaker arbitrage daemon</a> in production since November 2025 (3,900+ commits).</li>
-                <li>Took market-bot from first commit to a shipped verdict in three weeks (may &ndash; jun 2026): 7 days of gap-free 24/7 NDAX telemetry through a 9-criterion pre-trade synthesizer, ending in a data-backed NOT_READY verdict across all 75 CAD pairs.</li>
+                <li>Took market-bot from first commit to a shipped verdict in three weeks (may &ndash; jun 2026): 7 days of uninterrupted NDAX telemetry through a 9-criterion pre-trade synthesizer, ending in a NOT_READY verdict across all 75 CAD pairs.</li>
                 <li>Built and shipped tax-rebalance in a single spec-driven TDD sprint: 21-task plan, 117 tests, two-stage independent review; it has emailed weekly portfolio digests unattended since.</li>
               </ul>
             </li>
@@ -485,7 +507,7 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
             <li class="timeline__item">
               <header class="timeline__head">
                 <span class="status status--shipped" aria-hidden="true"></span>
-                <h3 class="timeline__role">Independent Game Developer &mdash; Mega Tic-Tac-Toe</h3>
+                <h3 class="timeline__role">Independent Game Developer &middot; Mega Tic-Tac-Toe</h3>
                 <span class="timeline__dates">jan &ndash; mar 2024</span>
               </header>
               <p class="timeline__org">Self-published, Unity</p>
@@ -501,7 +523,7 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
                 <h3 class="timeline__role">Design Team Member</h3>
                 <span class="timeline__dates">oct 2023 &ndash; mar 2024</span>
               </header>
-              <p class="timeline__org">QMIND &mdash; Queen&rsquo;s AI Hub</p>
+              <p class="timeline__org">QMIND &middot; Queen&rsquo;s AI Hub</p>
               <ul class="timeline__bullets">
                 <li>Trained a reinforcement-learning agent to play Blackjack alongside the team.</li>
                 <li>Built a tabular Q-learning baseline with training loop and basic tests, then helped migrate the system to a Deep Q-learning version so the model could learn policies beyond a simple lookup table.</li>
