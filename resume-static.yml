@@ -30,7 +30,7 @@ sections:
     blocks:
       - type: bullets
         items:
-          - "Computer Engineering student working in software engineering, technical problem solving, and design analysis."
+          - "Computer Engineering student focused on software, automation, and systems that run unattended."
           - "Proficient in Python, Java, C, C#, C++, SQL, Git, Word, Excel, JavaScript, Dart, Unity, FastAPI, Playwright, Monday.com, and Google Apps Script."
 
   - heading: "EDUCATION"
@@ -49,12 +49,12 @@ sections:
         items:
           - "Shipped releases on the company’s investor website through the Webflow API, each gated on scripted checks against staging and production. A round of 14 changes went from request to live in an afternoon, against two days by hand."
           - "Replaced all 51 portfolio-company bios in one scripted API pass, checked by a rule built to break if a bio landed on the wrong company. All 51 mapped correctly, with 3 extraction defects caught before publish."
-          - "Verified 7 stage transitions across the six boards of the portfolio’s Monday.com system, shipped a five-field gate enforced in the UI and API, and traced a defect dating every project from its approval rather than its start."
+          - "Verified 7 stage transitions across the 6 boards of the portfolio’s Monday.com system, shipped a 5-field gate enforced in the UI and API, and traced a defect measuring project age from approval rather than start."
       - { type: role, text: "Independent Software Engineer · Trading & Automation Systems", date: "Nov 2025 – Present" }
       - type: bullets
         items:
-          - "Operate two 24/7 production systems, an S&P 500 paper-trading agent and a ten-bookmaker arbitrage daemon (4,700+ combined commits; details under Personal Projects)."
-          - "Shipped market-bot, a crypto market-making feasibility study, in three weeks: 7 days of 24/7 venue telemetry and a NOT_READY verdict across all 75 pairs."
+          - "Operate an S&P 500 paper-trading agent and an arbitrage daemon across ten bookmakers, both 24/7 in production (4,700+ combined commits, detailed under Personal Projects)."
+          - "Shipped market-bot, a crypto market-making feasibility study, in three weeks. 7 days of 24/7 venue telemetry produced a NOT_READY verdict across all 75 pairs."
       - { type: role, text: "IT Intern", date: "Jun 2024 – Aug 2024; Jun 2025 – Aug 2025" }
       - { type: org, text: "Lynx Equity Limited" }
       - type: bullets
@@ -65,7 +65,7 @@ sections:
       - { type: org, text: "Mega Tic-Tac-Toe" }
       - type: bullets
         items:
-          - "Unity game on a 3×3 grid of linked Tic-Tac-Toe boards where each move sets the opponent’s next board, and winning a board claims one square. Supports local and online multiplayer, plus single player vs. a Minimax-based AI."
+          - "Built a Unity game on a 3×3 grid of linked Tic-Tac-Toe boards where each move sets the opponent’s next board, and winning a board claims one square. Supports local and online multiplayer, plus single player vs. a Minimax AI."
       - { type: role, text: "Design Team Member", date: "October 2023 – March 2024" }
       - { type: org, text: "QMIND · Queen’s AI Hub" }
       - type: bullets
