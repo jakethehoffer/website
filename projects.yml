@@ -112,7 +112,7 @@
   resume:
     role: "tax-rebalance (Python · async SQLAlchemy 2 · httpx · pytest)"
     bullets:
-      - "Canadian TFSA + RRSP portfolio drift monitor that emails weekly digests with cost-aware rebalance verdicts (read-only; never places trades). Spec-driven TDD: 21-task plan, two-stage independent review, 117 tests, ruff-clean, CI on Py 3.11 + 3.13. Questrade IQ API with OAuth refresh-token rotation."
+      - "Canadian TFSA + RRSP portfolio drift monitor that emails weekly digests with cost-aware rebalance verdicts (read-only; never places trades). Spec-driven TDD: 21-task plan, two-stage independent review, 117 tests. Questrade IQ API with OAuth refresh-token rotation."
 
 - key: market-bot
   name: market-bot
@@ -198,7 +198,7 @@
   resume:
     role: "equity-arbs (Python · asyncio · SQLAlchemy 2 · statsmodels · pydantic)"
     bullets:
-      - "Stat-arb research toolkit for TSX pair trading (spec-first, TDD, 76 unit tests). Backtest demonstrated a ~0.6%/yr ceiling on retail capital; retired at v1.0 with the toolkit as a reusable research asset and a documented negative result."
+      - "Stat-arb research toolkit for TSX pair trading (spec-first, TDD, 76 unit tests). Backtest demonstrated a ~0.6%/yr ceiling on retail capital; retired at v1.0 as a documented negative result."
 
 - key: mega-tictactoe
   name: Mega Tic-Tac-Toe

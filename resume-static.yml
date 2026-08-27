@@ -30,7 +30,7 @@ sections:
     blocks:
       - type: bullets
         items:
-          - "Computer Engineering student with a strong foundation in software engineering principles, technical problem solving, and design analysis."
+          - "Computer Engineering student working in software engineering, technical problem solving, and design analysis."
           - "Proficient in Python, Java, C, C#, C++, SQL, Git, Word, Excel, JavaScript, Dart, Unity, FastAPI, Playwright, Monday.com, and Google Apps Script."
 
   - heading: "EDUCATION"
@@ -43,11 +43,13 @@ sections:
 
   - heading: "EXPERIENCE"
     blocks:
-      - { type: role, text: "Operations Technology Intern · Digital Operations Improvement", date: "Jun 2026 – Present" }
+      - { type: role, text: "Operations Technology Intern · Digital Operations Improvement", date: "Jun 2026 – Aug 2026" }
       - { type: org, text: "Lynx Equity Limited (3rd consecutive summer)" }
       - type: bullets
         items:
-          - "Build and test automated workflows across a multi-subsidiary portfolio (Power Automate, Zapier, Monday.com); support SQL reporting and AI-assisted tooling."
+          - "Shipped releases on the company’s investor website through the Webflow API, each gated on scripted checks against staging and production. A round of 14 changes went from request to live in an afternoon, against two days by hand."
+          - "Replaced all 51 portfolio-company bios in one scripted API pass, checked by a rule built to break if a bio landed on the wrong company. All 51 mapped correctly, with 3 extraction defects caught before publish."
+          - "Verified 7 stage transitions across the six boards of the portfolio’s Monday.com system, shipped a five-field gate enforced in the UI and API, and traced a defect dating every project from its approval rather than its start."
       - { type: role, text: "Independent Software Engineer · Trading & Automation Systems", date: "Nov 2025 – Present" }
       - type: bullets
         items:
@@ -57,17 +59,15 @@ sections:
       - { type: org, text: "Lynx Equity Limited" }
       - type: bullets
         items:
-          - "Developed a task management system on Monday.com, streamlining communication between subsidiary companies and internal departments by automating issue routing to the appropriate workflow queue."
-          - "Wrote Google Apps Script (JavaScript) that consolidates multiple Excel exports into one Google Sheet, applies pricing logic, and tracks unmatched keys for reconciliation, with a custom Sheets menu and dynamic file-ID handling."
+          - "Built a task management system on Monday.com that routed issues to the right workflow queue across subsidiaries and internal departments."
+          - "Wrote Google Apps Script (JavaScript) that consolidates multiple Excel exports into one Google Sheet, applies pricing logic, and tracks unmatched keys for reconciliation."
       - { type: role, text: "Game Developer (Independent)", date: "January 2024 – March 2024" }
       - { type: org, text: "Mega Tic-Tac-Toe" }
       - type: bullets
         items:
-          - "Designed and programmed a Unity game built on a 3×3 grid of linked Tic-Tac-Toe boards where each move determines the opponent’s next board, and winning a board claims one square on the grid."
-          - "Supports local and online multiplayer, and single player vs. a Minimax-based AI with multiple difficulty levels."
+          - "Unity game on a 3×3 grid of linked Tic-Tac-Toe boards where each move sets the opponent’s next board, and winning a board claims one square. Supports local and online multiplayer, plus single player vs. a Minimax-based AI."
       - { type: role, text: "Design Team Member", date: "October 2023 – March 2024" }
       - { type: org, text: "QMIND · Queen’s AI Hub" }
       - type: bullets
         items:
-          - "Worked on a team project to train an agent to play Blackjack using reinforcement learning."
-          - "Built a tabular Q-learning baseline with training loop and basic tests, then helped migrate the system to a Deep Q-learning version so the model could learn policies beyond a simple lookup table."
+          - "Trained a Blackjack agent with reinforcement learning on a team project. Built a tabular Q-learning baseline with training loop and tests, then helped migrate it to Deep Q-learning so the model could learn policies beyond a lookup table."

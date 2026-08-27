@@ -464,14 +464,17 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
 
             <li class="timeline__item">
               <header class="timeline__head">
-                <span class="status status--active" aria-hidden="true"></span>
+                <span class="status status--shipped" aria-hidden="true"></span>
                 <h3 class="timeline__role">Operations Technology Intern &middot; Digital Operations Improvement</h3>
-                <span class="timeline__dates">jun 2026 &ndash; present</span>
+                <span class="timeline__dates">jun &ndash; aug 2026</span>
               </header>
               <p class="timeline__org">Lynx Equity Limited</p>
               <ul class="timeline__bullets">
-                <li>Building and testing automated workflows across Lynx&rsquo;s multi-subsidiary portfolio (Power Automate, Zapier, Monday.com), plus SQL reporting and AI-assisted tooling for digital operations improvement.</li>
-                <li>Third consecutive summer at Lynx. The first two terms below were IT internships, and this role was scoped around software, automation, and AI.</li>
+                <li>Shipped releases on Lynx&rsquo;s live investor website through the Webflow API rather than by hand in the Designer. A round of 14 changes across the Invest page and FAQs went from request to live in an afternoon, behind 53 scripted checks run against staging and then production.</li>
+                <li>Gated an earlier round of 24 changes across all 15 pages behind a scripted audit that caught 4 defects before launch. The worst was an invisible full-screen layer that would have blocked every tap on the portfolio page for tablet visitors.</li>
+                <li>Replaced all 51 portfolio-company bios in one scripted pass instead of roughly 3 hours of manual entry, checked by a rule designed to break if a bio ever landed on the wrong company. All 51 mapped correctly, and 3 defects in my own extraction turned up before publish.</li>
+                <li>Verified all 7 stage transitions across the six boards of the portfolio&rsquo;s Monday.com project system, traced the failure that was silently blocking project intake to its cause, and shipped a gate that requires five fields before a project can enter delivery. A later pass found a defect overwriting each project&rsquo;s start date at the Planning stage, so every project routed through it had been reporting its duration from the approval rather than the work.</li>
+                <li>This was the 3rd consecutive summer at Lynx. The first two terms below were IT internships, and this role was scoped around software, automation, and AI.</li>
               </ul>
             </li>
 
@@ -582,7 +585,7 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
       <div class="container site-footer__inner">
         <p class="site-footer__prompt">$ <span class="boot__caret" aria-hidden="true">_</span></p>
         <p class="site-footer__meta">
-          <span data-meta="last_deployed">last_deployed: 2026-08-25</span>
+          <span data-meta="last_deployed">last_deployed: 2026-08-27</span>
           <span class="site-footer__sep">&middot;</span>
           <span>&copy; <span id="footer-year">2026</span> jake hoffman</span>
         </p>
