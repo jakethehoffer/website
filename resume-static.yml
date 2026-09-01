@@ -36,7 +36,7 @@ sections:
   - heading: "EDUCATION"
     blocks:
       - { type: role, text: "3rd Year at Queen’s University", date: "September 2023 – Present" }
-      - { type: org, text: "Computer Engineering" }
+      - { type: org, text: "Computer Engineering · Expected graduation 2027" }
       - type: bullets
         items:
           - "Cumulative GPA of 3.85 with distinction of Dean’s Scholar."
