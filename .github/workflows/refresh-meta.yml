@@ -24,9 +24,13 @@ jobs:
         with:
           python-version: "3.13"
 
+      # Pinned, not floating. This job holds a write token for the site
+      # and a PAT that reads metadata across every repo, private names
+      # included, so "whatever pip resolves today" is the wrong install
+      # policy for it. Bump these deliberately.
       - name: Install dependencies
         run: |
-          pip install pyyaml pypdf playwright
+          pip install pyyaml==6.0.3 pypdf==6.18.0 playwright==1.62.0
           playwright install --with-deps chromium
 
       - name: Run refresh-meta.py

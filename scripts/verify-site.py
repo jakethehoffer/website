@@ -18,6 +18,11 @@ receives:
              in render-og-image.py (catches "edited the script, forgot
              to re-render the PNG" — dimensions alone can't)
   sitemap  - <lastmod> is a plausible ISO date, not years stale
+  expiry   - claims whose truth depends on today's date: the
+             resume's year-of-study label is recomputed from the
+             program start date and must match. Everything else
+             here compares artifact to source; nothing else can
+             notice a source that quietly stopped being true
   resume   - resume.pdf is exactly 1 page with the expected hyperlinks,
              and its text contains the name, GPA, and every project
              name the resume is supposed to feature (top
@@ -55,6 +60,7 @@ import re
 import struct
 import sys
 import threading
+from datetime import date
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -281,6 +287,53 @@ def check_sitemap() -> None:
         fail("sitemap <lastmod> missing or not YYYY-MM-DD")
 
 
+# ---------------- claims that expire on a calendar ----------------
+
+# Every other check in this file asks "does the artifact match the
+# source". None of them can ask "is the source still TRUE today",
+# which is how resume-static.yml went on saying "3rd Year" into the
+# first week of fourth year (caught by a human on 2026-09-08, not by
+# this suite). Anything whose truth depends on the date belongs here,
+# together with the rule that makes it go stale.
+
+PROGRAM_START = (2023, 9)   # September of first year
+PROGRAM_YEARS = 4           # expected graduation spring 2027
+ORDINALS = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th", 5: "5th"}
+
+
+def academic_year(today: date) -> int:
+    """Year of study on `today`, an academic year running Sept..Aug."""
+    months = ((today.year - PROGRAM_START[0]) * 12
+              + (today.month - PROGRAM_START[1]))
+    return months // 12 + 1
+
+
+def check_expiring_claims() -> None:
+    today = date.today()
+    year = academic_year(today)
+    text = RESUME_STATIC.read_text(encoding="utf-8")
+    m = re.search(r"(\d)(?:st|nd|rd|th) Year at ", text)
+    if not m:
+        fail('resume-static.yml has no "Nth Year at ..." line. If the '
+             "education line was deliberately rewritten, update "
+             "check_expiring_claims() so the label stays date-checked")
+        return
+    stated = int(m.group(1))
+    if year > PROGRAM_YEARS:
+        fail(f'resume-static.yml still states a year of study, but the '
+             f"{PROGRAM_YEARS}-year program ended in "
+             f"{PROGRAM_START[0] + PROGRAM_YEARS}. Replace that line with a "
+             "graduation line and retire this check.")
+    elif stated == year:
+        ok(f'resume year-of-study reads "{ORDINALS[year]} Year", correct '
+           f"as of {today.isoformat()}")
+    else:
+        fail(f'resume-static.yml says "{ORDINALS.get(stated, stated)} Year" '
+             f"but as of {today.isoformat()} it is {ORDINALS[year]} Year "
+             "(the label rolls over every September). Fix resume-static.yml, "
+             "then run scripts/build-site.py and commit the new resume.pdf.")
+
+
 # ---------------- resume.pdf ----------------
 
 def resume_expected_strings(projects: list[dict]) -> list[str]:
@@ -498,6 +551,7 @@ def main() -> int:
     check_og_dimensions()
     check_og_provenance()
     check_sitemap()
+    check_expiring_claims()
     check_resume(projects)
     check_voice()
     check_layout_and_a11y()

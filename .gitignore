@@ -11,7 +11,13 @@ Thumbs.db
 .tmp/
 .tmp_*
 
-# AI sync working files are committed; nothing to ignore there
+# Working notes about the site, not part of the site. Everything
+# tracked in this repo is also served on Pages, so notes stay local.
+# public-safety.yml asserts both paths are untracked, because an
+# ignore rule only stops an accidental add and does nothing about a
+# path that is already tracked.
+.ai-sync/
+docs/
 
 # resume-source.docx is a DERIVED artifact (gitignored). As of v2.23 it
 # is built from scratch by scripts/build-resume.py from two tracked,

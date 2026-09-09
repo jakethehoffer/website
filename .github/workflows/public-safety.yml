@@ -91,6 +91,20 @@ jobs:
           fi
           echo "404.html paths: clean"
 
+      # .gitignore is advisory: it stops an accidental add and does
+      # nothing about a path that is already tracked, or about a clone
+      # whose ignore rules differ. Assert the end state instead.
+      - name: Verify local-only folders are not tracked
+        run: |
+          set -e
+          tracked=$(git ls-files -- '.ai-sync/' 'docs/' || true)
+          if [ -n "$tracked" ]; then
+            echo "::error::.ai-sync/ or docs/ is tracked — both are local working notes and everything tracked here is served on Pages. Remove with: git rm -r --cached <path>"
+            echo "$tracked"
+            exit 1
+          fi
+          echo ".ai-sync/ and docs/: not tracked (correct)"
+
       - name: Verify resume-source.docx is not tracked
         run: |
           set -e

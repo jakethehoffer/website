@@ -189,4 +189,7 @@ then in **Settings &rarr; Pages**, source = `main` branch / root.
   source of truth); run by `.github/workflows/verify-site.yml` on
   every push and by `refresh-meta.yml` before each auto-commit.
 - `resume.pdf` &mdash; downloadable PDF (the committed published artifact).
-- `docs/superpowers/` &mdash; design specs and implementation plans.
+- `docs/` and `.ai-sync/` &mdash; local working notes (design specs,
+  plans, handoffs). Untracked on purpose: everything tracked here is
+  also served on Pages, and `public-safety.yml` fails the build if
+  either folder is ever committed.

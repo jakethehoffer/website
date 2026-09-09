@@ -2,8 +2,10 @@
 #
 # Add a new project by appending an entry below. Then run:
 #   python scripts/build-site.py
-# which calls generate-cards.py + build-resume.py + refresh-meta.py in order.
-# Regenerate the PDF separately via the documented LibreOffice command.
+# which calls generate-cards.py, build-resume.py, render-og-image.py and
+# refresh-meta.py in order, then rebuilds resume.pdf via LibreOffice. No
+# step is manual any more: the share card and the PDF used to be, and a
+# stale one of each shipped that way.
 #
 # Schema (each entry):
 #   key             short id; matches data-meta="<key>.last_commit" on the page
@@ -90,7 +92,11 @@
 - key: tax-rebalance
   name: tax-rebalance
   resume_priority: 80
-  status: active
+  # shipped, not active: no schedule runs it (no cron in its workflow,
+  # no scheduled task on the host) and its last commit was 2026-05-18.
+  # status also feeds the hero's unattended-system count, so this field
+  # has to stay honest.
+  status: shipped
   url: https://github.com/jakethehoffer/tax-rebalance
   private: true
   meta_key: tax-rebalance.last_commit
