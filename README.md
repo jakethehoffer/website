@@ -146,6 +146,15 @@ of silently freezing the `last commit:` pills at their last value. A red
 run deploys nothing, so the last good deployment keeps serving while the
 failure stays visible.
 
+One thing the old cron used to hide: GitHub disables a scheduled
+workflow after **60 days with no repository activity**. The daily
+`[auto]` commit counted as activity and so kept its own schedule alive
+forever. Nothing commits now, so 60 quiet days would disable the daily
+deploy and freeze the pills at their last deployed value. GitHub emails
+the repo owner first, and any push to `main` re-enables it and
+redeploys, but a long quiet stretch is worth a manual
+`gh workflow run deploy.yml`.
+
 ## The public-safety banned-terms check
 
 `.github/workflows/public-safety.yml` greps every tracked file for a
