@@ -32,7 +32,7 @@ BODY_LINES = [
     "> trading agents, arbitrage daemons,",
     "> and ML pipelines.",
 ]
-METRICS = "//  2 unattended systems  ·  10 bookmakers  ·  dean's scholar"
+METRICS = "//  2 unattended systems  ·  19 bookmakers  ·  dean's scholar"
 
 ROOT = Path(__file__).resolve().parent.parent
 OG_OUT = ROOT / "assets" / "og-image.png"

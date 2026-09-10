@@ -70,9 +70,9 @@
   meta_key: arbitrage.last_commit
   auto_meta: true
   hardcoded_date: "last commit: today"
-  what: "Production arbitrage daemon covering 10 bookmakers across 6 sports."
-  body: "Ingest &rarr; normalize &rarr; detect cross-book arbs &rarr; push alerts to Telegram and Discord. Runs 24/7 on a Windows host with Alembic-managed schema and replay tooling for postmortems."
-  metrics: "10 books &middot; 6 sports &middot; 24/7 uptime"
+  what: "Production arbitrage daemon covering 19 bookmakers across 7 sports."
+  body: "Ingest &rarr; normalize &rarr; detect cross-book arbs &rarr; push alerts to Telegram and Discord. Runs 24/7 on a Linux cloud host under systemd, with Alembic-managed schema and replay tooling for postmortems."
+  metrics: "19 books &middot; 7 sports &middot; 24/7 uptime"
   chips: "python &middot; playwright &middot; sqlite &middot; alembic &middot; fastapi"
   sample:
     label: "Example alert payload"
@@ -87,7 +87,7 @@
   resume:
     role: "Odds Aggregator (Python · Playwright · SQLite/Alembic · FastAPI)"
     bullets:
-      - "Production arbitrage daemon covering 10 bookmakers across 6 sports."
+      - "Production arbitrage daemon covering 19 bookmakers across 7 sports."
 
 - key: tax-rebalance
   name: tax-rebalance

@@ -94,7 +94,7 @@
 <span class="boot__line"><span class="boot__caret-mark">&gt;</span> <span data-boot-line>jake hoffman &middot; computer engineering @ queen&rsquo;s &middot; class of 2027</span></span>
 
 <span class="boot__prompt">$ summary</span>
-<span class="boot__line"><span class="boot__caret-mark">&gt;</span> <span data-boot-line>i build software that runs unattended. trading agents, arbitrage daemons, and ML pipelines. paper-trading the s&amp;p 500 on real infrastructure and running a 24/7 odds daemon across ten bookmakers.</span></span>
+<span class="boot__line"><span class="boot__caret-mark">&gt;</span> <span data-boot-line>i build software that runs unattended. trading agents, arbitrage daemons, and ML pipelines. paper-trading the s&amp;p 500 on real infrastructure and running a 24/7 odds daemon across nineteen bookmakers.</span></span>
 
 <span class="boot__prompt">$ <span data-boot-line>contact</span><span class="boot__caret" aria-hidden="true">_</span></span>
           </pre>
@@ -109,7 +109,7 @@
           <p class="hero__metrics">
             <span class="metrics__prefix">//</span>
             <span>2 unattended systems</span>
-            <span>10 bookmakers ingested</span>
+            <span>19 bookmakers ingested</span>
             <span>6 scheduled agents</span>
             <span>dean&rsquo;s scholar</span>
           </p>
@@ -122,7 +122,7 @@
           <p class="section__label"># about</p>
           <h2>What I work on</h2>
           <div class="about">
-            <p>Computer engineering at Queen&rsquo;s. I&rsquo;m most at home building systems that run unattended. Trading agents that paper-trade the S&amp;P 500, an arbitrage daemon ingesting ten bookmakers every minute, and the automation glue that keeps both alive.</p>
+            <p>Computer engineering at Queen&rsquo;s. I&rsquo;m most at home building systems that run unattended. Trading agents that paper-trade the S&amp;P 500, an arbitrage daemon ingesting nineteen bookmakers around the clock, and the automation glue that keeps both alive.</p>
             <p>What I&rsquo;m best at: turning a messy real-world domain (sports-book pricing, broker order flow) into clean abstractions and a service that doesn&rsquo;t wake me up at 3am.</p>
             <p>Looking for a full-time role starting when I graduate in 2027 where I can ship production code, ideally somewhere with hard correctness requirements like trading, infrastructure, financial systems, or developer tools. Taking freelance work in the meantime.</p>
           </div>
@@ -179,9 +179,9 @@
                 <span class="project__last-commit" data-meta="arbitrage.last_commit">last commit: today</span>
               </header>
               <h3 class="project__name">Odds Aggregator <span class="project__private">private</span></h3>
-              <p class="project__what">Production arbitrage daemon covering 10 bookmakers across 6 sports.</p>
-              <p class="project__body">Ingest &rarr; normalize &rarr; detect cross-book arbs &rarr; push alerts to Telegram and Discord. Runs 24/7 on a Windows host with Alembic-managed schema and replay tooling for postmortems.</p>
-              <p class="project__metrics"><span class="metrics__prefix">//</span> 10 books &middot; 6 sports &middot; 24/7 uptime</p>
+              <p class="project__what">Production arbitrage daemon covering 19 bookmakers across 7 sports.</p>
+              <p class="project__body">Ingest &rarr; normalize &rarr; detect cross-book arbs &rarr; push alerts to Telegram and Discord. Runs 24/7 on a Linux cloud host under systemd, with Alembic-managed schema and replay tooling for postmortems.</p>
+              <p class="project__metrics"><span class="metrics__prefix">//</span> 19 books &middot; 7 sports &middot; 24/7 uptime</p>
               <p class="project__chips">python &middot; playwright &middot; sqlite &middot; alembic &middot; fastapi</p>
               <pre class="project__sample" aria-label="Example alert payload" tabindex="0"><span class="sample__dim">// example alert payload</span>
 <span class="sample__hi">[ARB]</span> NHL &middot; Edmonton @ Vegas
@@ -362,17 +362,18 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
           <p class="section__label"># case study</p>
           <h2>odds aggregator &middot; a 24/7 cross-book arbitrage daemon</h2>
           <p class="case-study__lede">
-            Ten bookmakers, six sports, polled every minute. When prices on
+            Nineteen bookmakers, seven sports, polled continuously. When prices on
             the same outcome diverge enough to clear the vig and transaction
             friction, an alert fires to Telegram and Discord within seconds of
-            the gap opening. Runs unattended on a Windows host with
-            replay-tooling for postmortems.
+            the gap opening. Runs unattended on a Linux cloud host under
+            systemd, with a watchdog on a separate machine and replay
+            tooling for postmortems.
           </p>
 
           <pre class="diagram" aria-label="odds aggregator architecture: ingest, normalize, detect, alert, journal" tabindex="0">
    &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
    &#9474;  scraper pool   &#9474;&#9472;&#9472;&#9658;&#9474;   normalize     &#9474;&#9472;&#9472;&#9658;&#9474;  arb detector   &#9474;
-   &#9474;  (10 books)     &#9474;   &#9474;  (canonical     &#9474;   &#9474;  (cross-book,  &#9474;
+   &#9474;  (19 books)     &#9474;   &#9474;  (canonical     &#9474;   &#9474;  (cross-book,  &#9474;
    &#9474;                 &#9474;   &#9474;   markets)       &#9474;   &#9474;   per-event)    &#9474;
    &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
             &#9474;                                          &#9474;
@@ -487,7 +488,7 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
               </header>
               <p class="timeline__org">Self-directed, alongside school and work</p>
               <ul class="timeline__bullets">
-                <li>Operating two 24/7 production systems: <a href="#case-study">trader</a>, an S&amp;P 500 paper-trading agent (1,600+ commits since April 2026), and a <a href="#case-study-arb">ten-bookmaker arbitrage daemon</a> in production since November 2025 (4,100+ commits).</li>
+                <li>Operating two 24/7 production systems: <a href="#case-study">trader</a>, an S&amp;P 500 paper-trading agent (1,600+ commits since April 2026), and an <a href="#case-study-arb">arbitrage daemon across nineteen bookmakers</a> in production since November 2025 (4,100+ commits).</li>
                 <li>Took market-bot from first commit to a shipped verdict in three weeks (may &ndash; jun 2026): 7 days of uninterrupted NDAX telemetry through a 9-criterion pre-trade synthesizer, ending in a NOT_READY verdict across all 75 CAD pairs.</li>
                 <li>Built and shipped tax-rebalance in a single spec-driven TDD sprint: 21-task plan, 117 tests, two-stage independent review. It emails weekly portfolio digests with cost-aware rebalance verdicts and never places trades.</li>
               </ul>
@@ -586,7 +587,7 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
       <div class="container site-footer__inner">
         <p class="site-footer__prompt">$ <span class="boot__caret" aria-hidden="true">_</span></p>
         <p class="site-footer__meta">
-          <span data-meta="last_deployed">last_deployed: 2026-09-09</span>
+          <span data-meta="last_deployed">last_deployed: 2026-09-10</span>
           <span class="site-footer__sep">&middot;</span>
           <span>&copy; <span id="footer-year">2026</span> jake hoffman</span>
         </p>
