@@ -47,6 +47,12 @@ receives:
   a11y     - axe-core pass on both pages in both schemes; violations
              with impact critical/serious fail, the rest warn
              (axe loads from CDN; unreachable CDN degrades to warning)
+  metrics  - no raw commit counts in rendered prose. Both featured
+             repos commit their own runtime output, so a repo total
+             is mostly machine bookkeeping: the site once claimed
+             "5,700+ combined commits" against roughly 1,620 real
+             engineering commits, and every check passed because a
+             total is exactly what the API returns
   voice    - no em-dashes and no graded marketing adjectives
              ("production-grade" etc.) anywhere in rendered prose:
              index.html, 404.html, the prose fields of projects.yml /
@@ -477,10 +483,12 @@ def strip_yaml_comments(text: str) -> str:
     )
 
 
-def check_voice() -> None:
-    """No em-dashes, no graded marketing adjectives, in anything a
-    visitor reads. The July 2026 voice pass removed every instance;
-    this check keeps a late-night edit from quietly regressing it."""
+def prose_surfaces(why: str) -> dict[str, str]:
+    """Everything a visitor actually reads, as {label: text}.
+
+    Shared by the content checks below so a new one covers the printed
+    resume automatically. Comments in the YAML sources are stripped:
+    they are notes to the next maintainer, not rendered prose."""
     surfaces = {
         "index.html": INDEX.read_text(encoding="utf-8"),
         "404.html": (ROOT / "404.html").read_text(encoding="utf-8"),
@@ -495,7 +503,67 @@ def check_voice() -> None:
         surfaces["resume.pdf (text)"] = " ".join(
             p.extract_text() or "" for p in reader.pages)
     except ImportError:
-        soft_dep_missing("pypdf", "resume.pdf voice checks")
+        soft_dep_missing("pypdf", why)
+    return surfaces
+
+
+# A raw commit count read as a measure of engineering effort, e.g.
+# "4,100+ commits". Deliberately narrow: it wants a number bound to the
+# word, so "last commit: today" pills and "from first commit to a
+# shipped verdict" stay legal.
+COMMIT_COUNT_PATTERN = re.compile(
+    r"\b\d{1,3}(?:,\d{3})*\+?\s+(?:combined\s+|total\s+)?commits?\b",
+    re.IGNORECASE,
+)
+
+
+def check_padded_metrics() -> None:
+    """No raw commit counts anywhere a reader would take them as a
+    measure of engineering effort.
+
+    Shipped once and caught 2026-09-10: the site claimed "1,600+
+    commits" for trader and "4,100+ commits" for arbitrage, with
+    "5,700+ combined commits" on the printed resume. Both repos commit
+    their OWN runtime output, so the totals were mostly machine
+    bookkeeping: 1,406 of trader's 1,646 were scheduled-routine journal
+    entries ("[monitor 11:00] monitor complete: day_pnl=..."), and
+    2,770 of arbitrage's 4,150 were auto-tagged state syncs and daily
+    report dumps, some of them reports belonging to other projects.
+    Real engineering history was roughly 240 and 1,380. The stated
+    combined figure was about 3.6x the work it implied.
+
+    Every earlier check passed it, because a repo total IS what the
+    API returns and nothing asked what the commits contained. The
+    audit that "verified" the numbers sampled only the most recent 100
+    commits per repo, which happened to be hand-written.
+
+    A commit count on a portfolio is read as author effort, so any
+    repo that commits its own telemetry makes the number a claim it
+    cannot support. Durations and concrete system facts say the same
+    thing and survive someone opening the repo. If a count ever earns
+    its place again, it needs the exclusion stated in the sentence and
+    this check taught the exception deliberately."""
+    for name, text in prose_surfaces("resume.pdf padded-metric check").items():
+        # Tags become spaces before matching, so markup between the
+        # number and the word cannot smuggle the claim past this
+        # ("<strong>4,100+</strong> commits" reads as one phrase).
+        flat = re.sub(r"\s+", " ", re.sub(r"<[^>]*>", " ", normalize(text)))
+        hits = sorted({m.group(0).strip()
+                       for m in COMMIT_COUNT_PATTERN.finditer(flat)})
+        if hits:
+            fail(f"padded metric in {name}: {', '.join(hits)} — a raw "
+                 "commit count reads as engineering effort, and both "
+                 "featured repos commit their own runtime output. Say "
+                 "the duration or the concrete system fact instead.")
+        else:
+            ok(f"no raw commit counts in {name}")
+
+
+def check_voice() -> None:
+    """No em-dashes, no graded marketing adjectives, in anything a
+    visitor reads. The July 2026 voice pass removed every instance;
+    this check keeps a late-night edit from quietly regressing it."""
+    surfaces = prose_surfaces("resume.pdf voice checks")
 
     for name, text in surfaces.items():
         dashes = len(EM_DASH_PATTERN.findall(text))
@@ -762,6 +830,7 @@ def main() -> int:
     check_expiring_claims()
     check_cross_repo_claims()
     check_resume(projects)
+    check_padded_metrics()
     check_voice()
     check_layout_and_a11y()
 
