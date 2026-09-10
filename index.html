@@ -162,7 +162,7 @@
               </header>
               <h3 class="project__name">trader <span class="project__private">private</span></h3>
               <p class="project__what">24/7 AI swing-trading agent for S&amp;P 500 equities, driven by six scheduled, idempotent routines.</p>
-              <p class="project__body">Paper-traded on IBKR + Finnhub news; graduates to live only after 30 paper days of documented outperformance. Designed the risk model, journaling, and kill-switch from day one.</p>
+              <p class="project__body">Paper-traded on IBKR + Finnhub news. It passed its 30-day graduation gate, then failed a reserved out-of-sample holdout, so I closed the strategy research rather than tune a sixth variant. Designed the risk model, journaling, and kill-switch from day one.</p>
               <p class="project__metrics"><span class="metrics__prefix">//</span> s&amp;p 500 &middot; 6 scheduled agents &middot; ibkr paper</p>
               <p class="project__chips">python &middot; pytest &middot; ib_async &middot; finnhub</p>
               <pre class="project__sample" aria-label="Example daemon log" tabindex="0"><span class="sample__dim">// example daemon log</span>
@@ -321,8 +321,9 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
           <h2>trader &middot; a 24/7 ai swing-trading agent</h2>
           <p class="case-study__lede">
             Six scheduled, idempotent routines on IBKR paper + Finnhub news.
-            Paper-trading the S&amp;P 500, graduating to live only after 30 paper
-            days of documented outperformance.
+            Paper-trading the S&amp;P 500 behind a kill-switch and a
+            pre-registered graduation gate. It passed that gate and then failed
+            a reserved holdout, so it never went live.
           </p>
 
           <pre class="diagram" aria-label="trader architecture: six scheduled routines" tabindex="0">
@@ -351,8 +352,8 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
             <h3>What I learned</h3>
             <p>Three things I&rsquo;d repeat on the next agent like this: idempotent scheduled routines from day one (the monolith refactor I avoided would have eaten weeks); kill-switch and risk gates <em>before</em> any trading logic, so strategy iteration can&rsquo;t corrupt state; observability turned out to be the hardest engineering problem, not the math. Knowing <em>why</em> the agent made each call was harder than getting it to make calls at all.</p>
 
-            <h3>What&rsquo;s next</h3>
-            <p>Graduation to live trading is contingent on documented outperformance vs. SPY across 30 paper days. The broker layer is already abstracted (<code>broker.py</code>, with IBKR active and Alpaca preserved) so the live cutover is a config change. Building toward a backtester that replays the journal against historical Finnhub headlines to validate model changes before they touch a real fill.</p>
+            <h3>How it resolved</h3>
+            <p>The paper window closed on 2026-08-12 and passed all six graduation gates, including positive alpha against SPY. A reserved out-of-sample holdout, pre-registered before it ran, failed the next day. The strategy had already been measured against three long historical windows and trailed SPY in all three. Those 30 paper days were the only stretch it ever beat the index, and the margin sat inside the standard error. Five pre-registered improvements had failed by then, so I closed the strategy research rather than tune a sixth variant against a spent holdout. It never traded real money. The bot still runs on paper, which costs nothing, and the scheduling, risk and audit machinery now carries a pre-registered forward study that runs into 2027.</p>
           </div>
         </div>
       </section>

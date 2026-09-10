@@ -43,7 +43,7 @@
   auto_meta: true
   hardcoded_date: "last commit: today"
   what: "24/7 AI swing-trading agent for S&amp;P 500 equities, driven by six scheduled, idempotent routines."
-  body: "Paper-traded on IBKR + Finnhub news; graduates to live only after 30 paper days of documented outperformance. Designed the risk model, journaling, and kill-switch from day one."
+  body: "Paper-traded on IBKR + Finnhub news. It passed its 30-day graduation gate, then failed a reserved out-of-sample holdout, so I closed the strategy research rather than tune a sixth variant. Designed the risk model, journaling, and kill-switch from day one."
   metrics: "s&amp;p 500 &middot; 6 scheduled agents &middot; ibkr paper"
   chips: "python &middot; pytest &middot; ib_async &middot; finnhub"
   sample:
