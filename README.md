@@ -109,20 +109,26 @@ lines of page-fit hacks — is gone entirely.)
 
 ## Automated daily refresh
 
-A GitHub Action at `.github/workflows/refresh-meta.yml` runs
-`refresh-meta.py` daily at 11:23 UTC (and on manual
-`gh workflow run`). It commits any changes back to `main` automatically.
-Daily, not weekly: the pills carry day-granularity text
-("last commit: today"), so a weekly refresh serves that claim up to
-six days stale.
+`.github/workflows/deploy.yml` runs `refresh-meta.py` on every push to
+`main`, daily at 11:23 UTC, and on manual `gh workflow run`. Daily, not
+weekly: the pills carry day-granularity text ("last commit: today"), so
+a weekly refresh serves that claim up to six days stale.
 
-Because the auto-commit is pushed with `GITHUB_TOKEN`, it does **not**
-trigger the `verify-site` / `public-safety` workflows (GitHub's
-recursion guard). The refresh workflow therefore runs
-`scripts/verify-site.py` itself, after mutating the tree and before
-committing — an auto-commit can't ship an unverified `index.html`.
+Nothing is committed. The refresh rewrites the working tree, the same
+run verifies the mutated tree with `scripts/verify-site.py`, and the
+result is staged into a Pages artifact and deployed. A refresh bug
+fails the run instead of shipping a broken `index.html`, and a failed
+run leaves the previous deployment serving.
 
-The action reads `META_REFRESH_TOKEN` (a fine-grained PAT) from secrets.
+This used to be a separate `refresh-meta.yml` that committed the
+rewrite back to `main`. That put an `[auto]` commit on `main` most
+days — 20 of the last 30 commits before the change — and each one was
+a rebase conflict waiting for the next local session. One consequence
+worth knowing: the committed `index.html` now carries whatever pill
+text the last human build wrote, while the deployed one is refreshed at
+deploy time. The site is the render, not the repo.
+
+The workflow reads `META_REFRESH_TOKEN` (a fine-grained PAT) from secrets.
 To set it up:
 
 1. Create a **fine-grained PAT** at
@@ -136,9 +142,9 @@ To set it up:
 
 If the PAT is missing or expired, the daily run **fails loudly**
 (refresh-meta.py exits non-zero in CI when every lookup fails) instead
-of silently freezing the `last commit:` pills at their last value.
-The cron also only commits when a pill actually changed &mdash; the
-footer/sitemap date stamps alone don't generate `[auto]` commits.
+of silently freezing the `last commit:` pills at their last value. A red
+run deploys nothing, so the last good deployment keeps serving while the
+failure stays visible.
 
 ## The public-safety banned-terms check
 
@@ -162,8 +168,15 @@ always be regenerated from the tracked text sources.
 
 ## Deploy
 
-Drop the repo contents on any static host. GitHub Pages: push the repo,
-then in **Settings &rarr; Pages**, source = `main` branch / root.
+GitHub Pages, **source = GitHub Actions** (Settings &rarr; Pages), built
+and published by `.github/workflows/deploy.yml`. The artifact is every
+tracked file except dot-directories (`.github/`, `.claude/`), which is
+exactly what the old branch source served, since Jekyll skipped those
+too. To roll back to the branch source, set Pages source to `main` /
+root; the tree at the repo root is a complete, ready-to-serve site.
+
+Any other static host: drop the repo contents on it as-is. There is no
+build step, so the pills simply keep the values last committed.
 
 ## Files
 
@@ -187,9 +200,9 @@ then in **Settings &rarr; Pages**, source = `main` branch / root.
   voice rules: no em-dashes and no graded marketing adjectives in any
   rendered prose &mdash; the `VOICE_BANNED` list in the script is the
   source of truth); run by `.github/workflows/verify-site.yml` on
-  every push and by `refresh-meta.yml` before each auto-commit.
+  every push and by `deploy.yml` on the refreshed tree before it ships.
 - `resume.pdf` &mdash; downloadable PDF (the committed published artifact).
 - `docs/` and `.ai-sync/` &mdash; local working notes (design specs,
-  plans, handoffs). Untracked on purpose: everything tracked here is
-  also served on Pages, and `public-safety.yml` fails the build if
-  either folder is ever committed.
+  plans, handoffs). Untracked on purpose: every tracked file outside a
+  dot-directory is also served on Pages, and `public-safety.yml` fails
+  the build if either folder is ever committed.

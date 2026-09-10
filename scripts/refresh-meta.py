@@ -6,15 +6,23 @@ For each project in projects.yml with auto_meta: true, fetch
 <span data-meta="last_deployed"> and the sitemap <lastmod> with
 today's ISO date.
 
+Nothing here commits. In CI this runs inside deploy.yml, which stages
+the mutated working tree into a Pages artifact, so the rewrite lives
+exactly as long as the deploy that ships it.
+
 Failure behavior (deliberate):
 - In CI (GITHUB_ACTIONS set), if every gh lookup fails the script
   exits non-zero so the workflow goes red — an expired PAT must be
   noticed within a week, not silently freeze the freshness pills.
-- In CI, the footer/sitemap stamps are skipped unless a pill actually
-  changed, so the weekly cron no longer creates footer-date-only
-  commits (those caused repeated rebase conflicts with local work).
-- Locally the stamps always run (a local build precedes a real push,
-  i.e. an actual deploy) and lookup failures only warn.
+  A red deploy leaves the previous deployment serving, so the site
+  stays up while the failure is loud.
+- Locally lookup failures only warn, because a local run is usually a
+  build ahead of hand-editing rather than an unattended deploy.
+
+The footer/sitemap stamps always run. They used to be skipped in CI
+unless a pill had changed, purely to stop the old daily cron from
+committing a date-only diff to main; that cron is gone, and a stamp
+that names the day the artifact was built is now simply true.
 
 Replaces the older refresh-meta.mjs (Node) — Python lets us share
 YAML parsing with the other generators and removes the only Node
@@ -173,23 +181,21 @@ def main() -> None:
             sys.exit(1)
         print(f"\n[warn] {msg} Pills keep their last committed value.")
 
-    # Footer + sitemap date stamps. In CI, only stamp when a pill
-    # changed — otherwise the weekly cron commits a date-only diff.
+    # Footer + sitemap date stamps. Always applied: this run feeds a
+    # Pages artifact (or a local build), never a commit, so there is no
+    # date-only diff to avoid any more.
     today = datetime.now(timezone.utc).date().isoformat()
-    if in_ci and touched == 0:
-        print("[skip] last_deployed/sitemap stamps (CI run, no pill changes)")
+    value = f"last_deployed: {today}"
+    new_html, matched, changed = replace_meta(html, "last_deployed", value)
+    if not matched:
+        print("[miss] last_deployed (no sentinel found in index.html)")
+    elif changed:
+        touched += 1
+        print(f"[ok]   last_deployed = {today}")
+        html = new_html
     else:
-        value = f"last_deployed: {today}"
-        new_html, matched, changed = replace_meta(html, "last_deployed", value)
-        if not matched:
-            print("[miss] last_deployed (no sentinel found in index.html)")
-        elif changed:
-            touched += 1
-            print(f"[ok]   last_deployed = {today}")
-            html = new_html
-        else:
-            print(f"[same] last_deployed = {today} (unchanged)")
-        stamp_sitemap(today)
+        print(f"[same] last_deployed = {today} (unchanged)")
+    stamp_sitemap(today)
 
     if touched > 0:
         INDEX.write_text(html, encoding="utf-8")

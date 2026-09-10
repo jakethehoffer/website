@@ -2,8 +2,8 @@
 rebuilds resume.pdf via LibreOffice when it's installed.
 
 Refuses to run on a checkout that's behind origin (see
-check_not_behind). The daily cron pushes to main, so a clone drifts
-stale within days, and every generator here rewrites tracked files.
+check_not_behind), because every generator here rewrites tracked
+files and a stale base regenerates them from old inputs.
 
 After editing projects.yml (or resume-static.yml), run this to regenerate:
 - index.html projects block (generate-cards.py)
@@ -50,15 +50,19 @@ def git(*args: str, timeout: int = 25) -> subprocess.CompletedProcess:
 def check_not_behind() -> None:
     """Refuse to build on a checkout that is behind its upstream.
 
-    The refresh-meta cron pushes to main daily, so a local clone goes
-    stale within days while looking perfectly healthy. Every generator
-    below rewrites tracked files, so a stale base regenerates from old
-    inputs and guarantees a conflict on push.
+    Every generator below rewrites tracked files, so a stale base
+    regenerates from old inputs and guarantees a conflict on push.
+    A daily cron used to push to main and drift every clone within
+    days; deploy.yml now ships a built artifact instead, so main only
+    moves when a person pushes. That makes staleness rarer, not
+    impossible: any second machine or worktree still drifts.
 
     The sharper reason this exists: a stale checkout makes old local
     values look like live-site bugs. A freshness pill read from an
     8-week-old clone was once reported as a frozen cron, and the cron
-    had been correct the whole time.
+    had been correct the whole time. That failure mode outlives the
+    cron, because the deployed pills are now refreshed at deploy time
+    and the committed ones are only as fresh as the last human build.
 
     Skipped in CI (always a fresh checkout). Set WEBSITE_ALLOW_STALE=1
     to override deliberately.

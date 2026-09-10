@@ -1,0 +1,115 @@
+# Builds and deploys the site to GitHub Pages from a workflow artifact
+# instead of serving the main branch directly.
+#
+# Why not the branch source: the freshness pills carry day-granularity
+# text ("last commit: today"), so keeping them true meant a daily job
+# that rewrote index.html and pushed the result. That put a bot commit
+# on main most days — 20 of the last 30 commits before this change —
+# and every one of them was a rebase conflict waiting for the next
+# local session. Deploying a built tree keeps the pills fresh daily
+# and leaves main to human commits only.
+#
+# The daily schedule lives here now (it used to live in refresh-meta.yml,
+# deleted in the same commit). A run that deploys nothing new is cheap;
+# a run that fails leaves the PREVIOUS deployment serving, so the site
+# does not go dark on a bad build.
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Daily at 11:23 UTC. Daily (not weekly) because a pill that reads
+    # "last commit: today" is wrong six days out of seven if it is
+    # refreshed weekly.
+    - cron: "23 11 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race. Queue rather than cancel: a cancelled
+# scheduled run would silently skip a day of pill freshness.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      # Pinned, not floating. This job holds the Pages write token and a
+      # PAT that reads metadata across every repo, private names
+      # included, so "whatever pip resolves today" is the wrong install
+      # policy for it. Bump these deliberately.
+      - name: Install dependencies
+        run: |
+          pip install pyyaml==6.0.3 pypdf==6.18.0 playwright==1.62.0
+          playwright install --with-deps chromium
+
+      # Rewrites the data-meta pills, the footer last_deployed stamp and
+      # the sitemap lastmod IN THE WORKING TREE ONLY. Nothing is
+      # committed; the staging step below picks the mutated files up.
+      - name: Refresh metadata
+        env:
+          # Prefer META_REFRESH_TOKEN (a fine-grained PAT with read
+          # access on All repositories, Metadata: Read). Falls back to
+          # the default GITHUB_TOKEN, which can only read the current
+          # repo — private-repo lookups then fail and the script EXITS
+          # NON-ZERO in CI, so an expired or missing PAT shows up as a
+          # red run instead of silently freezing the freshness pills.
+          GH_TOKEN: ${{ secrets.META_REFRESH_TOKEN || github.token }}
+        run: python scripts/refresh-meta.py
+
+      # Verify the MUTATED tree, before it can ship. A refresh-meta bug
+      # must fail this run rather than deploy a broken index.html.
+      - name: Verify site
+        run: python scripts/verify-site.py
+
+      # Stage exactly what the branch source used to serve: tracked
+      # files, minus dot-directories (.github, .claude) which Jekyll
+      # skipped. Copying from the working tree, not from git, is what
+      # picks up the refreshed index.html and sitemap.xml above.
+      - name: Stage site
+        run: |
+          set -euo pipefail
+          rm -rf _site
+          mkdir -p _site
+          count=0
+          while IFS= read -r -d '' f; do
+            case "$f" in .*) continue ;; esac
+            mkdir -p "_site/$(dirname "$f")"
+            cp "$f" "_site/$f"
+            count=$((count + 1))
+          done < <(git ls-files -z)
+          echo "staged $count file(s)"
+          # A staging bug that produced an empty or near-empty tree would
+          # deploy a blank site over a working one. Assert the shape.
+          test -f _site/index.html
+          test -f _site/404.html
+          test "$count" -ge 20
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+      - name: Deploy to Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
