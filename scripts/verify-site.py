@@ -23,6 +23,12 @@ receives:
              program start date and must match. Everything else
              here compares artifact to source; nothing else can
              notice a source that quietly stopped being true
+  crossrepo- claims about OTHER repos (trader, arbitrage) carry the
+             date they were last read from that project's own records
+             and go stale on a timer. Nothing here can see another
+             repo, which is how a resolved gate stayed described as
+             pending for a month and a Windows host claim outlived
+             the cloud cutover by fifteen weeks
   resume   - resume.pdf is exactly 1 page with the expected hyperlinks,
              and its text contains the name, GPA, and every project
              name the resume is supposed to feature (top
@@ -362,6 +368,62 @@ def resume_expected_strings(projects: list[dict]) -> list[str]:
     return expected
 
 
+# ---------------- cross-repo claims ----------------
+
+# Claims this site makes about OTHER repositories. Nothing here can
+# see whether they are still true: the owning project can resolve a
+# pending question, move hosts, or double its coverage without one
+# file in this repo changing, and every other check stays green.
+#
+# Not hypothetical. Two of these went stale and shipped:
+#   - a gate described as pending had resolved a month earlier
+#   - a host described as Windows had been a Linux cloud box for
+#     fifteen weeks, and the book count had nearly doubled
+#
+# So each claim carries the date it was last read from the owning
+# project's own dated records. Past CLAIM_STALE_DAYS this fails; from
+# CLAIM_WARN_DAYS it warns. To clear it, re-read that project's
+# decision records and coverage notes, correct the site if they
+# disagree, then move the date here. Never infer from commit volume:
+# a busy repo can still have quietly stopped doing the thing.
+CLAIM_WARN_DAYS = 60
+CLAIM_STALE_DAYS = 90
+
+CROSS_REPO_CLAIMS = (
+    ("arbitrage covers 19 bookmakers across 7 sports",
+     "its coverage tracker and progress log", date(2026, 9, 10)),
+    ("arbitrage runs on a Linux cloud host under systemd, "
+     "with a watchdog on a separate machine",
+     "its deployment decision record", date(2026, 9, 10)),
+    ("arbitrage has not built the paper-trading recorder named as "
+     "the next step",
+     "its source tree", date(2026, 9, 10)),
+    ("trader closed its strategy research, never traded real money, "
+     "and still runs on paper",
+     "its programme-conclusion decision record", date(2026, 9, 10)),
+    ("both trader and arbitrage still run unattended "
+     '(hero says "2 unattended systems")',
+     "gh repo view --json isArchived,pushedAt on each", date(2026, 9, 10)),
+)
+
+
+def check_cross_repo_claims() -> None:
+    today = date.today()
+    for claim, source, verified in CROSS_REPO_CLAIMS:
+        age = (today - verified).days
+        if age >= CLAIM_STALE_DAYS:
+            fail(f"cross-repo claim unverified for {age} days: {claim}. "
+                 f"Re-read {source} in the owning repo, fix the site if "
+                 "they disagree, then move the date in CROSS_REPO_CLAIMS. "
+                 "Do not infer from commit volume.")
+        elif age >= CLAIM_WARN_DAYS:
+            warn(f"cross-repo claim due for re-check in "
+                 f"{CLAIM_STALE_DAYS - age} days: {claim} "
+                 f"(last read from {source} on {verified.isoformat()})")
+        else:
+            ok(f"cross-repo claim verified {age} days ago: {claim}")
+
+
 def check_resume(projects: list[dict]) -> None:
     try:
         from pypdf import PdfReader
@@ -552,6 +614,7 @@ def main() -> int:
     check_og_provenance()
     check_sitemap()
     check_expiring_claims()
+    check_cross_repo_claims()
     check_resume(projects)
     check_voice()
     check_layout_and_a11y()
