@@ -87,6 +87,49 @@
   const yearEl = document.getElementById("footer-year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
+  // ---------- Stale-metadata guard ----------
+  // The freshness pills ("last commit: today") are baked into the page
+  // by the deploy job, so they stay true only for as long as deploys
+  // keep happening. If deploys stop — GitHub disables a daily schedule
+  // after 60 days with no commits, a PAT expires, Actions gets paused —
+  // the pills keep asserting a reading that nothing is taking any more,
+  // and no server-side check can catch it, because nothing is running.
+  // So the page checks its own age against the visitor's clock and
+  // drops the day-granularity claim it can no longer stand behind.
+  (function staleMetaGuard() {
+    // The deploy runs daily. A week of silence is a failure, not a
+    // hiccup, and one skipped cron run must not blank the pills.
+    const STALE_AFTER_DAYS = 7;
+
+    const stampEl = document.querySelector('[data-meta="last_deployed"]');
+    if (!stampEl) return;
+    const stamp = /\d{4}-\d{2}-\d{2}/.exec(stampEl.textContent || "");
+    if (!stamp) return;
+
+    const parts = stamp[0].split("-");
+    const built = Date.UTC(+parts[0], +parts[1] - 1, +parts[2]);
+    const now = new Date();
+    const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+    const ageDays = Math.round((today - built) / 86400000);
+    // A visitor clock set in the past gives a negative age and counts as
+    // fresh: a wrong clock should not get to rewrite the page.
+    if (ageDays <= STALE_AFTER_DAYS) return;
+
+    // Only a relative phrase rots. A pill that already names an
+    // absolute date ("last commit: 2026-05-18") stays true forever.
+    const relative = /:\s*(today|\d+d ago|\d+w ago)\s*$/;
+    document.querySelectorAll('[data-meta$=".last_commit"]').forEach((el) => {
+      if (!relative.test(el.textContent || "")) return;
+      // Shorter than the absolute-date pill already rendered on the
+      // shipped page, so this branch cannot introduce an overflow the
+      // layout checks have not already cleared.
+      el.textContent = "last check: " + stamp[0];
+      el.title =
+        "Activity readings stopped refreshing on " + stamp[0] +
+        ", so this card no longer shows how long ago the last commit was.";
+    });
+  })();
+
   // ---------- Theme toggle ----------
   const themeBtn = document.querySelector(".theme-toggle");
   const labelEl = themeBtn ? themeBtn.querySelector(".theme-toggle__label") : null;

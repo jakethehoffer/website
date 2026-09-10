@@ -35,6 +35,11 @@ receives:
              RESUME_MAX_PROJECTS by resume_priority) — catches a stale
              committed PDF after a projects.yml/resume-static.yml edit
              (requires pypdf)
+  stale    - the freshness pills are baked at deploy time, so they
+             are only true while deploys keep running. script.js
+             retires them once the page outlives its last_deployed
+             stamp. That branch never renders in a normal run, so it
+             is exercised here against a rewritten stamp
   layout   - rendered index.html AND 404.html, served under the
              production /website/ subpath, have no horizontal overflow
              at 320/375/768/834/1280px in BOTH color schemes
@@ -66,7 +71,7 @@ import re
 import struct
 import sys
 import threading
-from datetime import date
+from datetime import date, timedelta
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -78,6 +83,7 @@ INDEX = ROOT / "index.html"
 PROJECTS_YML = ROOT / "projects.yml"
 RESUME_STATIC = ROOT / "resume-static.yml"
 BUILD_RESUME = ROOT / "scripts" / "build-resume.py"
+SCRIPT_JS = ROOT / "script.js"
 OG_SCRIPT = ROOT / "scripts" / "render-og-image.py"
 OG_IMAGE = ROOT / "assets" / "og-image.png"
 SITEMAP = ROOT / "sitemap.xml"
@@ -508,6 +514,145 @@ def check_voice() -> None:
             ok(f"voice: no banned adjectives in {name}")
 
 
+# ---------------- stale-metadata guard (playwright) ----------------
+
+RELATIVE_PILL = re.compile(r"last commit: (today|\d+d ago|\d+w ago)")
+ABSOLUTE_PILL = re.compile(r"last commit: \d{4}-\d{2}-\d{2}")
+
+
+def stale_guard_days() -> int | None:
+    """Read STALE_AFTER_DAYS out of script.js so this check can never
+    drift from the threshold the browser actually applies."""
+    if not SCRIPT_JS.exists():
+        return None
+    m = re.search(r"const STALE_AFTER_DAYS = (\d+);", SCRIPT_JS.read_text(encoding="utf-8"))
+    return int(m.group(1)) if m else None
+
+
+def check_stale_guard(browser, port: int) -> None:
+    """A pill reading "last commit: today" is baked by the deploy job and
+    keeps saying "today" forever if deploys stop — a scheduled workflow
+    disabled after 60 quiet days, an expired PAT, Actions paused. Nothing
+    server-side can catch that, because nothing is running. script.js
+    retires the relative pills once the page outlives its last_deployed
+    stamp; this drives that branch with a rewritten stamp rather than
+    trusting a code read, because it renders on no ordinary day."""
+    days = stale_guard_days()
+    if days is None:
+        fail("stale-guard: STALE_AFTER_DAYS not found in script.js — the "
+             "freshness pills no longer retire themselves when deploys stop")
+        return
+
+    # The cases below age the page by the threshold itself, so without
+    # this bound the check would happily bless a threshold of 99999 and
+    # report a guard that can never fire in a human lifetime. The band:
+    # the deploy runs daily, so 1 day is the earliest honest trigger,
+    # and GitHub disables the schedule after 60 quiet days, so a guard
+    # that waits longer than a month has already missed the failure it
+    # exists for.
+    if not 1 <= days <= 30:
+        fail(f"stale-guard: STALE_AFTER_DAYS is {days} in script.js, outside "
+             f"the 1..30 band — the pills either retire while still live or "
+             f"never retire in time to matter")
+        return
+
+    src = INDEX.read_text(encoding="utf-8")
+
+    def stamped(day: date) -> str:
+        return re.sub(
+            r'(data-meta="last_deployed">)[^<]*(</span>)',
+            lambda m: f"{m.group(1)}last_deployed: {day.isoformat()}{m.group(2)}",
+            src,
+        )
+
+    url = f"http://127.0.0.1:{port}/website/index.html"
+    # Counted from the fresh pass's DOM rather than from index.html: the
+    # rendered pills are what the guard actually touches, and a regex
+    # over the source would miscount if "last commit: <date>" ever
+    # appeared in ordinary prose.
+    absolute_baseline: int | None = None
+
+    for label, day, expect_retired in (
+        ("fresh", date.today(), False),
+        ("stale", date.today() - timedelta(days=days + 3), True),
+    ):
+        context = browser.new_context(reduced_motion="reduce")
+        page = context.new_page()
+        body = stamped(day)
+
+        # Exactly one parameter, on purpose: playwright inspects the
+        # handler's arity and passes the Request as a second positional
+        # argument, so a `def handler(route, b=body)` default gets
+        # clobbered by it. body is closed over instead, and the route
+        # only fires during this iteration's goto below.
+        def serve_stamped(route):
+            route.fulfill(status=200,
+                          content_type="text/html; charset=utf-8", body=body)
+
+        page.route("**/website/index.html", serve_stamped)
+        try:
+            page.goto(url, wait_until="networkidle")
+            pills = page.eval_on_selector_all(
+                '[data-meta$=".last_commit"]',
+                "els => els.map(e => e.textContent.trim())",
+            )
+            still_relative = [t for t in pills if RELATIVE_PILL.fullmatch(t)]
+            retired = [t for t in pills if t == f"last check: {day.isoformat()}"]
+            absolute_now = len([t for t in pills if ABSOLUTE_PILL.fullmatch(t)])
+
+            if not expect_retired:
+                absolute_baseline = absolute_now
+                if not still_relative:
+                    warn("stale-guard: index.html renders no relative freshness "
+                         "pill to exercise — every pill already names an "
+                         "absolute date, which cannot rot")
+                    return
+                if retired:
+                    fail(f"stale-guard: a build stamped today already retired "
+                         f"{len(retired)} pill(s) — the guard fires early and "
+                         f"hides live data (saw {pills})")
+                else:
+                    ok(f"stale-guard: {len(still_relative)} relative pill(s) "
+                       f"left alone on a same-day build")
+            else:
+                if still_relative:
+                    fail(f"stale-guard: a build {days + 3} days old still "
+                         f"asserts {still_relative} — the pills outlive the "
+                         f"deploys that make them true")
+                elif not retired:
+                    fail(f"stale-guard: a build {days + 3} days old retired no "
+                         f"pill and shows {pills} instead of "
+                         f'"last check: {day.isoformat()}"')
+                else:
+                    ok(f"stale-guard: {len(retired)} pill(s) retired to "
+                       f'"last check: {day.isoformat()}" after {days + 3} days')
+
+                if absolute_now != absolute_baseline:
+                    fail(f"stale-guard: absolute-date pills went from "
+                         f"{absolute_baseline} to {absolute_now} — a pill "
+                         f"naming a real date never rots and must be left alone")
+                else:
+                    ok(f"stale-guard: {absolute_now} absolute-date pill(s) "
+                       f"untouched")
+
+            # The retired text is a state nobody sees by hand, so it gets
+            # the same overflow budget as the shipped one.
+            page.set_viewport_size({"width": LAYOUT_WIDTHS[0], "height": 900})
+            metrics = page.evaluate(
+                "() => ({scroll: document.documentElement.scrollWidth,"
+                "        client: document.documentElement.clientWidth})"
+            )
+            if metrics["scroll"] <= metrics["client"] + 1:
+                ok(f"stale-guard [{label}]: no horizontal overflow at "
+                   f"{LAYOUT_WIDTHS[0]}px")
+            else:
+                fail(f"stale-guard [{label}]: horizontal overflow at "
+                     f"{LAYOUT_WIDTHS[0]}px viewport: layout is "
+                     f"{metrics['scroll']}px vs {metrics['client']}px visible")
+        finally:
+            context.close()
+
+
 # ---------------- rendered layout + a11y (playwright) ----------------
 
 def run_axe(page, label: str) -> None:
@@ -541,7 +686,7 @@ def check_layout_and_a11y() -> None:
     try:
         from playwright.sync_api import sync_playwright
     except ImportError:
-        soft_dep_missing("playwright", "layout overflow + a11y checks")
+        soft_dep_missing("playwright", "layout overflow, a11y and stale-guard checks")
         return
 
     class SiteHandler(SimpleHTTPRequestHandler):
@@ -597,6 +742,7 @@ def check_layout_and_a11y() -> None:
                                  f"vs {metrics['client']}px visible")
                     run_axe(page, label_base)
                 context.close()
+            check_stale_guard(browser, port)
             browser.close()
     finally:
         server.shutdown()

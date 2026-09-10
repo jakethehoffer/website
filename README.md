@@ -155,6 +155,20 @@ the repo owner first, and any push to `main` re-enables it and
 redeploys, but a long quiet stretch is worth a manual
 `gh workflow run deploy.yml`.
 
+Because a frozen deploy cannot be noticed by anything that has stopped
+running, the page defends itself. The stale-metadata guard in
+`script.js` compares the footer `last_deployed:` stamp against the
+visitor's clock; more than 7 days apart, every relative `last commit:`
+pill is retired to `last check: <stamp date>`. A pill that already
+names an absolute date is left alone, because it never rots. So the
+worst case of a dead deploy is a visibly dated reading, not a page
+still insisting a repo was pushed to "today" months after anything
+last looked. `verify-site.py` exercises that branch on every run by
+re-serving `index.html` with a rewritten stamp, since it renders on no
+ordinary day and would otherwise ship untested. The 7-day threshold
+lives in `script.js` and the check reads it from there, so the two
+cannot drift apart.
+
 ## The public-safety banned-terms check
 
 `.github/workflows/public-safety.yml` greps every tracked file for a

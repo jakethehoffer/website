@@ -24,9 +24,13 @@ jobs:
         with:
           python-version: "3.13"
 
+      # Same pins as deploy.yml, deliberately. This job is the gate on
+      # the tree deploy.yml ships; a gate that resolves different
+      # versions than the deploy can pass on one browser and ship on
+      # another. Bump both together.
       - name: Install dependencies
         run: |
-          pip install pyyaml pypdf playwright
+          pip install pyyaml==6.0.3 pypdf==6.18.0 playwright==1.62.0
           playwright install --with-deps chromium
 
       - name: Run verify-site.py
