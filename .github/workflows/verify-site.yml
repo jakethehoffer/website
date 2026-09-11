@@ -2,12 +2,17 @@
 # and a real browser layout check (horizontal-overflow budget at phone /
 # tablet / laptop widths). Slower than public-safety (~1-2 min because
 # of the chromium install), which is why it's a separate workflow.
+#
+# Pull requests and manual runs only. On a push to main, deploy.yml
+# runs the same script on the same pins against the very tree it is
+# about to ship, so a push run here was a second Chromium install per
+# push that gated nothing. A pull request has no deploy, so it gets the
+# full run here.
 name: verify-site
 
 on:
-  push:
-    branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -30,8 +35,14 @@ jobs:
       # another. Bump both together.
       - name: Install dependencies
         run: |
-          pip install pyyaml==6.0.3 pypdf==6.18.0 playwright==1.62.0
+          pip install pyyaml==6.0.3 pypdf==6.18.0 playwright==1.62.0 pytest==9.0.2
           playwright install --with-deps chromium
+
+      # The checker's own tests: each plants a known defect and asserts
+      # the check reports it, so a green verify run below means the
+      # checks still bite, not just that nothing tripped them.
+      - name: Test the checker
+        run: python -m pytest scripts -q
 
       - name: Run verify-site.py
         run: python scripts/verify-site.py

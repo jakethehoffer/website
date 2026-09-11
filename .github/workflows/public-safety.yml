@@ -30,7 +30,7 @@ jobs:
         run: |
           set -e
           if [ -z "$BANNED_TERMS" ]; then
-            echo "::error::BANNED_TERMS secret is missing or empty — the banned-terms check cannot run. Restore it (one term per line) at Settings > Secrets and variables > Actions."
+            echo "::error::BANNED_TERMS secret is missing or empty — the banned-terms check cannot run. Restore it (one term per line) at Settings > Secrets and variables > Actions. (A pull request from a fork cannot read secrets, so this check fails closed there and runs for real on the push after merge.)"
             exit 1
           fi
 
@@ -39,7 +39,11 @@ jobs:
           while IFS= read -r term; do
             [ -z "$term" ] && continue
             n=$((n + 1))
-            hits=$(git grep -in -F "$term" || true)
+            # Locations only. GitHub redacts an exact match of each
+            # secret line, and -i matches case variants it would not
+            # redact, so the matched line itself must never reach this
+            # public log. file:line is enough to go and look.
+            hits=$(git grep -in -F "$term" | cut -d: -f1,2 || true)
             if [ -n "$hits" ]; then
               echo "::error::banned-term hit (term #$n):"
               echo "$hits"

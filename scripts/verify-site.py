@@ -17,7 +17,8 @@ receives:
              and its jh:metrics tEXt chunk matches the METRICS constant
              in render-og-image.py (catches "edited the script, forgot
              to re-render the PNG" — dimensions alone can't)
-  sitemap  - <lastmod> is a plausible ISO date, not years stale
+  sitemap  - <lastmod> is an ISO date, not in the future, warns
+             past 60 days and fails past a year
   expiry   - claims whose truth depends on today's date: the
              resume's year-of-study label is recomputed from the
              program start date and must match. Everything else
@@ -28,7 +29,11 @@ receives:
              and go stale on a timer. Nothing here can see another
              repo, which is how a resolved gate stayed described as
              pending for a month and a Windows host claim outlived
-             the cloud cutover by fifteen weeks
+             the cloud cutover by fifteen weeks. Every PRIVATE
+             project must have at least one claim on that timer: a
+             visitor cannot open the repo to check, and market-bot
+             had none while "runs unattended" outlived its collector
+             by three months
   resume   - resume.pdf is exactly 1 page with the expected hyperlinks,
              and its text contains the name, GPA, and every project
              name the resume is supposed to feature (top
@@ -46,7 +51,11 @@ receives:
              (requires playwright + chromium)
   a11y     - axe-core pass on both pages in both schemes; violations
              with impact critical/serious fail, the rest warn
-             (axe loads from CDN; unreachable CDN degrades to warning)
+             (axe loads from a CDN with a second CDN as fallback;
+             both unreachable degrades to a warning)
+  pins     - the playwright this script drives is the build deploy.yml
+             pins: a mismatch fails in CI (the two workflows drifted)
+             and warns locally (a green run here is not the gate's)
   metrics  - no raw commit counts in rendered prose. Both featured
              repos commit their own runtime output, so a repo total
              is mostly machine bookkeeping: the site once claimed
@@ -63,6 +72,10 @@ receives:
 Exit 0 = all checks pass. In CI every check is mandatory; locally,
 missing optional deps (pypdf/playwright) degrade to a warning so the
 script stays runnable everywhere.
+
+scripts/test_verify_site.py plants one known defect per check in a
+scratch copy of the tree and asserts the check reports it, so a
+refactor here that quietly stops a check from biting goes red in CI.
 
 Usage:
     python scripts/verify-site.py
@@ -94,6 +107,7 @@ OG_SCRIPT = ROOT / "scripts" / "render-og-image.py"
 OG_IMAGE = ROOT / "assets" / "og-image.png"
 SITEMAP = ROOT / "sitemap.xml"
 RESUME = ROOT / "resume.pdf"
+DEPLOY_WORKFLOW = ROOT / ".github" / "workflows" / "deploy.yml"
 
 IN_CI = bool(os.environ.get("GITHUB_ACTIONS"))
 
@@ -102,10 +116,15 @@ IN_CI = bool(os.environ.get("GITHUB_ACTIONS"))
 # stock laptop.
 LAYOUT_WIDTHS = (320, 375, 768, 834, 1280)
 
-# Pinned axe-core build for the a11y pass. CDN-loaded at check time;
-# if the CDN is unreachable the check degrades to a warning (an axe
-# CDN outage should not block a deploy — the next push re-runs it).
-AXE_URL = "https://cdn.jsdelivr.net/npm/axe-core@4.10.3/axe.min.js"
+# Pinned axe-core build for the a11y pass, loaded at check time from
+# the first CDN that answers. One CDN outage should not block a deploy
+# (the decision behind the warn-only fallback), and with two hosts of
+# the same pinned file it takes both being down at once to skip the
+# gate. Keep the version identical on every entry.
+AXE_URLS = (
+    "https://cdn.jsdelivr.net/npm/axe-core@4.10.3/axe.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.3/axe.min.js",
+)
 
 # Voice rules (owner directives, 2026-07-02): em-dashes and graded
 # marketing adjectives are banned from all rendered prose. This list
@@ -196,6 +215,15 @@ def check_structure(html: str, projects: list[dict]) -> None:
         ok("footer last_deployed sentinel present")
     else:
         fail("footer last_deployed sentinel missing")
+
+    link = re.search(r'<a[^>]*href="resume\.pdf"[^>]*>', html)
+    if not link:
+        fail('resume link (href="resume.pdf") not found')
+    elif re.search(r'\sdownload="[^"]+\.pdf"', link.group(0)):
+        ok("resume link downloads under a named file")
+    else:
+        fail('resume link needs download="<Name>.pdf": a bare download '
+             "saves as resume.pdf, one of fifty in a recruiter's folder")
 
     h1s = len(re.findall(r"<h1\b", html))
     if h1s == 1:
@@ -296,13 +324,38 @@ def check_og_provenance() -> None:
 
 # ---------------- sitemap ----------------
 
+# refresh-meta.py stamps <lastmod> on every build and every deploy, so
+# in the deployed tree it is always today. The committed stamp only
+# moves on a human build; a pull request against a tree nobody has
+# built in months should say so, and a stamp years old or in the
+# future is a bug.
+SITEMAP_WARN_DAYS = 60
+SITEMAP_STALE_DAYS = 365
+
+
 def check_sitemap() -> None:
     xml = SITEMAP.read_text(encoding="utf-8")
     m = re.search(r"<lastmod>(\d{4}-\d{2}-\d{2})</lastmod>", xml)
-    if m:
-        ok(f"sitemap lastmod is ISO date ({m.group(1)})")
-    else:
+    if not m:
         fail("sitemap <lastmod> missing or not YYYY-MM-DD")
+        return
+    try:
+        stamped = date.fromisoformat(m.group(1))
+    except ValueError:
+        fail(f"sitemap <lastmod> {m.group(1)} is not a real date")
+        return
+    age = (date.today() - stamped).days
+    # -1 allows a UTC stamp read from a machine still on the day before.
+    if age < -1:
+        fail(f"sitemap lastmod {stamped} is {-age} days in the future")
+    elif age >= SITEMAP_STALE_DAYS:
+        fail(f"sitemap lastmod {stamped} is {age} days stale; "
+             "refresh-meta.py stamps it on every build")
+    elif age >= SITEMAP_WARN_DAYS:
+        warn(f"sitemap lastmod {stamped} is {age} days old; the committed "
+             "stamp only moves on a human build")
+    else:
+        ok(f"sitemap lastmod is ISO date ({stamped}), {age} day(s) old")
 
 
 # ---------------- claims that expire on a calendar ----------------
@@ -416,10 +469,21 @@ CROSS_REPO_CLAIMS = (
     ("both trader and arbitrage still run unattended "
      '(hero says "2 unattended systems")',
      "gh repo view --json isArchived,pushedAt on each", date(2026, 9, 10)),
+    ('trader runs six scheduled routines (hero says "6 scheduled agents", '
+     "the case study names them)",
+     "its routines folder, one spec per routine", date(2026, 9, 10)),
+    ("tax-rebalance is not scheduled anywhere, so the site describes "
+     "what it does and never says it is running",
+     "its ci.yml (no cron), the host's scheduled tasks, and "
+     "gh repo view --json isArchived,pushedAt", date(2026, 9, 9)),
+    ("market-bot's collector was wound down on 2026-06-08, so the site "
+     "speaks of it in the past tense, and its suite is 258 tests",
+     "its README status table and its last .ai-sync handoff",
+     date(2026, 9, 10)),
 )
 
 
-def check_cross_repo_claims() -> None:
+def check_cross_repo_claims(projects: list[dict]) -> None:
     today = date.today()
     for claim, source, verified in CROSS_REPO_CLAIMS:
         age = (today - verified).days
@@ -434,6 +498,22 @@ def check_cross_repo_claims() -> None:
                  f"(last read from {source} on {verified.isoformat()})")
         else:
             ok(f"cross-repo claim verified {age} days ago: {claim}")
+
+    # A visitor can open a public repo and see for themselves. A private
+    # one they cannot, so every private project needs at least one
+    # claim on this timer. market-bot had none, and "runs unattended"
+    # outlived its collector by three months while every check passed.
+    for p in projects:
+        if not p.get("private"):
+            continue
+        key = p["key"].lower()
+        if any(key in claim.lower() for claim, _, _ in CROSS_REPO_CLAIMS):
+            ok(f"private project {p['key']} has a dated claim on the timer")
+        else:
+            fail(f"private project {p['key']} has no entry in "
+                 "CROSS_REPO_CLAIMS, so nothing will expire what the site "
+                 "says about it. Add the claim, its source in the owning "
+                 "repo, and today's date.")
 
 
 def check_resume(projects: list[dict]) -> None:
@@ -725,13 +805,20 @@ def check_stale_guard(browser, port: int) -> None:
 
 def run_axe(page, label: str) -> None:
     """axe-core pass on the current page. critical/serious violations
-    fail; moderate/minor warn. An unreachable CDN warns instead of
-    failing — an axe outage should not block a deploy."""
-    try:
-        page.add_script_tag(url=AXE_URL)
-    except Exception as e:
-        warn(f"axe-core CDN unreachable — a11y checks skipped for {label} "
-             f"({e.__class__.__name__})")
+    fail; moderate/minor warn. Loads axe from the first CDN in
+    AXE_URLS that answers; only when every one is unreachable does the
+    pass degrade to a warning, since an axe outage should not block a
+    deploy."""
+    misses: list[str] = []
+    for url in AXE_URLS:
+        try:
+            page.add_script_tag(url=url)
+            break
+        except Exception as e:
+            misses.append(f"{url.split('/')[2]}: {e.__class__.__name__}")
+    else:
+        warn(f"axe-core unreachable on every CDN ({'; '.join(misses)}); "
+             f"a11y checks skipped for {label}")
         return
     results = page.evaluate(
         "() => axe.run(document, {resultTypes: ['violations']})"
@@ -748,6 +835,41 @@ def run_axe(page, label: str) -> None:
             fail(msg)
         else:
             warn(msg)
+
+
+def pinned_playwright_version() -> str | None:
+    """The playwright build deploy.yml installs for the gate."""
+    m = re.search(r"playwright==(\d+\.\d+\.\d+)",
+                  DEPLOY_WORKFLOW.read_text(encoding="utf-8"))
+    return m.group(1) if m else None
+
+
+def check_playwright_pin(installed: str | None = None) -> None:
+    """The browser this script drives must be the browser the gate
+    drives. In CI the installed build comes from a workflow pin, so a
+    mismatch means verify-site.yml and deploy.yml no longer pin the
+    same version and can pass on one browser and ship on another.
+    Locally it only means a green run here is not the gate's run."""
+    pinned = pinned_playwright_version()
+    if pinned is None:
+        fail("deploy.yml no longer pins playwright==X.Y.Z; the layout and "
+             "a11y gate must run on a deliberate browser build")
+        return
+    if installed is None:
+        try:
+            from importlib.metadata import version
+            installed = version("playwright")
+        except Exception:
+            return  # not installed: check_layout_and_a11y reports that
+    if installed == pinned:
+        ok(f"playwright {installed} matches the deploy.yml pin")
+    elif IN_CI:
+        fail(f"playwright {installed} in CI but deploy.yml pins {pinned}: "
+             "verify-site.yml and deploy.yml must pin the same build")
+    else:
+        warn(f"local playwright is {installed}, the gate runs {pinned}; a "
+             "green run here is not the gate's run (pip install "
+             f"playwright=={pinned} && playwright install chromium)")
 
 
 def check_layout_and_a11y() -> None:
@@ -828,10 +950,11 @@ def main() -> int:
     check_og_provenance()
     check_sitemap()
     check_expiring_claims()
-    check_cross_repo_claims()
+    check_cross_repo_claims(projects)
     check_resume(projects)
     check_padded_metrics()
     check_voice()
+    check_playwright_pin()
     check_layout_and_a11y()
 
     print()

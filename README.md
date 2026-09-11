@@ -140,11 +140,20 @@ To set it up:
    <https://github.com/jakethehoffer/website/settings/secrets/actions>
    as `META_REFRESH_TOKEN`.
 
-If the PAT is missing or expired, the daily run **fails loudly**
-(refresh-meta.py exits non-zero in CI when every lookup fails) instead
-of silently freezing the `last commit:` pills at their last value. A red
+If any lookup fails, the daily run **fails loudly** (refresh-meta.py
+exits non-zero in CI on a single failed lookup) instead of freezing that
+`last commit:` pill at its committed value. The committed value after a
+human build is "last commit: today", and shipping it under a fresh
+`last_deployed` stamp is the one false claim the stale guard below
+cannot see, which is why one failure is enough to stop the deploy. A red
 run deploys nothing, so the last good deployment keeps serving while the
-failure stays visible.
+failure stays visible. An expired PAT, a renamed or deleted repo, and a
+fallback token that can only read the public repos all surface this way.
+
+Fine-grained PATs expire (one year at most). When you mint one, put its
+expiry date on the Projects calendar a week early; when it lapses the
+daily run goes red and the last good deploy keeps serving until the new
+token lands.
 
 One thing the old cron used to hide: GitHub disables a scheduled
 workflow after **60 days with no repository activity**. The daily
@@ -219,11 +228,19 @@ build step, so the pills simply keep the values last committed.
 - `scripts/verify-site.py` &mdash; rendered-artifact checks (HTML structure,
   resume PDF page/link/content sync, OG-image claim sync + provenance
   chunk, layout overflow at 320&ndash;1280px in both color schemes for
-  `index.html` and `404.html`, axe-core accessibility gate, and the
-  voice rules: no em-dashes and no graded marketing adjectives in any
-  rendered prose &mdash; the `VOICE_BANNED` list in the script is the
-  source of truth); run by `.github/workflows/verify-site.yml` on
-  every push and by `deploy.yml` on the refreshed tree before it ships.
+  `index.html` and `404.html`, axe-core accessibility gate, dated
+  claims about other repos with every private project required to have
+  one, and the voice rules: no em-dashes and no graded marketing
+  adjectives in any rendered prose &mdash; the `VOICE_BANNED` list in
+  the script is the source of truth); run by `deploy.yml` on the
+  refreshed tree before it ships, and by `.github/workflows/verify-site.yml`
+  on pull requests.
+- `scripts/test_verify_site.py`, `scripts/test_refresh_meta.py` &mdash;
+  the checker's own tests. Each plants one known defect in a scratch
+  copy of the tree and asserts the check reports it, so a refactor that
+  quietly stops a check from biting goes red instead of staying green
+  until the next incident. Both workflows run them before the checker
+  (`python -m pytest scripts -q`).
 - `resume.pdf` &mdash; downloadable PDF (the committed published artifact).
 - `docs/` and `.ai-sync/` &mdash; local working notes (design specs,
   plans, handoffs). Untracked on purpose: every tracked file outside a

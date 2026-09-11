@@ -28,3 +28,4 @@ docs/
 # the freshly-built docx).
 *.docx
 __pycache__/
+.pytest_cache/

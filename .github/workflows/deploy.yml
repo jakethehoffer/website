@@ -57,8 +57,15 @@ jobs:
       # policy for it. Bump these deliberately.
       - name: Install dependencies
         run: |
-          pip install pyyaml==6.0.3 pypdf==6.18.0 playwright==1.62.0
+          pip install pyyaml==6.0.3 pypdf==6.18.0 playwright==1.62.0 pytest==9.0.2
           playwright install --with-deps chromium
+
+      # The refresh script and the checker are what stand between a
+      # bad tree and the live site. Their own tests run first, against
+      # the untouched checkout, so a check that stopped biting is a red
+      # run here rather than a green deploy of the thing it missed.
+      - name: Test the refresh script and the checker
+        run: python -m pytest scripts -q
 
       # Rewrites the data-meta pills, the footer last_deployed stamp and
       # the sitemap lastmod IN THE WORKING TREE ONLY. Nothing is
@@ -68,9 +75,12 @@ jobs:
           # Prefer META_REFRESH_TOKEN (a fine-grained PAT with read
           # access on All repositories, Metadata: Read). Falls back to
           # the default GITHUB_TOKEN, which can only read the current
-          # repo — private-repo lookups then fail and the script EXITS
-          # NON-ZERO in CI, so an expired or missing PAT shows up as a
-          # red run instead of silently freezing the freshness pills.
+          # repo. The script EXITS NON-ZERO in CI on ANY failed lookup:
+          # a skipped repo would otherwise deploy the committed pill
+          # text ("last commit: today" after a human build) under a
+          # fresh stamp, which the browser's stale guard cannot see. So
+          # an expired PAT, a renamed repo, or a fallback token that can
+          # read only the public repos all show up as a red run.
           GH_TOKEN: ${{ secrets.META_REFRESH_TOKEN || github.token }}
         run: python scripts/refresh-meta.py
 

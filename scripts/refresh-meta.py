@@ -11,11 +11,17 @@ the mutated working tree into a Pages artifact, so the rewrite lives
 exactly as long as the deploy that ships it.
 
 Failure behavior (deliberate):
-- In CI (GITHUB_ACTIONS set), if every gh lookup fails the script
-  exits non-zero so the workflow goes red — an expired PAT must be
-  noticed within a week, not silently freeze the freshness pills.
-  A red deploy leaves the previous deployment serving, so the site
-  stays up while the failure is loud.
+- In CI (GITHUB_ACTIONS set), ANY failed gh lookup exits non-zero so
+  the workflow goes red. The deploy ships whatever this script leaves
+  in the working tree, and after a human build the committed pill
+  text reads "last commit: today", so one skipped repo would deploy
+  that text under a fresh last_deployed stamp: a false claim the
+  browser's stale guard cannot see, because the stamp is current.
+  This used to trip only when every lookup failed, which covered an
+  expired PAT and nothing else (not a renamed repo, and not a PAT
+  expiry after one repo went public and the GITHUB_TOKEN fallback
+  could still read that one). A red deploy leaves the previous
+  deployment serving, so the site stays up while the failure is loud.
 - Locally lookup failures only warn, because a local run is usually a
   build ahead of hand-editing rather than an unattended deploy.
 
@@ -138,6 +144,7 @@ def main() -> None:
     touched = 0
     attempted = 0
     succeeded = 0
+    failed: list[str] = []
 
     for proj in projects:
         if not proj.get("auto_meta"):
@@ -155,6 +162,7 @@ def main() -> None:
         attempted += 1
         value = humanize(gh_pushed_at(owner, name))
         if value is None:
+            failed.append(f"{owner}/{name}")
             continue
         succeeded += 1
         new_html, matched, changed = replace_meta(html, meta_key, value)
@@ -168,18 +176,22 @@ def main() -> None:
         else:
             print(f'[same] {meta_key} = "{value}" (unchanged)')
 
-    # All lookups failing means the pills silently freeze at their last
-    # value — the exact false-freshness problem they exist to solve.
-    # In CI that's a red run (expired/missing PAT); locally just warn.
-    if attempted > 0 and succeeded == 0:
-        msg = (
-            f"all {attempted} gh lookup(s) failed — "
-            "META_REFRESH_TOKEN expired/missing or gh unauthenticated?"
-        )
+    # A failed lookup leaves that pill at whatever text is committed,
+    # which after a human build is "last commit: today". Shipping that
+    # under a fresh stamp is the one false-freshness shape nothing
+    # downstream can catch, so in CI any failure is a red run and the
+    # last good deployment keeps serving. Locally, warn and carry on.
+    if failed:
+        if succeeded == 0:
+            why = "META_REFRESH_TOKEN expired/missing or gh unauthenticated?"
+        else:
+            why = "repo renamed, deleted, or unreadable with this token?"
+        msg = (f"{len(failed)} of {attempted} gh lookup(s) failed "
+               f"({', '.join(failed)}). {why}")
         if in_ci:
-            print(f"\n[FAIL] {msg}")
+            print(f"\n[FAIL] {msg} Refusing to deploy the committed pill text.")
             sys.exit(1)
-        print(f"\n[warn] {msg} Pills keep their last committed value.")
+        print(f"\n[warn] {msg} Those pills keep their last committed value.")
 
     # Footer + sitemap date stamps. Always applied: this run feeds a
     # Pages artifact (or a local build), never a commit, so there is no
