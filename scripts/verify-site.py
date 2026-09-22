@@ -51,6 +51,8 @@ receives:
              (requires playwright + chromium)
   reveal   - every section becomes visible while scrolling with normal
              motion at phone and laptop sizes, including long sections
+  menu     - the open phone menu fits short screens and every choice
+             remains reachable, including contact and the theme button
   a11y     - axe-core pass on both pages in both schemes; violations
              with impact critical/serious fail, the rest warn
              (axe loads from a CDN with a second CDN as fallback;
@@ -912,6 +914,61 @@ def check_scroll_reveal(browser, port: int) -> None:
             context.close()
 
 
+def check_mobile_menu(browser, port: int) -> None:
+    """A sticky header must not strand menu choices below a short screen.
+
+    Closed-menu overflow checks cannot see this. Exercise the open menu
+    in both phone orientations, then use each choice from its visible
+    position, including the last button and the contact link.
+    """
+    for scheme in ("dark", "light"):
+        for width, height in ((320, 568), (375, 667), (568, 320), (667, 375)):
+            label = f"phone menu at {width}x{height} [{scheme}]"
+            context = browser.new_context(
+                viewport={"width": width, "height": height},
+                color_scheme=scheme, reduced_motion="reduce",
+            )
+            try:
+                page = context.new_page()
+                page.goto(f"http://127.0.0.1:{port}/website/", wait_until="networkidle")
+                page.evaluate("document.fonts.ready")
+                toggle = page.get_by_role("button", name="Open navigation")
+                toggle.click()
+                menu = page.locator("#nav-menu")
+                bounds = menu.bounding_box()
+                if not bounds or bounds["y"] < 0 or bounds["y"] + bounds["height"] > height + 1:
+                    fail(f"{label}: open menu extends beyond the visible screen")
+                    continue
+
+                # Tab starts at the toggle and should scroll the menu as
+                # needed. Check actual hit targets, not just DOM presence.
+                for control in menu.locator("a, button").all():
+                    page.keyboard.press("Tab")
+                    reachable = control.evaluate("""el => {
+                        const r = el.getBoundingClientRect();
+                        const hit = document.elementFromPoint(r.x + r.width / 2,
+                                                              r.y + r.height / 2);
+                        return document.activeElement === el &&
+                            r.top >= 0 && r.bottom <= innerHeight + 1 &&
+                            el.contains(hit);
+                    }""")
+                    if not reachable:
+                        fail(f"{label}: choice cannot be reached: {control.inner_text()}")
+
+                page.keyboard.press("Enter")
+                expected_theme = "light" if scheme == "dark" else "dark"
+                if page.locator("html").get_attribute("data-theme") != expected_theme:
+                    fail(f"{label}: theme button did not switch the theme")
+
+                menu.get_by_role("link", name="contact", exact=True).click()
+                if not page.url.endswith("#contact") or menu.is_visible():
+                    fail(f"{label}: contact link did not navigate and close the menu")
+                elif not any(label in failure for failure in failures):
+                    ok(f"{label}: all choices reachable, theme and contact work")
+            finally:
+                context.close()
+
+
 def check_layout_and_a11y() -> None:
     try:
         from playwright.sync_api import sync_playwright
@@ -973,6 +1030,7 @@ def check_layout_and_a11y() -> None:
                     run_axe(page, label_base)
                 context.close()
             check_scroll_reveal(browser, port)
+            check_mobile_menu(browser, port)
             check_stale_guard(browser, port)
             browser.close()
     finally:

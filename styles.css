@@ -711,6 +711,12 @@ h1, h2, h3 { letter-spacing: -0.01em; }
     top: 100%;
     right: 0;
     left: 0;
+    /* Keep every choice reachable below the sticky header, even on
+       a landscape phone. 100% is the containing header's height. */
+    max-height: calc(100vh - 100%);
+    max-height: calc(100dvh - 100%);
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
     flex-direction: column;
     align-items: stretch;
     gap: 0;

@@ -244,6 +244,9 @@ build step, so the pills simply keep the values last committed.
   Every section must actually become visible, including the long
   projects and writing sections. The accessibility pass uses reduced
   motion and cannot test this path.
+  The open phone menu is checked in portrait and landscape in both
+  themes: it must fit the screen, every choice must be reachable by
+  keyboard, and the theme button and contact link must work.
 - `scripts/test_verify_site.py`, `scripts/test_refresh_meta.py` &mdash;
   the checker's own tests. Each plants one known defect in a scratch
   copy of the tree and asserts the check reports it, so a refactor that
