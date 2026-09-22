@@ -189,6 +189,11 @@ public, so a term written in the workflow (even split into fragments)
 is itself the leak the check exists to prevent. If the secret goes
 missing the check fails loudly rather than passing empty.
 
+Every deploy calls this workflow and waits for it to pass before
+building or publishing, including scheduled and manual deploys. A
+separate check on the same push would only report a failure while the
+deploy carried on. Pull requests still run the check on their own.
+
 ## The `resume.pdf` pipeline
 
 `resume-source.docx` is a **derived artifact** (gitignored). It's built
@@ -234,13 +239,20 @@ build step, so the pills simply keep the values last committed.
   adjectives in any rendered prose &mdash; the `VOICE_BANNED` list in
   the script is the source of truth); run by `deploy.yml` on the
   refreshed tree before it ships, and by `.github/workflows/verify-site.yml`
-  on pull requests.
+  on pull requests. Normal-motion scrolling is also checked at phone
+  and laptop sizes.
+  Every section must actually become visible, including the long
+  projects and writing sections. The accessibility pass uses reduced
+  motion and cannot test this path.
 - `scripts/test_verify_site.py`, `scripts/test_refresh_meta.py` &mdash;
   the checker's own tests. Each plants one known defect in a scratch
   copy of the tree and asserts the check reports it, so a refactor that
   quietly stops a check from biting goes red instead of staying green
   until the next incident. Both workflows run them before the checker
   (`python -m pytest scripts -q`).
+- `scripts/test_deploy_workflow.py` &mdash; checks that publishing waits
+  for the shared privacy check, with the required secret and read-only
+  access.
 - `resume.pdf` &mdash; downloadable PDF (the committed published artifact).
 - `docs/` and `.ai-sync/` &mdash; local working notes (design specs,
   plans, handoffs). Untracked on purpose: every tracked file outside a

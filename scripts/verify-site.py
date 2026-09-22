@@ -49,6 +49,8 @@ receives:
              production /website/ subpath, have no horizontal overflow
              at 320/375/768/834/1280px in BOTH color schemes
              (requires playwright + chromium)
+  reveal   - every section becomes visible while scrolling with normal
+             motion at phone and laptop sizes, including long sections
   a11y     - axe-core pass on both pages in both schemes; violations
              with impact critical/serious fail, the rest warn
              (axe loads from a CDN with a second CDN as fallback;
@@ -872,6 +874,44 @@ def check_playwright_pin(installed: str | None = None) -> None:
              f"playwright=={pinned} && playwright install chromium)")
 
 
+def check_scroll_reveal(browser, port: int) -> None:
+    """Exercise the normal-motion path that the a11y pass disables.
+
+    A percentage threshold on a tall section can exceed the entire
+    viewport, leaving projects and writing permanently transparent.
+    Check actual opacity after scrolling, not just DOM presence.
+    """
+    from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+
+    for width, height in ((320, 568), (375, 667), (1280, 720)):
+        context = browser.new_context(
+            viewport={"width": width, "height": height},
+            reduced_motion="no-preference",
+        )
+        try:
+            page = context.new_page()
+            page.goto(f"http://127.0.0.1:{port}/website/", wait_until="networkidle")
+            page.evaluate("document.fonts.ready")
+            sections = page.locator("main > section")
+            hidden = []
+            for section in sections.all():
+                section.evaluate("el => el.scrollIntoView({behavior: 'instant', block: 'start'})")
+                try:
+                    page.wait_for_function(
+                        "el => Number(getComputedStyle(el).opacity) >= 0.99",
+                        arg=section.element_handle(), timeout=2500,
+                    )
+                except PlaywrightTimeoutError:
+                    hidden.append(section.get_attribute("id"))
+            if hidden:
+                fail(f"scroll reveal at {width}x{height}: sections stay hidden: "
+                     + ", ".join(hidden))
+            else:
+                ok(f"scroll reveal: every section visible at {width}x{height}")
+        finally:
+            context.close()
+
+
 def check_layout_and_a11y() -> None:
     try:
         from playwright.sync_api import sync_playwright
@@ -932,6 +972,7 @@ def check_layout_and_a11y() -> None:
                                  f"vs {metrics['client']}px visible")
                     run_axe(page, label_base)
                 context.close()
+            check_scroll_reveal(browser, port)
             check_stale_guard(browser, port)
             browser.close()
     finally:

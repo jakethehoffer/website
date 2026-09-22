@@ -37,7 +37,18 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # A separate push workflow can fail while Pages still publishes.
+  # Run the same privacy check as a prerequisite on EVERY deploy,
+  # including scheduled and manual runs, with only its own secret.
+  public-safety:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/public-safety.yml
+    secrets:
+      BANNED_TERMS: ${{ secrets.BANNED_TERMS }}
+
   deploy:
+    needs: public-safety
     runs-on: ubuntu-latest
     environment:
       name: github-pages

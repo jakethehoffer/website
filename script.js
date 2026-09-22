@@ -169,7 +169,9 @@
           }
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -10% 0px" }
+      // Long sections can be many screens tall. Reveal on entry: a
+      // fraction of the whole section may never fit in the viewport.
+      { threshold: 0, rootMargin: "0px 0px -10% 0px" }
     );
     targets.forEach((el) => io.observe(el));
   }

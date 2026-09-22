@@ -1,12 +1,14 @@
 name: public-safety
 
 # Defensive checks that prevent privacy/leakage regressions in this
-# public repo. Runs on every push to main and every PR. Fast (<10s).
+# public repo. Required by every deploy, and runs on every PR. Fast (<10s).
 
 on:
-  push:
-    branches: [main]
   pull_request:
+  workflow_call:
+    secrets:
+      BANNED_TERMS:
+        required: true
 
 permissions:
   contents: read
