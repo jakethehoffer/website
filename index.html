@@ -16,7 +16,7 @@
     </script>
     <meta name="description" content="Jake Hoffman, Computer Engineering student at Queen's University (class of 2027). Software, automation, and research projects. Explore the work, read the engineering notes, and get in touch." />
     <link rel="preload" href="assets/fonts/jetbrains-mono-variable.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles.css?v=461375ff8e" />
+    <link rel="stylesheet" href="styles.css?v=f4a090cf04" />
     <noscript><style>.nav-toggle { display: none; } .nav-menu { display: flex; position: static; max-height: none; flex-wrap: wrap; flex-direction: row; gap: 1rem; padding: 0 0 1rem; width: 100%; } .site-header { position: static; } .site-nav { flex-wrap: wrap; padding-top: 1rem; } .theme-toggle { display: none; }</style></noscript>
     <meta property="og:type" content="profile" />
     <meta property="og:title" content="Jake Hoffman · Computer Engineering @ Queen's University" />
@@ -367,21 +367,14 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
             a reserved holdout, so it never went live.
           </p>
 
-          <pre class="diagram" aria-label="trader architecture: six scheduled routines" tabindex="0">
-   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;    &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
-   &#9474;  scan_premarket  &#9474;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9658;&#9474;      gate        &#9474;
-   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;    &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
-                                       &#9474;
-                                       &#9660;
-   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;    &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
-   &#9474;     monitor      &#9474;&#9668;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9474;   place_orders   &#9474;
-   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;    &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
-            &#9474;
-            &#9660;
-   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;    &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
-   &#9474;       eod        &#9474;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9658;&#9474;     journal      &#9474;
-   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;    &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
-          </pre>
+          <ol class="architecture-flow" aria-label="Trading agent routines">
+            <li><span class="architecture-flow__number" aria-hidden="true">01</span><strong>Scan</strong><span>Find candidates before the market opens.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">02</span><strong>Check risk</strong><span>Apply limits and the paper-trading gate.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">03</span><strong>Place orders</strong><span>Send approved orders to the paper account.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">04</span><strong>Monitor</strong><span>Track positions while the market is open.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">05</span><strong>Close the day</strong><span>Record results and update risk counters.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">06</span><strong>Journal</strong><span>Keep the record each routine works from.</span></li>
+          </ol>
 
           <div class="case-study__prose">
             <h3>The problem</h3>
@@ -415,20 +408,13 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
             tooling for postmortems.
           </p>
 
-          <pre class="diagram" aria-label="odds aggregator architecture: ingest, normalize, detect, alert, journal" tabindex="0">
-   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
-   &#9474;  scraper pool   &#9474;&#9472;&#9472;&#9658;&#9474;   normalize     &#9474;&#9472;&#9472;&#9658;&#9474;  arb detector   &#9474;
-   &#9474;  (19 books)     &#9474;   &#9474;  (canonical     &#9474;   &#9474;  (cross-book,  &#9474;
-   &#9474;                 &#9474;   &#9474;   markets)       &#9474;   &#9474;   per-event)    &#9474;
-   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
-            &#9474;                                          &#9474;
-            &#9660;                                          &#9660;
-   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;                          &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
-   &#9474;  SQLite +       &#9474;&#9668;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9474; alert pipeline  &#9474;
-   &#9474;  Alembic        &#9474;                          &#9474; (Telegram /     &#9474;
-   &#9474;  (journal)      &#9474;                          &#9474;  Discord)       &#9474;
-   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;                          &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
-          </pre>
+          <ol class="architecture-flow" aria-label="Odds aggregator data flow">
+            <li><span class="architecture-flow__number" aria-hidden="true">01</span><strong>Collect</strong><span>Read prices from the bookmaker sources.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">02</span><strong>Normalize</strong><span>Give matching markets a common name.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">03</span><strong>Compare</strong><span>Check cross-book prices for a possible edge.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">04</span><strong>Alert</strong><span>Send matches to Telegram and Discord.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">05</span><strong>Record</strong><span>Keep the inputs for replay and review.</span></li>
+          </ol>
 
           <div class="case-study__prose">
             <h3>The problem</h3>

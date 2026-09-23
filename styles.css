@@ -146,7 +146,11 @@ details[open] > summary .detail-sign::after { content: "−"; }
 .case-study__lede { font-size: 1.08rem; color: var(--muted); }
 .case-study__prose h3, .essay-detail__body h3 { margin-top: 2rem; margin-bottom: .8rem; font-size: 1.2rem; }
 .case-study__prose p, .essay-detail__body p { margin-block: 1rem; color: var(--muted); }
-.diagram { font-size: clamp(.49rem, .85vw, .7rem); }
+.architecture-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; list-style: none; margin-block: 2rem; padding: 0; }
+.architecture-flow li { display: flex; flex-direction: column; padding: 1.2rem; background: var(--soft); border: 1px solid var(--line); }
+.architecture-flow__number { font: .65rem var(--mono); color: var(--accent); margin-bottom: 1rem; }
+.architecture-flow strong { font-size: .95rem; line-height: 1.4; font-weight: 600; }
+.architecture-flow li > span:last-child { color: var(--muted); font-size: .8rem; line-height: 1.6; margin-top: .5rem; }
 .writing-post { border-top: 1px solid var(--line); margin-top: 2rem; padding-top: 1.5rem; }
 .writing-post + .writing-post { margin-top: 1.5rem; }
 .writing-post__meta { color: var(--muted); margin-bottom: .7rem; font-size: .66rem; }
@@ -250,6 +254,10 @@ details[open] > summary .detail-sign::after { content: "−"; }
   .case-detail > summary, .essay-detail > summary { gap: 1rem; }
   .detail-heading > span { font-size: .84rem; }
   .detail-sign { width: 34px; height: 34px; }
+  .architecture-flow { grid-template-columns: 1fr; }
+  .architecture-flow li { display: grid; grid-template-columns: 1.8rem 1fr; column-gap: .5rem; }
+  .architecture-flow__number { grid-row: 1 / span 2; margin: .3rem 0 0; }
+  .architecture-flow li > span:last-child { grid-column: 2; }
   .site-footer__inner { align-items: flex-start; flex-direction: column; }
   .hero__inner { padding-block: 3rem; }
 }
@@ -258,6 +266,9 @@ details[open] > summary .detail-sign::after { content: "−"; }
   .hero__intro { animation: arrive .55s both; }
   .system-sketch { animation: arrive .65s both; }
   @keyframes arrive { from { opacity: .65; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
 }
 @media print {
   :root, :root[data-theme="dark"] { --bg: #fff; --surface: #fff; --soft: #fff; --ink: #111; --muted: #444; --line: #ccc; --accent: #732913; --green: #234630; }
