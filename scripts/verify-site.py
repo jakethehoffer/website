@@ -980,12 +980,18 @@ def check_project_interactions(browser, port: int) -> None:
             errors = []
             page.on("pageerror", lambda error: errors.append(str(error)))
             page.goto(f"http://127.0.0.1:{port}/website/", wait_until="networkidle")
-            for category in ("systems", "research", "interactive", "all"):
+            selected_count = sum(bool(p.get("selected")) for p in projects)
+            if page.locator(".project:visible").count() != selected_count:
+                fail(f"default project selection at {width}px is not curated")
+            if page.locator('[data-filter="selected"]').get_attribute("aria-pressed") != "true":
+                fail(f"default Selected filter at {width}px is not announced")
+            for category in ("selected", "systems", "research", "interactive", "all"):
                 button = page.locator(f'[data-filter="{category}"]')
                 button.focus()
                 page.keyboard.press("Space")
                 expected = [p["name"] for p in projects
-                            if category == "all" or p["category"] == category]
+                            if category == "all" or p["category"] == category
+                            or (category == "selected" and p.get("selected"))]
                 visible = page.locator(".project:visible .project__name").all_text_contents()
                 visible = [name.removesuffix(" private").strip() for name in visible]
                 if visible != expected:
@@ -1014,6 +1020,31 @@ def check_project_interactions(browser, port: int) -> None:
                 page.keyboard.press("Enter")
             if page.locator(".essay-detail[open]").count() != 2:
                 fail(f"essays do not open from the keyboard at {width}px")
+
+            for summary in page.locator(".role-details summary").all():
+                summary.focus()
+                page.keyboard.press("Enter")
+            if page.locator(".role-details[open]").count() != 6:
+                fail(f"experience details do not open from the keyboard at {width}px")
+
+            # The button reports the real clipboard outcome and leaves a
+            # usable email link when permission is denied.
+            page.evaluate("""() => {
+                window.copiedEmail = null;
+                Object.defineProperty(navigator.clipboard, 'writeText', {
+                    configurable: true,
+                    value: async text => { window.copiedEmail = text; }
+                });
+            }""")
+            page.get_by_role("button", name="Copy email address").click()
+            if page.evaluate("window.copiedEmail") != "14jakehoffman@gmail.com" or page.locator(".copy-status").inner_text() != "Email address copied.":
+                fail(f"email copy did not copy and announce the address at {width}px")
+            page.evaluate("""() => Object.defineProperty(navigator.clipboard, 'writeText', {
+                configurable: true, value: async () => { throw new Error('Permission denied'); }
+            })""")
+            page.get_by_role("button", name="Copy email address").click()
+            if not page.locator(".copy-status").inner_text().startswith("Copy did not work."):
+                fail(f"email copy falsely reports success when denied at {width}px")
 
             if width == 375:
                 toggle = page.get_by_role("button", name="Open navigation")
@@ -1109,6 +1140,7 @@ def check_layout_and_a11y() -> None:
                     if doc == "index.html":
                         # Collapsed details cannot reveal contrast or overflow
                         # faults in the longer project samples and essays.
+                        page.locator('[data-filter="all"]').click()
                         page.locator("details").evaluate_all("els => els.forEach(el => el.open = true)")
                         for width in (320, 1280):
                             page.set_viewport_size({"width": width, "height": 900})

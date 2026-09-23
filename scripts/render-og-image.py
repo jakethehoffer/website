@@ -94,17 +94,18 @@ def render_og() -> None:
     d.text((PAD + 63, 59), "Jake Hoffman", font=display_font(24), fill=FG)
     d.line((PAD, 127, W - PAD, 127), fill=(216, 219, 207), width=2)
     d.text((PAD, 160), EYEBROW, font=load_font(18), fill=DIM)
-    d.text((PAD - 4, 212), "Software with", font=display_font(88), fill=FG)
-    d.text((PAD, 314), "a job to do.", font=display_font(94, italic=True), fill=ACCENT)
+    d.text((PAD - 4, 205), "Jake", font=display_font(112), fill=FG)
+    d.text((PAD - 4, 320), "Hoffman.", font=display_font(110, italic=True), fill=ACCENT)
 
-    # A diagram, never a screenshot or a claim about live system state.
+    # The same focus areas as the profile, never a live-status claim.
     green = (37, 55, 45)
     d.rectangle((800, 170, 1136, 464), fill=green)
     for x in range(814, 1130, 16):
         for y in range(180, 456, 16):
             d.point((x, y), fill=(72, 96, 74))
-    for index, label in enumerate(("01  Real data", "02  Check first", "03  Do the work", "04  Keep a record")):
-        y = 194 + index * 65
+    d.text((822, 193), "SOFTWARE WITH A PURPOSE", font=load_font(15), fill=(243, 242, 220))
+    for index, label in enumerate(("Software", "Automation", "Data tools")):
+        y = 235 + index * 65
         fill = (218, 228, 194) if index == 1 else green
         ink = green if index == 1 else (243, 242, 220)
         d.rectangle((822, y, 1114, y + 48), fill=fill, outline=(98, 120, 95))

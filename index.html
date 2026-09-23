@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Jake Hoffman · Computer Engineering @ Queen's University</title>
+    <title>Jake Hoffman | Software & Automation | Queen's 2027</title>
     <script>
       (function () {
         try {
@@ -16,16 +16,16 @@
     </script>
     <meta name="description" content="Jake Hoffman, Computer Engineering student at Queen's University (class of 2027). Software, automation, and research projects. Explore the work, read the engineering notes, and get in touch." />
     <link rel="preload" href="assets/fonts/jetbrains-mono-variable.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles.css?v=f4a090cf04" />
+    <link rel="stylesheet" href="styles.css?v=acaf720f2e" />
     <noscript><style>.nav-toggle { display: none; } .nav-menu { display: flex; position: static; max-height: none; flex-wrap: wrap; flex-direction: row; gap: 1rem; padding: 0 0 1rem; width: 100%; } .site-header { position: static; } .site-nav { flex-wrap: wrap; padding-top: 1rem; } .theme-toggle { display: none; }</style></noscript>
     <meta property="og:type" content="profile" />
-    <meta property="og:title" content="Jake Hoffman · Computer Engineering @ Queen's University" />
-    <meta property="og:description" content="Computer Engineering student, class of 2027. Software with a job to do. Explore my projects, engineering notes, and experience." />
+    <meta property="og:title" content="Jake Hoffman | Software & Automation | Queen's 2027" />
+    <meta property="og:description" content="Software, automation, and data tools. Three summers at Lynx Equity. Queen’s Computer Engineering, class of 2027." />
     <meta property="og:url" content="https://jakethehoffer.github.io/website/" />
     <meta property="og:image" content="https://jakethehoffer.github.io/website/assets/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Jake Hoffman. Software with a job to do. Computer Engineering at Queen’s University." />
+    <meta property="og:image:alt" content="Jake Hoffman. Software, automation, and data tools. Queen’s University, class of 2027." />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://jakethehoffer.github.io/website/assets/og-image.png" />
     <meta name="theme-color" content="#191e1b" media="(prefers-color-scheme: dark)" />
@@ -67,10 +67,11 @@
         <a class="nav-brand" href="#top" aria-label="Jake Hoffman, home"><span class="brand-mark" aria-hidden="true">jh.</span><span>Jake Hoffman</span></a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open navigation"><span></span><span></span></button>
         <ul class="nav-menu" id="nav-menu">
-          <li><a href="#projects">Work</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#projects">Projects</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#writing">Notes</a></li>
-          <li><a href="#experience">Experience</a></li>
+          <li><a class="nav-resume" href="resume.pdf" download="Jake-Hoffman-Resume.pdf">Resume <span aria-hidden="true">↓</span></a></li>
           <li><a class="nav-contact" href="#contact">contact <span aria-hidden="true">↗</span></a></li>
           <li><button class="theme-toggle" type="button" aria-label="Switch theme"><span aria-hidden="true">◐</span> <span class="theme-toggle__label">Theme</span></button></li>
         </ul>
@@ -80,38 +81,159 @@
     <main id="main">
       <section id="top" class="hero">
         <div class="container">
-          <div class="hero__eyebrow"><span>Computer engineering · Queen&rsquo;s University</span><span class="hero__edition">Portfolio / 2026</span></div>
+          <div class="hero__eyebrow"><span>Software · Automation · Data</span><span>Toronto, Canada</span></div>
           <div class="hero__grid">
             <div class="hero__intro">
-              <p class="hero__hello">Hi, I&rsquo;m Jake Hoffman.</p>
-              <h1>Software with<br> a <em>job to do.</em></h1>
-              <p class="hero__description">I build tools that turn data into decisions and take repeat work off people&rsquo;s hands. From trading research to the small details that keep a system running.</p>
+              <h1>Jake<br> <em>Hoffman.</em></h1>
+              <p class="hero__role">Computer engineering at Queen&rsquo;s.<br>Building software people can put to work.</p>
+              <p class="hero__description">I turn messy data and repeat tasks into useful tools. My work spans company websites, trading research, and systems that run on their own.</p>
               <div class="hero__ctas">
-                <a class="btn btn--primary" href="#projects">Explore my work <span aria-hidden="true">↘</span></a>
-                <a class="btn btn--ghost" href="resume.pdf" download="Jake-Hoffman-Resume.pdf">Get my resume <span aria-hidden="true">↓</span></a>
+                <a class="btn btn--primary" href="resume.pdf" download="Jake-Hoffman-Resume.pdf">Get my resume <span aria-hidden="true">↓</span></a>
+                <a class="btn btn--ghost" href="mailto:14jakehoffman@gmail.com">Let&rsquo;s talk <span aria-hidden="true">↗</span></a>
               </div>
+              <div class="hero__socials"><a href="https://github.com/jakethehoffer" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a><a href="https://www.linkedin.com/in/jake-hoffman-7117692a5/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a><a href="#projects">Explore my work <span aria-hidden="true">↓</span></a></div>
             </div>
-            <figure class="system-sketch" aria-labelledby="sketch-title">
-              <div class="system-sketch__top"><span>THE WAY I BUILD</span><span aria-hidden="true">01 / 04</span></div>
-              <div class="sketch-node sketch-node--input"><span class="sketch-number">01</span><div><strong>Start with real data</strong><span>Prices, events, signals</span></div><span aria-hidden="true">↘</span></div>
-              <div class="sketch-connector" aria-hidden="true"></div>
-              <div class="sketch-node sketch-node--check"><span class="sketch-number">02</span><div><strong>Check before acting</strong><span>Limits, tests, stopping rules</span></div><span aria-hidden="true">✓</span></div>
-              <div class="sketch-connector" aria-hidden="true"></div>
-              <div class="sketch-pair"><div class="sketch-node"><span class="sketch-number">03</span><div><strong>Do the work</strong><span>One clear task</span></div></div><div class="sketch-node"><span class="sketch-number">04</span><div><strong>Keep a record</strong><span>Know what happened</span></div></div></div>
-              <figcaption id="sketch-title">Make it useful. Make it explainable.</figcaption>
-            </figure>
+            <aside class="profile-note" aria-label="Jake at a glance">
+              <div class="profile-note__top"><span>AT A GLANCE</span><span aria-hidden="true">JH / 27</span></div>
+              <p class="profile-note__intro">Useful software.<br><em>Thoughtful decisions.</em></p>
+              <dl class="profile-note__facts">
+                <div><dt>Studying</dt><dd>Computer Engineering<span>Queen&rsquo;s University · Class of 2027</span></dd></div>
+                <div><dt>Experience</dt><dd>Three summers at Lynx Equity<span>From IT to software and automation</span></dd></div>
+                <div><dt>Looking ahead</dt><dd>Full-time roles from 2027<span>Open to freelance projects now</span></dd></div>
+              </dl>
+              <a href="#experience">See the work behind it <span aria-hidden="true">↘</span></a>
+            </aside>
           </div>
-          <div class="hero__bottom"><p class="hero__metrics"><span>Class of 2027</span><span>Dean&rsquo;s Scholar</span><span>Software &amp; automation</span></p><a href="#contact">Freelance now · Full-time in 2027 <span aria-hidden="true">↗</span></a></div>
+          <div class="hero__bottom"><p class="hero__metrics"><span>Class of 2027</span><span>Dean&rsquo;s Scholar</span><span>Software &amp; automation</span></p><a href="#education">GPA 3.85 · Queen&rsquo;s University <span aria-hidden="true">↗</span></a></div>
+        </div>
+      </section>
+      <section id="experience" class="section">
+        <div class="container">
+          <p class="section__label">01 / Experience</p>
+          <h2>Real work. Real responsibility.</h2>
+          <p class="section__intro">Three summers at Lynx Equity, independent software projects, and hands-on engineering at Queen&rsquo;s.</p>
+          <ol class="timeline">
+
+            <li class="timeline__item" id="experience-lynx">
+              <header class="timeline__head">
+                <span class="status status--shipped" aria-hidden="true"></span>
+                <h3 class="timeline__role">Operations Technology Intern &middot; Digital Operations Improvement</h3>
+                <span class="timeline__dates">jun &ndash; aug 2026</span>
+              </header>
+              <p class="timeline__org">Lynx Equity Limited</p>
+              <div class="timeline__body"><p class="role-summary">Shipped changes to a live investor website, automated company content updates, and repaired internal project workflows.</p><div class="role-results"><p><strong>51</strong><span>company bios updated in one pass</span></p><p><strong>53</strong><span>checks for a website release</span></p><p><strong>7</strong><span>workflow transitions verified</span></p></div>
+                <details class="role-details"><summary>Role details<span class="visually-hidden">: Operations Technology Intern at Lynx Equity</span></summary>
+              <ul class="timeline__bullets">
+                <li>Shipped releases on Lynx&rsquo;s live investor website through the Webflow API rather than by hand in the Designer. A round of 14 changes across the Invest page and FAQs went from request to live in an afternoon, behind 53 scripted checks run against staging and then production.</li>
+                <li>Gated an earlier round of 24 changes across all 15 pages behind a scripted audit that caught 4 defects before launch. The worst was an invisible full-screen layer that would have blocked every tap on the portfolio page for tablet visitors.</li>
+                <li>Replaced all 51 portfolio-company bios in one scripted pass instead of roughly 3 hours of manual entry, checked by a rule designed to break if a bio ever landed on the wrong company. All 51 mapped correctly, and 3 defects in my own extraction turned up before publish.</li>
+                <li>Verified all 7 stage transitions across the six boards of the portfolio&rsquo;s Monday.com project system, traced the failure that was silently blocking project intake to its cause, and shipped a gate that requires five fields before a project can enter delivery. A later pass found a defect overwriting each project&rsquo;s start date at the Planning stage, so every project routed through it had been reporting its duration from the approval rather than the work.</li>
+                <li>This was the 3rd consecutive summer at Lynx. The first two terms below were IT internships, and this role was scoped around software, automation, and AI.</li>
+              </ul>
+                </details>
+              </div>
+            </li>
+
+            <li class="timeline__item" id="experience-independent">
+              <header class="timeline__head">
+                <span class="status status--active" aria-hidden="true"></span>
+                <h3 class="timeline__role">Independent Software Engineer &middot; Trading &amp; Automation Systems</h3>
+                <span class="timeline__dates">nov 2025 &ndash; present</span>
+              </header>
+              <p class="timeline__org">Self-directed, alongside school and work</p>
+              <div class="timeline__body"><p class="role-summary">Built paper-trading and data-collection systems with risk limits, replayable records, and clear stopping rules. Took market-bot from an idea to a measured no-go decision in three weeks.</p>
+                <details class="role-details"><summary>Role details<span class="visually-hidden">: Independent Software Engineer</span></summary>
+              <ul class="timeline__bullets">
+                <li>Operating two 24/7 production systems: <a href="#case-study">trader</a>, an S&amp;P 500 paper-trading agent running since April 2026, and an <a href="#case-study-arb">arbitrage daemon across nineteen bookmakers</a> in production since November 2025.</li>
+                <li>Took market-bot from first commit to a shipped verdict in three weeks (may &ndash; jun 2026): 7 days of uninterrupted NDAX telemetry through a 9-criterion pre-trade synthesizer, ending in a NOT_READY verdict across all 75 CAD pairs.</li>
+                <li>Built and shipped tax-rebalance in a single spec-driven TDD sprint: 21-task plan, 117 tests, two-stage independent review. It emails weekly portfolio digests with cost-aware rebalance verdicts and never places trades.</li>
+              </ul>
+                </details>
+              </div>
+            </li>
+
+            <li class="timeline__item" id="experience-lynx-it">
+              <header class="timeline__head">
+                <span class="status status--shipped" aria-hidden="true"></span>
+                <h3 class="timeline__role">IT Intern</h3>
+                <span class="timeline__dates">jun &ndash; aug 2024 &middot; jun &ndash; aug 2025</span>
+              </header>
+              <p class="timeline__org">Lynx Equity Limited</p>
+              <div class="timeline__body"><p class="role-summary">Built tools that route tasks between teams and turn separate spreadsheet exports into one checked source of data.</p>
+                <details class="role-details"><summary>Role details<span class="visually-hidden">: IT Intern at Lynx Equity</span></summary>
+              <ul class="timeline__bullets">
+                <li>Built a task-management system on Monday.com that streamlined communication between subsidiaries by auto-routing issues to the right workflow queue.</li>
+                <li>Designed an On/Off-Boarding workflow with standardized role-based tasks, handoffs, and approvals; delivered a stakeholder demo and shipped feedback into the final product.</li>
+                <li>Wrote Google Apps Script (JavaScript) to ingest multiple Excel exports into a single Google Sheet, apply pricing logic, and track unmatched keys for reconciliation; added a Sheets custom menu and logic for dynamic Excel file IDs.</li>
+                <li>Conducted DNS lookups across subsidiary domains to inventory email providers, SSL status, and other domain metadata.</li>
+              </ul>
+                </details>
+              </div>
+            </li>
+
+            <li class="timeline__item" id="experience-game-dev">
+              <header class="timeline__head">
+                <span class="status status--shipped" aria-hidden="true"></span>
+                <h3 class="timeline__role">Independent Game Developer &middot; Mega Tic-Tac-Toe</h3>
+                <span class="timeline__dates">jan &ndash; mar 2024</span>
+              </header>
+              <p class="timeline__org">Self-published, Unity</p>
+              <div class="timeline__body"><p class="role-summary">Designed and shipped Mega Tic-Tac-Toe with local and online multiplayer and a Minimax opponent.</p>
+                <details class="role-details"><summary>Role details<span class="visually-hidden">: Game Development</span></summary>
+              <ul class="timeline__bullets">
+                <li>Designed and programmed a Unity game on a 3&times;3 grid of linked Tic-Tac-Toe boards where each move dictates the opponent&rsquo;s next board.</li>
+                <li>Shipped local + online multiplayer plus single-player vs. a Minimax-based AI with multiple difficulty levels.</li>
+              </ul>
+                </details>
+              </div>
+            </li>
+
+            <li class="timeline__item" id="experience-qmind">
+              <header class="timeline__head">
+                <span class="status status--shipped" aria-hidden="true"></span>
+                <h3 class="timeline__role">Design Team Member</h3>
+                <span class="timeline__dates">oct 2023 &ndash; mar 2024</span>
+              </header>
+              <p class="timeline__org">QMIND &middot; Queen&rsquo;s AI Hub</p>
+              <div class="timeline__body"><p class="role-summary">Worked with Queen&rsquo;s AI Hub on a Blackjack agent, from a tabular Q-learning baseline to a Deep Q-learning model.</p>
+                <details class="role-details"><summary>Role details<span class="visually-hidden">: QMIND Design Team</span></summary>
+              <ul class="timeline__bullets">
+                <li>Trained a reinforcement-learning agent to play Blackjack alongside the team.</li>
+                <li>Built a tabular Q-learning baseline with training loop and basic tests, then helped migrate the system to a Deep Q-learning version so the model could learn policies beyond a simple lookup table.</li>
+              </ul>
+                </details>
+              </div>
+            </li>
+
+            <li class="timeline__item" id="experience-analyst">
+              <header class="timeline__head">
+                <span class="status status--shipped" aria-hidden="true"></span>
+                <h3 class="timeline__role">Financial Analyst</h3>
+                <span class="timeline__dates">oct 2021 &ndash; jun 2023</span>
+              </header>
+              <p class="timeline__org">BMC Pharmacy</p>
+              <div class="timeline__body"><p class="role-summary">Studied a new market opportunity and tracked profitability using pharmacy sales and service reports.</p>
+                <details class="role-details"><summary>Role details<span class="visually-hidden">: Data Analyst</span></summary>
+              <ul class="timeline__bullets">
+                <li>Scoped the animal-drug compounding market opportunity across SW Ontario.</li>
+                <li>Tracked monthly, quarterly, and YoY profitability and margin contribution from drug utilization, expanded services, and Rx reports.</li>
+              </ul>
+                </details>
+              </div>
+            </li>
+
+          </ol>
         </div>
       </section>
       <section id="projects" class="section">
         <div class="container">
-          <p class="section__label">01 / Selected work</p>
-          <h2>Built to do something.</h2>
-          <p class="section__intro">Systems, experiments, and things you can play. The result matters, including the times the evidence said to stop.</p>
+          <p class="section__label">02 / Selected projects</p>
+          <h2>A few things I&rsquo;ve built.</h2>
+          <p class="section__intro">Start with four selected projects, or explore the full collection. Each one shows what I built, how I checked it, and what happened.</p>
           <div class="project-toolbar" hidden>
             <div class="project-filters" role="group" aria-label="Filter projects">
-              <button type="button" data-filter="all" aria-pressed="true">All work</button>
+              <button type="button" data-filter="selected" aria-pressed="true">Selected</button>
+              <button type="button" data-filter="all" aria-pressed="false">All work</button>
               <button type="button" data-filter="systems" aria-pressed="false">Systems</button>
               <button type="button" data-filter="research" aria-pressed="false">Research</button>
               <button type="button" data-filter="interactive" aria-pressed="false">Interactive</button>
@@ -121,7 +243,7 @@
           <div class="projects" id="project-list">
 <!-- BEGIN projects-block (generated by scripts/generate-cards.py from projects.yml; do not edit) -->
             <article class="project">
-              <header class="project__head" data-category="systems">
+              <header class="project__head" data-category="systems" data-selected="true">
                 <span class="project__category">systems</span>
                 <span class="status status--active" role="img" aria-label="Status: active"></span>
                 <span class="project__status-label">ACTIVE</span>
@@ -129,14 +251,14 @@
               </header>
               <h3 class="project__name">trader <span class="project__private">private</span></h3>
               <p class="project__what">An S&amp;P 500 paper-trading agent with risk checks built in from the start.</p>
-              <p class="project__metrics"><span class="metrics__prefix">//</span> s&amp;p 500 &middot; 6 scheduled agents &middot; ibkr paper</p>
-              <p class="project__chips">python &middot; pytest &middot; ib_async &middot; finnhub</p>
-              <div class="project-flow" aria-label="System flow"><span>Scan</span><b aria-hidden="true">&rarr;</b><span>Check risk</span><b aria-hidden="true">&rarr;</b><span>Paper trade</span><b aria-hidden="true">&rarr;</b><span>Record</span></div>
+              <p class="project__outcome"><span>My work &amp; the result</span>Owned the scheduling, risk limits, and audit trail. Closed the strategy after a failed holdout. It never traded real money.</p>
+              <p class="project__chips" aria-label="Tools used"><span>python</span><span>pytest</span><span>ib_async</span><span>finnhub</span></p>
               <p class="project__cta"><a class="btn" href="#case-study">Read the case study <span aria-hidden="true">&darr;</span></a></p>
               <details class="project__details">
                 <summary>About this project<span class="visually-hidden">: trader</span></summary>
                 <p class="project__body">24/7 AI swing-trading agent for S&amp;P 500 equities, driven by six scheduled, idempotent routines.</p>
                 <p class="project__body">Paper-traded on IBKR + Finnhub news. It passed its 30-day graduation gate, then failed a reserved out-of-sample holdout, so I closed the strategy research rather than tune a sixth variant. Designed the risk model, journaling, and kill-switch from day one.</p>
+                <p class="project__metrics">s&amp;p 500 &middot; 6 scheduled agents &middot; ibkr paper</p>
               <pre class="project__sample" aria-label="Example daemon log" tabindex="0"><span class="sample__dim">// example daemon log</span>
 <span class="sample__dim">[2026-05-12 09:31:02]</span> <span class="sample__ok">scan_premarket</span>: 14 candidates &rarr; <span class="sample__hi">3 passed</span> (volatility gate)
 <span class="sample__dim">[2026-05-12 09:31:18]</span> <span class="sample__ok">place_orders</span>: limit buy 100 NVDA @ 132.40 (paper)
@@ -145,7 +267,7 @@
             </article>
 
             <article class="project">
-              <header class="project__head" data-category="systems">
+              <header class="project__head" data-category="systems" data-selected="true">
                 <span class="project__category">systems</span>
                 <span class="status status--active" role="img" aria-label="Status: active"></span>
                 <span class="project__status-label">ACTIVE</span>
@@ -153,14 +275,14 @@
               </header>
               <h3 class="project__name">Odds Aggregator <span class="project__private">private</span></h3>
               <p class="project__what">Turning prices from 19 bookmakers into one stream of checked alerts.</p>
-              <p class="project__metrics"><span class="metrics__prefix">//</span> 19 books &middot; 7 sports &middot; 24/7 uptime</p>
-              <p class="project__chips">python &middot; playwright &middot; sqlite &middot; alembic &middot; fastapi</p>
-              <div class="project-flow" aria-label="System flow"><span>19 sources</span><b aria-hidden="true">&rarr;</b><span>Normalize</span><b aria-hidden="true">&rarr;</b><span>Compare</span><b aria-hidden="true">&rarr;</b><span>Alert</span></div>
+              <p class="project__outcome"><span>My work &amp; the result</span>Built the collection, normalization, and alert pipeline across 19 bookmakers and seven sports.</p>
+              <p class="project__chips" aria-label="Tools used"><span>python</span><span>playwright</span><span>sqlite</span><span>alembic</span><span>fastapi</span></p>
               <p class="project__cta"><a class="btn" href="#case-study-arb">Read the case study <span aria-hidden="true">&darr;</span></a></p>
               <details class="project__details">
                 <summary>About this project<span class="visually-hidden">: Odds Aggregator</span></summary>
                 <p class="project__body">Production arbitrage daemon covering 19 bookmakers across 7 sports.</p>
                 <p class="project__body">Ingest &rarr; normalize &rarr; detect cross-book arbs &rarr; push alerts to Telegram and Discord. Runs 24/7 on a Linux cloud host under systemd, with Alembic-managed schema and replay tooling for postmortems.</p>
+                <p class="project__metrics">19 books &middot; 7 sports &middot; 24/7 uptime</p>
               <pre class="project__sample" aria-label="Example alert payload" tabindex="0"><span class="sample__dim">// example alert payload</span>
 <span class="sample__hi">[ARB]</span> NHL &middot; Edmonton @ Vegas
   pinnacle  EDM -132   &rarr;  stake 0.567
@@ -170,7 +292,7 @@
             </article>
 
             <article class="project">
-              <header class="project__head" data-category="systems">
+              <header class="project__head" data-category="systems" data-selected="true">
                 <span class="project__category">systems</span>
                 <span class="status status--shipped" role="img" aria-label="Status: shipped"></span>
                 <span class="project__status-label">SHIPPED</span>
@@ -178,12 +300,13 @@
               </header>
               <h3 class="project__name">tax-rebalance <span class="project__private">private</span></h3>
               <p class="project__what">A weekly portfolio check that explains when to rebalance and when to leave things alone.</p>
-              <p class="project__metrics"><span class="metrics__prefix">//</span> 117 tests &middot; ruff-clean &middot; ci on py 3.11 + 3.13</p>
-              <p class="project__chips">python &middot; async sqlalchemy 2 &middot; httpx &middot; aiosmtplib &middot; jinja2 &middot; pytest</p>
+              <p class="project__outcome"><span>My work &amp; the result</span>Shipped a read-only tool with 117 tests. It explains rebalance choices and never places trades.</p>
+              <p class="project__chips" aria-label="Tools used"><span>python</span><span>async sqlalchemy 2</span><span>httpx</span><span>aiosmtplib</span><span>jinja2</span><span>pytest</span></p>
               <details class="project__details">
                 <summary>About this project<span class="visually-hidden">: tax-rebalance</span></summary>
                 <p class="project__body">Python CLI that monitors a Canadian TFSA + RRSP portfolio for allocation drift and emails weekly digests with cost-aware rebalance verdicts.</p>
                 <p class="project__body">Read-only, so it never places trades. The user takes the action in their broker. Async end to end with SQLAlchemy 2.0 + aiosqlite, httpx, aiosmtplib, jinja2, and structlog. Spec-driven development, where every feature traces to a written design spec and a 21-task TDD implementation plan executed task by task with a two-stage independent review for spec compliance and then code quality.</p>
+                <p class="project__metrics">117 tests &middot; ruff-clean &middot; ci on py 3.11 + 3.13</p>
               <pre class="project__sample" aria-label="Example weekly digest" tabindex="0"><span class="sample__dim">// example weekly digest excerpt</span>
 <span class="sample__dim">[TFSA]</span> VEQT 60.2% vs target 60.0%  &rarr; <span class="sample__ok">hold</span> (drift &lt;2%)
 <span class="sample__dim">[TFSA]</span> XBB  19.4% vs target 20.0%  &rarr; <span class="sample__hi">buy $312</span> (cost-aware)
@@ -192,7 +315,7 @@
             </article>
 
             <article class="project">
-              <header class="project__head" data-category="research">
+              <header class="project__head" data-category="research" data-selected="false">
                 <span class="project__category">research</span>
                 <span class="status status--shipped" role="img" aria-label="Status: shipped"></span>
                 <span class="project__status-label">SHIPPED</span>
@@ -200,12 +323,13 @@
               </header>
               <h3 class="project__name">market-bot <span class="project__private">private</span></h3>
               <p class="project__what">Could retail market making work after fees? Seven days of real data said no.</p>
-              <p class="project__metrics"><span class="metrics__prefix">//</span> 75 pairs &middot; 7 days 24/7 data &middot; 258 tests</p>
-              <p class="project__chips">python &middot; sqlite/wal &middot; websocket &middot; structlog &middot; pydantic &middot; typer</p>
+              <p class="project__outcome"><span>My work &amp; the result</span>Seven days of recorded prices, 75 pairs checked, and a NOT_READY verdict. The result was a decision not to trade.</p>
+              <p class="project__chips" aria-label="Tools used"><span>python</span><span>sqlite/wal</span><span>websocket</span><span>structlog</span><span>pydantic</span><span>typer</span></p>
               <details class="project__details">
                 <summary>About this project<span class="visually-hidden">: market-bot</span></summary>
                 <p class="project__body">Market-making feasibility bot for NDAX, a Canadian crypto exchange. Collected real 24/7 venue data before any trading, ran it through a pre-trade synthesizer, and the verdict came back NOT_READY.</p>
                 <p class="project__body">Collects 24/7 order-book and trade telemetry with no coverage gaps over NDAX&rsquo;s REST + WebSocket feeds into a SQLite WAL store, then scores every pair against a 9-criterion pre-trade synthesizer. After 7 covered days the verdict was NOT_READY across all 75 CAD pairs. The data shows passive retail market making can't clear a flat 0.20%/fill (40 bps round-trip) venue. A queue-aware paper-fill model confirmed it; the one pair that initially passed was bootstrap-validated and rejected as an artifact of a thin sample. The negative verdict IS the deliverable. 258 tests. The collector ran unattended on a systemd cloud host until the verdict came in.</p>
+                <p class="project__metrics">75 pairs &middot; 7 days 24/7 data &middot; 258 tests</p>
               <pre class="project__sample" aria-label="Excerpt from the pre-trade synthesizer verdict" tabindex="0"><span class="sample__dim">// market-bot synth - 7 days 24/7 data, 75 ndax cad pairs</span>
 <span class="sample__dim">[PENGU/CAD]</span> median +239 bps  p10 &minus;408 bps  &rarr; <span class="sample__hi">NOT_READY</span> (thin tail, $9.5k/day)
 <span class="sample__dim">[BTC/CAD]</span>   spread &lt; 40 bps round-trip fee  &rarr; <span class="sample__hi">NOT_READY</span> (no edge)
@@ -215,7 +339,7 @@
             </article>
 
             <article class="project">
-              <header class="project__head" data-category="research">
+              <header class="project__head" data-category="research" data-selected="false">
                 <span class="project__category">research</span>
                 <span class="status status--shipped" role="img" aria-label="Status: shipped"></span>
                 <span class="project__status-label">SHIPPED</span>
@@ -223,12 +347,13 @@
               </header>
               <h3 class="project__name"><a href="https://github.com/jakethehoffer/trades-agency" target="_blank" rel="noopener">trades-agency</a></h3>
               <p class="project__what">A receptionist and lead-generation service, tested with real customer outreach.</p>
-              <p class="project__metrics"><span class="metrics__prefix">//</span> 32 contacts &middot; 0 positive replies &middot; 6 hypotheses ranked</p>
-              <p class="project__chips">python &middot; google places api &middot; llm &middot; sdr &middot; receptionist agent</p>
+              <p class="project__outcome"><span>My work &amp; the result</span>Built the service, tested outreach with 32 contacts, then closed the venture after zero positive replies.</p>
+              <p class="project__chips" aria-label="Tools used"><span>python</span><span>google places api</span><span>llm</span><span>sdr</span><span>receptionist agent</span></p>
               <details class="project__details">
                 <summary>About this project<span class="visually-hidden">: trades-agency</span></summary>
                 <p class="project__body">AI receptionist + lead-gen service targeting Toronto trades. Built the full stack, ran a real customer-discovery experiment, and abandoned the venture on the data.</p>
                 <p class="project__body">Three Python subsystems: lead-gen via Google Places API, an LLM-driven SDR generating cold outreach, and a conversational receptionist agent (&ldquo;Riley&rdquo;) with booking and message-taking logic. Ran a 32-contact cold-outreach experiment over four days (18 SMS, 14 email) and got 0 positive replies. Wrote a Bayesian post-mortem ranking six hypotheses; the leading explanation was ICP/channel mismatch. Small Toronto trades simply don&rsquo;t engage with cold outreach from strangers. Abandoned the venture rather than burning more credibility and time on a non-responsive niche.</p>
+                <p class="project__metrics">32 contacts &middot; 0 positive replies &middot; 6 hypotheses ranked</p>
               <pre class="project__sample" aria-label="Excerpt from post-mortem hypothesis ranking" tabindex="0"><span class="sample__dim">// cold outreach batch 1 - 32 contacts, 0 positive replies</span>
 <span class="sample__dim">[H1]</span> wrong icp for cold inbound      <span class="sample__hi">strong</span> (0/32 across 2 channels)
 <span class="sample__dim">[H2]</span> send time wrong (sat 2pm)      <span class="sample__dim">weak</span>   (wouldn&rsquo;t explain 0%)
@@ -238,7 +363,7 @@
             </article>
 
             <article class="project">
-              <header class="project__head" data-category="research">
+              <header class="project__head" data-category="research" data-selected="false">
                 <span class="project__category">research</span>
                 <span class="status status--shipped" role="img" aria-label="Status: shipped"></span>
                 <span class="project__status-label">SHIPPED</span>
@@ -246,12 +371,13 @@
               </header>
               <h3 class="project__name"><a href="https://github.com/jakethehoffer/equity-arbs" target="_blank" rel="noopener">equity-arbs</a></h3>
               <p class="project__what">A research toolkit that put a trading idea through its tests, then retired it.</p>
-              <p class="project__metrics"><span class="metrics__prefix">//</span> 76 tests &middot; 80 equities + 39 etfs &middot; 6 analysis arcs</p>
-              <p class="project__chips">python &middot; asyncio &middot; sqlalchemy 2 &middot; statsmodels &middot; pydantic &middot; typer</p>
+              <p class="project__outcome"><span>My work &amp; the result</span>Built the research and backtest tools. Retired the strategy after measuring a ceiling of roughly 0.6% per year.</p>
+              <p class="project__chips" aria-label="Tools used"><span>python</span><span>asyncio</span><span>sqlalchemy 2</span><span>statsmodels</span><span>pydantic</span><span>typer</span></p>
               <details class="project__details">
                 <summary>About this project<span class="visually-hidden">: equity-arbs</span></summary>
                 <p class="project__body">Async Python stat-arb research toolkit for TSX-listed equities and ETFs. Documented a hard ceiling and retired at v1.0.</p>
                 <p class="project__body">Engle-Granger cointegration + OLS hedge ratio + Ornstein-Uhlenbeck half-life scoring across an 80-name TSX universe; rolling-window regime-stability sweep; configurable backtest engine with z-score entry/exit, hold-time cap, and stop-loss buffer. Six analysis arcs, 76 unit tests. The backtest proved the strategy works mathematically (+$216 net across 6 ETF pairs at zero commissions) but caps at ~0.6% annual return on $5K capital, below the passive TSX index alternative. Shipped a correct negative; retired the project at v1.0 with the toolkit as a reusable research asset.</p>
+                <p class="project__metrics">76 tests &middot; 80 equities + 39 etfs &middot; 6 analysis arcs</p>
               <pre class="project__sample" aria-label="Example backtest verdict" tabindex="0"><span class="sample__dim">// example backtest result - etf pairs, 7 years</span>
 <span class="sample__dim">[XIU/XIC]</span> coint p=0.001  half-life 22d  &rarr; <span class="sample__ok">+$84</span> (entries 14, hits 9)
 <span class="sample__dim">[XEG/XIT]</span> coint p=0.024  half-life 18d  &rarr; <span class="sample__hi">-$31</span> (entries 8, hits 3)
@@ -260,7 +386,7 @@
             </article>
 
             <article class="project">
-              <header class="project__head" data-category="interactive">
+              <header class="project__head" data-category="interactive" data-selected="true">
                 <span class="project__category">interactive</span>
                 <span class="status status--shipped" role="img" aria-label="Status: shipped"></span>
                 <span class="project__status-label">SHIPPED</span>
@@ -268,8 +394,8 @@
               </header>
               <h3 class="project__name"><a href="https://jakethehoffer.itch.io/mega-tictactoe" target="_blank" rel="noopener">Mega Tic-Tac-Toe</a></h3>
               <p class="project__what">Nine linked boards. Every move changes where your opponent can play next.</p>
-              <p class="project__metrics"><span class="metrics__prefix">//</span> unity &middot; c# &middot; minimax ai &middot; local + online mp</p>
-              <p class="project__chips">unity &middot; c# &middot; minimax ai &middot; multiplayer</p>
+              <p class="project__outcome"><span>My work &amp; the result</span>Shipped a playable Unity game with local and online multiplayer and a Minimax opponent.</p>
+              <p class="project__chips" aria-label="Tools used"><span>unity</span><span>c#</span><span>minimax ai</span><span>multiplayer</span></p>
               <figure class="project__media">
                 <img src="assets/projects/mega-ttt.webp" alt="Mega Tic-Tac-Toe gameplay: a 3x3 grid of sub-boards with Xs and Os, one sub-board claimed by a large blue O" loading="lazy" decoding="async" width="802" height="802" />
               </figure>
@@ -278,11 +404,12 @@
                 <summary>About this project<span class="visually-hidden">: Mega Tic-Tac-Toe</span></summary>
                 <p class="project__body">Unity game on a 3&times;3 grid of linked Tic-Tac-Toe boards where each move dictates the opponent&rsquo;s next board.</p>
                 <p class="project__body">Local + online multiplayer; single player vs. a Minimax-based AI with multiple difficulty levels. Self-shipped indie title on itch.io.</p>
+                <p class="project__metrics">unity &middot; c# &middot; minimax ai &middot; local + online mp</p>
               </details>
             </article>
 
             <article class="project">
-              <header class="project__head" data-category="interactive">
+              <header class="project__head" data-category="interactive" data-selected="false">
                 <span class="project__category">interactive</span>
                 <span class="status status--shipped" role="img" aria-label="Status: shipped"></span>
                 <span class="project__status-label">SHIPPED</span>
@@ -290,12 +417,13 @@
               </header>
               <h3 class="project__name">Smart Shoe Navigation</h3>
               <p class="project__what">A phone app that guides your next turn through vibrations in a Bluetooth shoe.</p>
-              <p class="project__metrics"><span class="metrics__prefix">//</span> dart &middot; flutter &middot; bluetooth &middot; embedded haptics</p>
-              <p class="project__chips">dart &middot; flutter &middot; bluetooth &middot; embedded</p>
+              <p class="project__outcome"><span>My work &amp; the result</span>Built the Dart app and Bluetooth controls for directional haptic navigation.</p>
+              <p class="project__chips" aria-label="Tools used"><span>dart</span><span>flutter</span><span>bluetooth</span><span>embedded</span></p>
               <details class="project__details">
                 <summary>About this project<span class="visually-hidden">: Smart Shoe Navigation</span></summary>
                 <p class="project__body">Dart mobile app pairing via Bluetooth to a &ldquo;Smart Shoe&rdquo; for turn-by-turn directions.</p>
                 <p class="project__body">Users enter a destination; the app delivers on-screen prompts plus directional haptic feedback in the shoe itself.</p>
+                <p class="project__metrics">dart &middot; flutter &middot; bluetooth &middot; embedded haptics</p>
               <pre class="project__sample" aria-label="Example API call" tabindex="0"><span class="sample__dim">// example api call - turn right in 30m</span>
 shoe.pulse(side: <span class="sample__hi">Side.right</span>,
            strength: 0.7,
@@ -304,7 +432,7 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
             </article>
 
             <article class="project">
-              <header class="project__head" data-category="research">
+              <header class="project__head" data-category="research" data-selected="false">
                 <span class="project__category">research</span>
                 <span class="status status--shipped" role="img" aria-label="Status: shipped"></span>
                 <span class="project__status-label">SHIPPED</span>
@@ -312,8 +440,8 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
               </header>
               <h3 class="project__name">Walking / Jumping Classifier</h3>
               <p class="project__what">Teaching a model to tell walking from jumping using movement data.</p>
-              <p class="project__metrics"><span class="metrics__prefix">//</span> python &middot; accelerometer &middot; signal processing</p>
-              <p class="project__chips">python &middot; numpy &middot; scikit-learn &middot; signal processing</p>
+              <p class="project__outcome"><span>My work &amp; the result</span>Built the path from accelerometer recordings to a trained and evaluated movement classifier.</p>
+              <p class="project__chips" aria-label="Tools used"><span>python</span><span>numpy</span><span>scikit-learn</span><span>signal processing</span></p>
               <figure class="project__media">
                 <img src="assets/projects/walking-jumping-cm.png" alt="Confusion matrix: 182 true walking, 156 true jumping, 7+5 misclassifications. Accuracy 0.965, F1 0.964." loading="lazy" decoding="async" width="660" height="440" />
               </figure>
@@ -321,37 +449,12 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
                 <summary>About this project<span class="visually-hidden">: Walking / Jumping Classifier</span></summary>
                 <p class="project__body">Python ML pipeline classifying accelerometer time-series as walking vs. jumping.</p>
                 <p class="project__body">Covers the full pipeline, from data collection and feature engineering through model training and evaluation. Course capstone shipped with reproducible scripts.</p>
+                <p class="project__metrics">python &middot; accelerometer &middot; signal processing</p>
               </details>
             </article>
 <!-- END projects-block -->
           </div>
           <p class="projects__more"><a href="https://github.com/jakethehoffer" target="_blank" rel="noopener">More on GitHub <span aria-hidden="true">↗</span></a></p>
-        </div>
-      </section>
-      <section id="about" class="section about-section">
-        <div class="container about-layout">
-          <div><p class="section__label">02 / A little about me</p><h2>What I work on</h2><p class="about__statement">The useful part is<br> what happens <em>after<br> it works once.</em></p></div>
-          <div class="about"><p>I&rsquo;m studying computer engineering at Queen&rsquo;s University. I like taking a messy problem, finding the parts that matter, and building something people can use.</p><p>My projects span trading research, data collection, games, and automation. I care about the checks, records, and stopping rules that make software easier to trust.</p><p>Across three summers at Lynx Equity, I&rsquo;ve worked on internal tools, company websites, and the everyday tasks that slow people down.</p><p>I&rsquo;m looking for a full-time role after I graduate in 2027, and taking freelance work in the meantime.</p><a class="text-link" href="#experience">See my experience <span aria-hidden="true">↗</span></a></div>
-        </div>
-      </section>
-      <section id="skills" class="section">
-        <div class="container">
-          <p class="section__label">Tools I work with</p>
-          <h2>From idea to working software.</h2>
-          <div class="skills">
-            <div class="skill-group">
-              <p class="skill-group__label">Languages</p>
-              <p class="skill-group__items">python &middot; java &middot; c &middot; c# &middot; c++ &middot; javascript &middot; dart &middot; sql</p>
-            </div>
-            <div class="skill-group">
-              <p class="skill-group__label">Tools &amp; frameworks</p>
-              <p class="skill-group__items">git &middot; fastapi &middot; playwright &middot; unity &middot; sqlite &middot; alembic &middot; monday.com &middot; google apps script</p>
-            </div>
-            <div class="skill-group">
-              <p class="skill-group__label">Areas of work</p>
-              <p class="skill-group__items">machine learning &middot; web development &middot; automation &middot; trading systems &middot; mobile apps</p>
-            </div>
-          </div>
         </div>
       </section>
       <section id="case-study" class="section">
@@ -430,9 +533,53 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
           </details>
         </div>
       </section>
+      <section id="about" class="section about-section">
+        <div class="container about-layout">
+          <div><p class="section__label">03 / About me</p><h2>What I work on</h2><p class="about__statement">Curious about how it works.<br> <em>Careful about<br> how it fails.</em></p></div>
+          <div class="about"><p>I&rsquo;m studying computer engineering at Queen&rsquo;s University. I like taking a messy problem, finding the parts that matter, and building something people can use.</p><p>My projects span trading research, data collection, games, and automation. I care about the checks, records, and stopping rules that make software easier to trust.</p><p>Across three summers at Lynx Equity, I&rsquo;ve worked on internal tools, company websites, and the everyday tasks that slow people down.</p><p>I&rsquo;m looking for a full-time role after I graduate in 2027, and taking freelance work in the meantime.</p><a class="text-link" href="#experience">See my experience <span aria-hidden="true">↗</span></a></div>
+        </div>
+      </section>
+      <section id="skills" class="section">
+        <div class="container">
+          <p class="section__label">What I use</p>
+          <h2>The tools behind the work.</h2>
+          <div class="skills">
+            <div class="skill-group">
+              <p class="skill-group__label">Languages</p>
+              <p class="skill-group__items">python &middot; java &middot; c &middot; c# &middot; c++ &middot; javascript &middot; dart &middot; sql</p>
+            </div>
+            <div class="skill-group">
+              <p class="skill-group__label">Tools &amp; frameworks</p>
+              <p class="skill-group__items">git &middot; fastapi &middot; playwright &middot; unity &middot; sqlite &middot; alembic &middot; monday.com &middot; google apps script</p>
+            </div>
+            <div class="skill-group">
+              <p class="skill-group__label">Areas of work</p>
+              <p class="skill-group__items">machine learning &middot; web development &middot; automation &middot; trading systems &middot; mobile apps</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="education" class="section">
+        <div class="container">
+          <p class="section__label">04 / Education</p>
+          <h2>Education</h2>
+          <article class="education">
+            <header class="education__head">
+              <h3 class="education__school">Queen&rsquo;s University</h3>
+              <span class="education__dates">2023 &ndash; expected 2027</span>
+            </header>
+            <p class="education__program">BASc, Computer Engineering &middot; <span class="education__gpa">GPA 3.85 &middot; Dean&rsquo;s Scholar</span></p>
+            <ul class="education__highlights">
+              <li>Built a Python ML classifier on accelerometer data for walking vs. jumping.</li>
+              <li>Developed a pathfinding algorithm in Python for autonomous rover operation.</li>
+              <li>Built a Dart mobile app paired with a Bluetooth &ldquo;Smart Shoe&rdquo; for directional haptic navigation.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
       <section id="writing" class="section">
         <div class="container">
-          <p class="section__label">03 / Writing &amp; decisions</p>
+          <p class="section__label">05 / Writing &amp; decisions</p>
           <h2>Notes from the work.</h2>
           <p class="section__intro">What I learned, what I kept, and when I chose to stop.</p>
           <article class="writing-post">
@@ -495,127 +642,19 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
           </article>
         </div>
       </section>
-      <section id="experience" class="section">
-        <div class="container">
-          <p class="section__label">04 / Experience</p>
-          <h2>Work beyond the projects.</h2>
-          <ol class="timeline">
-
-            <li class="timeline__item">
-              <header class="timeline__head">
-                <span class="status status--shipped" aria-hidden="true"></span>
-                <h3 class="timeline__role">Operations Technology Intern &middot; Digital Operations Improvement</h3>
-                <span class="timeline__dates">jun &ndash; aug 2026</span>
-              </header>
-              <p class="timeline__org">Lynx Equity Limited</p>
-              <ul class="timeline__bullets">
-                <li>Shipped releases on Lynx&rsquo;s live investor website through the Webflow API rather than by hand in the Designer. A round of 14 changes across the Invest page and FAQs went from request to live in an afternoon, behind 53 scripted checks run against staging and then production.</li>
-                <li>Gated an earlier round of 24 changes across all 15 pages behind a scripted audit that caught 4 defects before launch. The worst was an invisible full-screen layer that would have blocked every tap on the portfolio page for tablet visitors.</li>
-                <li>Replaced all 51 portfolio-company bios in one scripted pass instead of roughly 3 hours of manual entry, checked by a rule designed to break if a bio ever landed on the wrong company. All 51 mapped correctly, and 3 defects in my own extraction turned up before publish.</li>
-                <li>Verified all 7 stage transitions across the six boards of the portfolio&rsquo;s Monday.com project system, traced the failure that was silently blocking project intake to its cause, and shipped a gate that requires five fields before a project can enter delivery. A later pass found a defect overwriting each project&rsquo;s start date at the Planning stage, so every project routed through it had been reporting its duration from the approval rather than the work.</li>
-                <li>This was the 3rd consecutive summer at Lynx. The first two terms below were IT internships, and this role was scoped around software, automation, and AI.</li>
-              </ul>
-            </li>
-
-            <li class="timeline__item">
-              <header class="timeline__head">
-                <span class="status status--active" aria-hidden="true"></span>
-                <h3 class="timeline__role">Independent Software Engineer &middot; Trading &amp; Automation Systems</h3>
-                <span class="timeline__dates">nov 2025 &ndash; present</span>
-              </header>
-              <p class="timeline__org">Self-directed, alongside school and work</p>
-              <ul class="timeline__bullets">
-                <li>Operating two 24/7 production systems: <a href="#case-study">trader</a>, an S&amp;P 500 paper-trading agent running since April 2026, and an <a href="#case-study-arb">arbitrage daemon across nineteen bookmakers</a> in production since November 2025.</li>
-                <li>Took market-bot from first commit to a shipped verdict in three weeks (may &ndash; jun 2026): 7 days of uninterrupted NDAX telemetry through a 9-criterion pre-trade synthesizer, ending in a NOT_READY verdict across all 75 CAD pairs.</li>
-                <li>Built and shipped tax-rebalance in a single spec-driven TDD sprint: 21-task plan, 117 tests, two-stage independent review. It emails weekly portfolio digests with cost-aware rebalance verdicts and never places trades.</li>
-              </ul>
-            </li>
-
-            <li class="timeline__item">
-              <header class="timeline__head">
-                <span class="status status--shipped" aria-hidden="true"></span>
-                <h3 class="timeline__role">IT Intern</h3>
-                <span class="timeline__dates">jun &ndash; aug 2024 &middot; jun &ndash; aug 2025</span>
-              </header>
-              <p class="timeline__org">Lynx Equity Limited</p>
-              <ul class="timeline__bullets">
-                <li>Built a task-management system on Monday.com that streamlined communication between subsidiaries by auto-routing issues to the right workflow queue.</li>
-                <li>Designed an On/Off-Boarding workflow with standardized role-based tasks, handoffs, and approvals; delivered a stakeholder demo and shipped feedback into the final product.</li>
-                <li>Wrote Google Apps Script (JavaScript) to ingest multiple Excel exports into a single Google Sheet, apply pricing logic, and track unmatched keys for reconciliation; added a Sheets custom menu and logic for dynamic Excel file IDs.</li>
-                <li>Conducted DNS lookups across subsidiary domains to inventory email providers, SSL status, and other domain metadata.</li>
-              </ul>
-            </li>
-
-            <li class="timeline__item">
-              <header class="timeline__head">
-                <span class="status status--shipped" aria-hidden="true"></span>
-                <h3 class="timeline__role">Independent Game Developer &middot; Mega Tic-Tac-Toe</h3>
-                <span class="timeline__dates">jan &ndash; mar 2024</span>
-              </header>
-              <p class="timeline__org">Self-published, Unity</p>
-              <ul class="timeline__bullets">
-                <li>Designed and programmed a Unity game on a 3&times;3 grid of linked Tic-Tac-Toe boards where each move dictates the opponent&rsquo;s next board.</li>
-                <li>Shipped local + online multiplayer plus single-player vs. a Minimax-based AI with multiple difficulty levels.</li>
-              </ul>
-            </li>
-
-            <li class="timeline__item">
-              <header class="timeline__head">
-                <span class="status status--shipped" aria-hidden="true"></span>
-                <h3 class="timeline__role">Design Team Member</h3>
-                <span class="timeline__dates">oct 2023 &ndash; mar 2024</span>
-              </header>
-              <p class="timeline__org">QMIND &middot; Queen&rsquo;s AI Hub</p>
-              <ul class="timeline__bullets">
-                <li>Trained a reinforcement-learning agent to play Blackjack alongside the team.</li>
-                <li>Built a tabular Q-learning baseline with training loop and basic tests, then helped migrate the system to a Deep Q-learning version so the model could learn policies beyond a simple lookup table.</li>
-              </ul>
-            </li>
-
-            <li class="timeline__item">
-              <header class="timeline__head">
-                <span class="status status--shipped" aria-hidden="true"></span>
-                <h3 class="timeline__role">Financial Analyst</h3>
-                <span class="timeline__dates">oct 2021 &ndash; jun 2023</span>
-              </header>
-              <p class="timeline__org">BMC Pharmacy</p>
-              <ul class="timeline__bullets">
-                <li>Scoped the animal-drug compounding market opportunity across SW Ontario.</li>
-                <li>Tracked monthly, quarterly, and YoY profitability and margin contribution from drug utilization, expanded services, and Rx reports.</li>
-              </ul>
-            </li>
-
-          </ol>
-        </div>
-      </section>
-      <section id="education" class="section">
-        <div class="container">
-          <p class="section__label">05 / Education</p>
-          <h2>Education</h2>
-          <article class="education">
-            <header class="education__head">
-              <h3 class="education__school">Queen&rsquo;s University</h3>
-              <span class="education__dates">2023 &ndash; expected 2027</span>
-            </header>
-            <p class="education__program">BASc, Computer Engineering &middot; <span class="education__gpa">GPA 3.85 &middot; Dean&rsquo;s Scholar</span></p>
-            <ul class="education__highlights">
-              <li>Built a Python ML classifier on accelerometer data for walking vs. jumping.</li>
-              <li>Developed a pathfinding algorithm in Python for autonomous rover operation.</li>
-              <li>Built a Dart mobile app paired with a Bluetooth &ldquo;Smart Shoe&rdquo; for directional haptic navigation.</li>
-            </ul>
-          </article>
-        </div>
-      </section>
       <section id="contact" class="section">
         <div class="container">
           <p class="section__label">06 / Have something in mind?</p>
-          <h2>Let&rsquo;s make it work.</h2>
-          <p class="contact__lede">Email is best. Open to freelance work now, full-time roles starting in 2027, and interesting side-project collaborations. I take on projects that automate repeat tasks, collect and check data, or build small web tools.</p>
-          <p class="contact__address">14jakehoffman@gmail.com</p>
+          <h2>Let&rsquo;s talk.</h2>
+          <p class="contact__lede">Looking for someone who can turn a messy problem into working software? I&rsquo;m open to freelance projects now and full-time roles after graduation in 2027. Email is the best place to start.</p>
+          <a class="contact__address" href="mailto:14jakehoffman@gmail.com">14jakehoffman@gmail.com</a>
+          <button class="copy-email" type="button" hidden>Copy email address</button>
+          <p class="copy-status" role="status" aria-live="polite"></p>
           <div class="contact__links">
             <a class="btn btn--primary" href="mailto:14jakehoffman@gmail.com">Email me <span aria-hidden="true">↗</span></a>
             <a class="btn" href="https://github.com/jakethehoffer" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
             <a class="btn" href="https://www.linkedin.com/in/jake-hoffman-7117692a5/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
+            <a class="btn" href="resume.pdf" download="Jake-Hoffman-Resume.pdf">Download resume <span aria-hidden="true">↓</span></a>
           </div>
         </div>
       </section>
@@ -632,6 +671,6 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
       </div>
     </footer>
 
-    <script src="script.js?v=e085d61cfa" defer></script>
+    <script src="script.js?v=0dd7fcb00a" defer></script>
   </body>
 </html>

@@ -41,14 +41,15 @@
     const filterCards = value => {
       let shown = 0;
       cards.forEach(card => {
-        card.hidden = value !== "all" && card.querySelector("[data-category]").dataset.category !== value;
+        const data = card.querySelector("[data-category]").dataset;
+        card.hidden = value === "selected" ? data.selected !== "true" : value !== "all" && data.category !== value;
         if (!card.hidden) shown++;
       });
       filters.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.filter === value)));
       count.textContent = `${shown} ${shown === 1 ? "project" : "projects"}`;
     };
     filters.forEach(button => button.addEventListener("click", () => filterCards(button.dataset.filter)));
-    filterCards("all");
+    filterCards("selected");
     toolbar.hidden = false;
   }
 
@@ -65,6 +66,21 @@
   });
   window.addEventListener("hashchange", () => openLinkedStory(location.hash));
   openLinkedStory(location.hash);
+
+  // An email link always works; copying is an optional convenience.
+  const copyButton = document.querySelector(".copy-email");
+  const copyStatus = document.querySelector(".copy-status");
+  if (copyButton && navigator.clipboard && window.isSecureContext) {
+    copyButton.hidden = false;
+    copyButton.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText("14jakehoffman@gmail.com");
+        copyStatus.textContent = "Email address copied.";
+      } catch (_) {
+        copyStatus.textContent = "Copy did not work. You can select the address above or use Email me.";
+      }
+    });
+  }
 
   // ---------- Footer year ----------
   const yearEl = document.getElementById("footer-year");

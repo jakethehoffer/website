@@ -24,7 +24,9 @@
 #                   last value refresh-meta.py fetched, so keep it non-claiming
 #                   ("last commit: n/a"), never a fake "today".
 #   category        systems | research | interactive (website filter)
+#   selected        true for the default website selection; independent of resume_priority
 #   summary         short website introduction; full description stays in what/body
+#   outcome         factual personal contribution and result shown on the website card
 #   what            1-2 sentence project lede (HTML allowed)
 #   body            longer description, 80-120 words (HTML allowed)
 #   metrics         terse stats line (HTML entities pre-encoded)
@@ -35,6 +37,8 @@
 #   resume          optional resume entry: {role, bullets: [...]}; omit to skip resume
 
 - key: trader
+  selected: true
+  outcome: "Owned the scheduling, risk limits, and audit trail. Closed the strategy after a failed holdout. It never traded real money."
   category: systems
   summary: "An S&amp;P 500 paper-trading agent with risk checks built in from the start."
   name: trader
@@ -65,6 +69,8 @@
       - "24/7 AI swing-trading agent for S&P 500 equities, driven by six scheduled, idempotent routines."
 
 - key: arbitrage
+  selected: true
+  outcome: "Built the collection, normalization, and alert pipeline across 19 bookmakers and seven sports."
   category: systems
   summary: "Turning prices from 19 bookmakers into one stream of checked alerts."
   name: Odds Aggregator
@@ -96,6 +102,8 @@
       - "Production arbitrage daemon covering 19 bookmakers across 7 sports."
 
 - key: tax-rebalance
+  selected: true
+  outcome: "Shipped a read-only tool with 117 tests. It explains rebalance choices and never places trades."
   category: systems
   summary: "A weekly portfolio check that explains when to rebalance and when to leave things alone."
   name: tax-rebalance
@@ -129,6 +137,8 @@
       - "Canadian TFSA + RRSP portfolio drift monitor that emails weekly digests with cost-aware rebalance verdicts (read-only; never places trades). Spec-driven TDD: 21-task plan, two-stage independent review, 117 tests. Questrade IQ API with OAuth refresh-token rotation."
 
 - key: market-bot
+  selected: false
+  outcome: "Seven days of recorded prices, 75 pairs checked, and a NOT_READY verdict. The result was a decision not to trade."
   category: research
   summary: "Could retail market making work after fees? Seven days of real data said no."
   name: market-bot
@@ -163,6 +173,8 @@
   resume: null
 
 - key: trades-agency
+  selected: false
+  outcome: "Built the service, tested outreach with 32 contacts, then closed the venture after zero positive replies."
   category: research
   summary: "A receptionist and lead-generation service, tested with real customer outreach."
   name: trades-agency
@@ -193,6 +205,8 @@
   resume: null
 
 - key: equity-arbs
+  selected: false
+  outcome: "Built the research and backtest tools. Retired the strategy after measuring a ceiling of roughly 0.6% per year."
   category: research
   summary: "A research toolkit that put a trading idea through its tests, then retired it."
   name: equity-arbs
@@ -221,6 +235,8 @@
       - "Stat-arb research toolkit for TSX pair trading (spec-first, TDD, 76 unit tests). Backtest demonstrated a ~0.6%/yr ceiling on retail capital; retired at v1.0 as a documented negative result."
 
 - key: mega-tictactoe
+  selected: true
+  outcome: "Shipped a playable Unity game with local and online multiplayer and a Minimax opponent."
   category: interactive
   summary: "Nine linked boards. Every move changes where your opponent can play next."
   name: Mega Tic-Tac-Toe
@@ -246,6 +262,8 @@
   resume: null
 
 - key: smart-shoe
+  selected: false
+  outcome: "Built the Dart app and Bluetooth controls for directional haptic navigation."
   category: interactive
   summary: "A phone app that guides your next turn through vibrations in a Bluetooth shoe."
   name: Smart Shoe Navigation
@@ -271,6 +289,8 @@
   resume: null
 
 - key: walking-jumping
+  selected: false
+  outcome: "Built the path from accelerometer recordings to a trained and evaluated movement classifier."
   category: research
   summary: "Teaching a model to tell walking from jumping using movement data."
   name: Walking / Jumping Classifier

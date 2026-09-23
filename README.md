@@ -1,8 +1,10 @@
 # website
 
-Jake Hoffman's portfolio. A warm light theme and forest dark theme,
-project filters, expandable project records and essays, and direct links
-to the resume and contact details. Plain HTML, CSS, and vanilla JS.
+Jake Hoffman's resume website. A name-led introduction, recent experience
+with concrete results, four selected projects and a filterable full collection.
+Warm light and forest dark themes, expandable role details, project records
+and essays, a persistent resume link, and optional email copying.
+Plain HTML, CSS, and vanilla JS.
 No framework or client build step.
 
 **Live at <https://jakethehoffer.github.io/website/>**
@@ -75,7 +77,9 @@ Each entry:
 |---|---|
 | `key` | short id; matches `data-meta="<key>.last_commit"` on the page |
 | `category` | `systems`, `research`, or `interactive`; drives the website filters |
+| `selected` | boolean; shows the project in the default Selected view, independently of resume priority |
 | `summary` | short card introduction; `what`, `body`, and samples remain in native expandable details |
+| `outcome` | short factual description of Jake's own contribution and the result, shown before the full details |
 | `name` | displayed name in the card's `<h3>` |
 | `status` | `active`, `shipped`, or `archived` (controls the pill colour) |
 | `url` | external link; `null` = name renders without an `<a>` wrapper |
@@ -98,7 +102,10 @@ Project order in the rendered page matches order in `projects.yml`.
 
 ### Resume curation (one-page guarantee)
 
-The **website** shows every project. The **resume** shows only the top
+The **website** starts with four selected projects. All work and category
+filters reveal the full collection; without JavaScript, every project is
+visible. Website selection is independent of resume selection.
+The **resume** shows only the top
 `RESUME_MAX_PROJECTS` (in `scripts/build-resume.py`, currently 4) of
 the projects that have a `resume:` block, ranked by `resume_priority`
 (highest first) and displayed in `projects.yml` order.

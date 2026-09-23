@@ -83,7 +83,7 @@ def render_header(project: dict, current_meta: str | None = None) -> str:
     if category not in ("systems", "research", "interactive"):
         raise ValueError(f"Unknown category: {category}")
     return (
-        f'              <header class="project__head" data-category="{category}">\n'
+        f'              <header class="project__head" data-category="{category}" data-selected="{str(bool(project.get("selected"))).lower()}">\n'
         f'                <span class="project__category">{category}</span>\n'
         f'                <span class="status {status_class}" role="img" aria-label="Status: {status_label.lower()}"></span>\n'
         f'                <span class="project__status-label">{status_label}</span>\n'
@@ -177,18 +177,11 @@ def render_card(project: dict, current_meta: str | None = None) -> str:
         render_header(project, current_meta),
         render_name(project),
         f'              <p class="project__what">{project.get("summary", project["what"])}</p>',
-        f'              <p class="project__metrics"><span class="metrics__prefix">//</span> {project["metrics"]}</p>',
-        f'              <p class="project__chips">{project["chips"]}</p>',
     ]
-    flows = {
-        "trader": ("Scan", "Check risk", "Paper trade", "Record"),
-        "arbitrage": ("19 sources", "Normalize", "Compare", "Alert"),
-    }
-    if project["key"] in flows:
-        steps = '<b aria-hidden="true">&rarr;</b>'.join(
-            f"<span>{step}</span>" for step in flows[project["key"]]
-        )
-        parts.append(f'              <div class="project-flow" aria-label="System flow">{steps}</div>')
+    if project.get("outcome"):
+        parts.append(f'              <p class="project__outcome"><span>My work &amp; the result</span>{project["outcome"]}</p>')
+    chips = "".join(f"<span>{chip.strip()}</span>" for chip in project["chips"].split("&middot;"))
+    parts.append(f'              <p class="project__chips" aria-label="Tools used">{chips}</p>')
     media = render_media(project.get("media"))
     if media:
         parts.append(media)
@@ -204,6 +197,7 @@ def render_card(project: dict, current_meta: str | None = None) -> str:
         f'                <summary>About this project<span class="visually-hidden">: {name}</span></summary>',
         f'                <p class="project__body">{project["what"]}</p>',
         f'                <p class="project__body">{project["body"]}</p>',
+        f'                <p class="project__metrics">{project["metrics"]}</p>',
     ])
     sample = render_sample(project.get("sample"))
     if sample:
