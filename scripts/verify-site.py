@@ -969,6 +969,84 @@ def check_mobile_menu(browser, port: int) -> None:
                 context.close()
 
 
+def check_project_interactions(browser, port: int) -> None:
+    """Check the visitor paths introduced by the portfolio redesign."""
+    projects = yaml.safe_load(PROJECTS_YML.read_text(encoding="utf-8"))
+    for width in (375, 1280):
+        context = browser.new_context(viewport={"width": width, "height": 800},
+                                      reduced_motion="reduce")
+        try:
+            page = context.new_page()
+            errors = []
+            page.on("pageerror", lambda error: errors.append(str(error)))
+            page.goto(f"http://127.0.0.1:{port}/website/", wait_until="networkidle")
+            for category in ("systems", "research", "interactive", "all"):
+                button = page.locator(f'[data-filter="{category}"]')
+                button.focus()
+                page.keyboard.press("Space")
+                expected = [p["name"] for p in projects
+                            if category == "all" or p["category"] == category]
+                visible = page.locator(".project:visible .project__name").all_text_contents()
+                visible = [name.removesuffix(" private").strip() for name in visible]
+                if visible != expected:
+                    fail(f"project filter {category} at {width}px: {visible} != {expected}")
+                if page.locator('[data-filter][aria-pressed="true"]').count() != 1 or button.get_attribute("aria-pressed") != "true":
+                    fail(f"project filter {category}: selected state is incorrect")
+                if page.locator(".project-count").inner_text() != f"{len(expected)} projects":
+                    fail(f"project filter {category}: result count is incorrect")
+                if not button.evaluate("el => el === document.activeElement"):
+                    fail(f"project filter {category}: keyboard focus lost")
+
+            summary = page.locator(".project__details summary").first
+            summary.focus()
+            page.keyboard.press("Enter")
+            if not page.locator(".project__details").first.evaluate("el => el.open"):
+                fail(f"project details do not open from the keyboard at {width}px")
+
+            page.locator('.project__cta a[href="#case-study"]').click()
+            if not page.locator("#case-study .case-detail").evaluate("el => el.open"):
+                fail(f"case study link did not open the story at {width}px")
+            page.goto(f"http://127.0.0.1:{port}/website/#case-study-arb")
+            if not page.locator("#case-study-arb .case-detail").evaluate("el => el.open"):
+                fail(f"direct case study URL did not open the story at {width}px")
+            for summary in page.locator(".essay-detail summary").all():
+                summary.focus()
+                page.keyboard.press("Enter")
+            if page.locator(".essay-detail[open]").count() != 2:
+                fail(f"essays do not open from the keyboard at {width}px")
+
+            if width == 375:
+                toggle = page.get_by_role("button", name="Open navigation")
+                toggle.click()
+                page.keyboard.press("Escape")
+                if page.locator("#nav-menu").is_visible() or not toggle.evaluate("el => el === document.activeElement"):
+                    fail("Escape did not close the phone menu and restore focus")
+            if errors:
+                fail(f"browser errors at {width}px: {errors}")
+            else:
+                ok(f"project filters, keyboard details, case links and essays checked at {width}px")
+        finally:
+            context.close()
+
+    context = browser.new_context(java_script_enabled=False,
+                                  viewport={"width": 320, "height": 568})
+    try:
+        page = context.new_page()
+        page.goto(f"http://127.0.0.1:{port}/website/")
+        if page.locator(".project:visible").count() != len(projects):
+            fail("projects missing without JavaScript")
+        if not page.locator("#nav-menu").is_visible():
+            fail("phone navigation missing without JavaScript")
+        if page.locator(".project-toolbar").is_visible():
+            fail("inactive project filters shown without JavaScript")
+        page.locator(".project__details summary").first.click()
+        if not page.locator(".project__body").first.is_visible():
+            fail("native project details do not work without JavaScript")
+        ok("navigation, projects and native details checked without JavaScript")
+    finally:
+        context.close()
+
+
 def check_layout_and_a11y() -> None:
     try:
         from playwright.sync_api import sync_playwright
@@ -1028,9 +1106,19 @@ def check_layout_and_a11y() -> None:
                                  f"({label_base}): layout is {metrics['scroll']}px "
                                  f"vs {metrics['client']}px visible")
                     run_axe(page, label_base)
+                    if doc == "index.html":
+                        # Collapsed details cannot reveal contrast or overflow
+                        # faults in the longer project samples and essays.
+                        page.locator("details").evaluate_all("els => els.forEach(el => el.open = true)")
+                        for width in (320, 1280):
+                            page.set_viewport_size({"width": width, "height": 900})
+                            if page.evaluate("document.documentElement.scrollWidth > innerWidth + 1"):
+                                fail(f"expanded details overflow at {width}px ({label_base})")
+                        run_axe(page, f"{label_base}, all details open")
                 context.close()
             check_scroll_reveal(browser, port)
             check_mobile_menu(browser, port)
+            check_project_interactions(browser, port)
             check_stale_guard(browser, port)
             browser.close()
     finally:

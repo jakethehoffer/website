@@ -1,7 +1,9 @@
 # website
 
-Single-page resume for Jake Hoffman &mdash; the "engineering log" v2.
-Plain HTML, CSS, and a touch of vanilla JS. No framework, no build step.
+Jake Hoffman's portfolio. A warm light theme and forest dark theme,
+project filters, expandable project records and essays, and direct links
+to the resume and contact details. Plain HTML, CSS, and vanilla JS.
+No framework or client build step.
 
 **Live at <https://jakethehoffer.github.io/website/>**
 
@@ -72,6 +74,8 @@ Each entry:
 | field | description |
 |---|---|
 | `key` | short id; matches `data-meta="<key>.last_commit"` on the page |
+| `category` | `systems`, `research`, or `interactive`; drives the website filters |
+| `summary` | short card introduction; `what`, `body`, and samples remain in native expandable details |
 | `name` | displayed name in the card's `<h3>` |
 | `status` | `active`, `shipped`, or `archived` (controls the pill colour) |
 | `url` | external link; `null` = name renders without an `<a>` wrapper |
@@ -222,8 +226,8 @@ build step, so the pills simply keep the values last committed.
   sections (contact, summary, education, experience).
 - `index.html` &mdash; semantic single-page markup; projects block
   generated from `projects.yml`.
-- `styles.css` &mdash; all-mono design system, dark default + parchment light.
-- `script.js` &mdash; boot animation, mobile nav, theme toggle, IntersectionObserver reveal.
+- `styles.css` &mdash; responsive portfolio layout, warm light and forest dark themes, reduced-motion and print styles.
+- `script.js` &mdash; project filters, mobile navigation, saved theme, direct case-study expansion, current-section link, and stale-metadata guard. All page text is visible immediately. Project records and essays use native details, and navigation works without JavaScript.
 - `scripts/build-site.py` &mdash; orchestrator (runs the four generators).
 - `scripts/generate-cards.py` &mdash; renders the projects block of `index.html`.
 - `scripts/build-resume.py` &mdash; builds `resume-source.docx` from scratch
@@ -247,6 +251,12 @@ build step, so the pills simply keep the values last committed.
   The open phone menu is checked in portrait and landscape in both
   themes: it must fit the screen, every choice must be reachable by
   keyboard, and the theme button and contact link must work.
+  Project filters must show exactly the right cards and count, with
+  keyboard focus retained. Details and essays must open from the keyboard,
+  case-study links must expand their targets (including a direct visit),
+  and Escape must close the phone menu and return focus. Layout and
+  accessibility are also checked with every detail open. With JavaScript
+  disabled, all projects, navigation, and native details must still work.
 - `scripts/test_verify_site.py`, `scripts/test_refresh_meta.py` &mdash;
   the checker's own tests. Each plants one known defect in a scratch
   copy of the tree and asserts the check reports it, so a refactor that

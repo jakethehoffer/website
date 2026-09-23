@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import re
 import sys
+from html import escape
 from pathlib import Path
 
 import yaml
@@ -78,8 +79,12 @@ def render_header(project: dict, current_meta: str | None = None) -> str:
         # auto_meta=false: plain text, no sentinel.
         date_text = project["hardcoded_date"]
         last_commit_span = f'<span class="project__last-commit">{date_text}</span>'
+    category = project.get("category", "systems")
+    if category not in ("systems", "research", "interactive"):
+        raise ValueError(f"Unknown category: {category}")
     return (
-        '              <header class="project__head">\n'
+        f'              <header class="project__head" data-category="{category}">\n'
+        f'                <span class="project__category">{category}</span>\n'
         f'                <span class="status {status_class}" role="img" aria-label="Status: {status_label.lower()}"></span>\n'
         f'                <span class="project__status-label">{status_label}</span>\n'
         f"                {last_commit_span}\n"
@@ -144,7 +149,7 @@ def render_cta(cta: dict | None) -> str | None:
     return (
         f'              <p class="project__cta">'
         f'<a class="btn" href="{cta["url"]}" target="_blank" rel="noopener">'
-        f'{cta["label"]}</a></p>'
+        f'{cta["label"].strip("[] ")}</a></p>'
     )
 
 
@@ -161,7 +166,7 @@ def render_case_study_cta(project: dict) -> str | None:
         return None
     return (
         f'              <p class="project__cta">'
-        f'<a class="btn" href="{anchor}">[ read case study &darr; ]</a></p>'
+        f'<a class="btn" href="{anchor}">Read the case study <span aria-hidden="true">&darr;</span></a></p>'
     )
 
 
@@ -171,14 +176,19 @@ def render_card(project: dict, current_meta: str | None = None) -> str:
         '            <article class="project">',
         render_header(project, current_meta),
         render_name(project),
-        f'              <p class="project__what">{project["what"]}</p>',
-        f'              <p class="project__body">{project["body"]}</p>',
+        f'              <p class="project__what">{project.get("summary", project["what"])}</p>',
         f'              <p class="project__metrics"><span class="metrics__prefix">//</span> {project["metrics"]}</p>',
         f'              <p class="project__chips">{project["chips"]}</p>',
     ]
-    sample = render_sample(project.get("sample"))
-    if sample:
-        parts.append(sample)
+    flows = {
+        "trader": ("Scan", "Check risk", "Paper trade", "Record"),
+        "arbitrage": ("19 sources", "Normalize", "Compare", "Alert"),
+    }
+    if project["key"] in flows:
+        steps = '<b aria-hidden="true">&rarr;</b>'.join(
+            f"<span>{step}</span>" for step in flows[project["key"]]
+        )
+        parts.append(f'              <div class="project-flow" aria-label="System flow">{steps}</div>')
     media = render_media(project.get("media"))
     if media:
         parts.append(media)
@@ -188,6 +198,17 @@ def render_card(project: dict, current_meta: str | None = None) -> str:
     case_study_cta = render_case_study_cta(project)
     if case_study_cta:
         parts.append(case_study_cta)
+    name = escape(project["name"])
+    parts.extend([
+        '              <details class="project__details">',
+        f'                <summary>About this project<span class="visually-hidden">: {name}</span></summary>',
+        f'                <p class="project__body">{project["what"]}</p>',
+        f'                <p class="project__body">{project["body"]}</p>',
+    ])
+    sample = render_sample(project.get("sample"))
+    if sample:
+        parts.append(sample)
+    parts.append("              </details>")
     parts.append("            </article>")
     return "\n".join(parts)
 

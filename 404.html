@@ -17,9 +17,9 @@
     <meta name="description" content="Page not found." />
     <meta name="robots" content="noindex" />
     <link rel="preload" href="/website/assets/fonts/jetbrains-mono-variable.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="/website/styles.css" />
-    <meta name="theme-color" content="#0a0e14" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#f5efe4" media="(prefers-color-scheme: light)" />
+    <link rel="stylesheet" href="/website/styles.css?v=461375ff8e" />
+    <meta name="theme-color" content="#191e1b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f6f5ef" media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/svg+xml" href="/website/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/website/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/website/apple-touch-icon.png" sizes="180x180" />
@@ -29,28 +29,22 @@
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="site-header">
-      <nav class="site-nav" aria-label="Primary">
-        <a class="nav-brand" href="/website/"><span class="nav-brand__prompt">$</span> jake_hoffman</a>
+      <nav class="site-nav container" aria-label="Primary">
+        <a class="nav-brand" href="/website/"><span class="brand-mark" aria-hidden="true">jh.</span> Jake Hoffman</a>
       </nav>
     </header>
 
     <main id="main">
       <section class="hero">
         <div class="container hero__inner">
-          <h1 class="visually-hidden">404: page not found</h1>
-          <pre class="hero__boot" aria-label="404 error">
-<span class="boot__prompt">$ cat /requested/path</span>
-<span class="boot__line"><span class="boot__caret-mark">&gt;</span> error: file not found (404)</span>
-
-<span class="boot__prompt">$ ls /jake_hoffman</span>
-<span class="boot__line"><span class="boot__caret-mark">&gt;</span> the page you tried to visit doesn&rsquo;t exist.</span>
-<span class="boot__line"><span class="boot__caret-mark">&gt;</span> try one of:<span class="boot__caret" aria-hidden="true">_</span></span>
-          </pre>
+          <p class="section__label">404 / Page not found</p>
+          <h1>Let&rsquo;s get you<br> <em>back to the work.</em></h1>
+          <p class="hero__description">That page is missing. You can head home, explore my projects, or get in touch.</p>
 
           <div class="hero__ctas" role="group" aria-label="Recovery links">
-            <a class="btn btn--primary" href="/website/">[ home ]</a>
-            <a class="btn" href="/website/#projects">[ projects ]</a>
-            <a class="btn" href="/website/#contact">[ contact ]</a>
+            <a class="btn btn--primary" href="/website/">Back home ↗</a>
+            <a class="btn" href="/website/#projects">Explore projects</a>
+            <a class="btn" href="/website/#contact">Contact me</a>
           </div>
         </div>
       </section>
@@ -58,7 +52,7 @@
 
     <footer class="site-footer">
       <div class="container site-footer__inner">
-        <p class="site-footer__prompt">$ <span class="boot__caret" aria-hidden="true">_</span></p>
+        <a class="footer-brand" href="/website/">Jake Hoffman</a>
         <p class="site-footer__meta"><span>&copy; <span id="footer-year">2026</span> jake hoffman</span></p>
       </div>
     </footer>

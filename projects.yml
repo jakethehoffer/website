@@ -23,6 +23,8 @@
 #                   BRAND-NEW card; on rebuilds generate-cards.py preserves the
 #                   last value refresh-meta.py fetched, so keep it non-claiming
 #                   ("last commit: n/a"), never a fake "today".
+#   category        systems | research | interactive (website filter)
+#   summary         short website introduction; full description stays in what/body
 #   what            1-2 sentence project lede (HTML allowed)
 #   body            longer description, 80-120 words (HTML allowed)
 #   metrics         terse stats line (HTML entities pre-encoded)
@@ -33,6 +35,8 @@
 #   resume          optional resume entry: {role, bullets: [...]}; omit to skip resume
 
 - key: trader
+  category: systems
+  summary: "An S&amp;P 500 paper-trading agent with risk checks built in from the start."
   name: trader
   resume_priority: 100
   status: active
@@ -61,6 +65,8 @@
       - "24/7 AI swing-trading agent for S&P 500 equities, driven by six scheduled, idempotent routines."
 
 - key: arbitrage
+  category: systems
+  summary: "Turning prices from 19 bookmakers into one stream of checked alerts."
   name: Odds Aggregator
   resume_priority: 90
   status: active
@@ -90,6 +96,8 @@
       - "Production arbitrage daemon covering 19 bookmakers across 7 sports."
 
 - key: tax-rebalance
+  category: systems
+  summary: "A weekly portfolio check that explains when to rebalance and when to leave things alone."
   name: tax-rebalance
   resume_priority: 80
   # shipped, not active: no schedule runs it (no cron in its workflow,
@@ -121,6 +129,8 @@
       - "Canadian TFSA + RRSP portfolio drift monitor that emails weekly digests with cost-aware rebalance verdicts (read-only; never places trades). Spec-driven TDD: 21-task plan, two-stage independent review, 117 tests. Questrade IQ API with OAuth refresh-token rotation."
 
 - key: market-bot
+  category: research
+  summary: "Could retail market making work after fees? Seven days of real data said no."
   name: market-bot
   resume_priority: 72
   status: shipped
@@ -153,6 +163,8 @@
   resume: null
 
 - key: trades-agency
+  category: research
+  summary: "A receptionist and lead-generation service, tested with real customer outreach."
   name: trades-agency
   resume_priority: 65
   status: shipped
@@ -181,6 +193,8 @@
   resume: null
 
 - key: equity-arbs
+  category: research
+  summary: "A research toolkit that put a trading idea through its tests, then retired it."
   name: equity-arbs
   resume_priority: 70
   status: shipped
@@ -207,6 +221,8 @@
       - "Stat-arb research toolkit for TSX pair trading (spec-first, TDD, 76 unit tests). Backtest demonstrated a ~0.6%/yr ceiling on retail capital; retired at v1.0 as a documented negative result."
 
 - key: mega-tictactoe
+  category: interactive
+  summary: "Nine linked boards. Every move changes where your opponent can play next."
   name: Mega Tic-Tac-Toe
   resume_priority: 40
   status: shipped
@@ -230,6 +246,8 @@
   resume: null
 
 - key: smart-shoe
+  category: interactive
+  summary: "A phone app that guides your next turn through vibrations in a Bluetooth shoe."
   name: Smart Shoe Navigation
   resume_priority: 30
   status: shipped
@@ -253,6 +271,8 @@
   resume: null
 
 - key: walking-jumping
+  category: research
+  summary: "Teaching a model to tell walking from jumping using movement data."
   name: Walking / Jumping Classifier
   resume_priority: 20
   status: shipped

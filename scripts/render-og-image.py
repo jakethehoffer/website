@@ -17,22 +17,17 @@ import os
 
 from PIL import Image, ImageDraw, ImageFont, PngImagePlugin
 
-# v2 design tokens (keep in sync with styles.css :root)
-BG = (10, 14, 20)            # #0a0e14
-FG = (214, 222, 230)         # #d6dee6
-DIM = (118, 130, 143)        # #76828f (--text-mute, AA-adjusted)
-ACCENT = (245, 179, 66)      # #f5b342
+# Portfolio design tokens (keep in sync with styles.css :root).
+BG = (246, 245, 239)
+FG = (36, 44, 38)
+DIM = (96, 102, 91)
+ACCENT = (171, 60, 34)
 
 # Text content shown on the share card. Keep claims in sync with the
 # hero in index.html — scripts/verify-site.py cross-checks each
 # "·"-separated METRICS phrase against the hero metrics block.
-EYEBROW = "computer engineering @ queen's · class of 2027"
-BODY_LINES = [
-    "> i build software that runs unattended.",
-    "> trading agents, arbitrage daemons,",
-    "> and ML pipelines.",
-]
-METRICS = "//  2 unattended systems  ·  19 bookmakers  ·  dean's scholar"
+EYEBROW = "COMPUTER ENGINEERING / QUEEN'S UNIVERSITY"
+METRICS = "Class of 2027 · Dean's Scholar · Software & automation"
 
 ROOT = Path(__file__).resolve().parent.parent
 OG_OUT = ROOT / "assets" / "og-image.png"
@@ -74,51 +69,50 @@ def load_font(size: int, *, bold: bool = False) -> ImageFont.FreeTypeFont:
     return ImageFont.truetype(str(path), size=size)
 
 
+def display_font(size: int, italic: bool = False) -> ImageFont.FreeTypeFont:
+    candidates = (
+        ("C:/Windows/Fonts/georgiai.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf")
+        if italic else
+        ("C:/Windows/Fonts/segoeuib.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf")
+    )
+    for candidate in candidates:
+        if Path(candidate).exists():
+            return ImageFont.truetype(candidate, size=size)
+    return load_font(size, bold=not italic)
+
+
 # ---------- OG image (1200x630) ----------
 def render_og() -> None:
     W, H = 1200, 630
-    PAD = 80
+    PAD = 64
 
     img = Image.new("RGB", (W, H), BG)
     d = ImageDraw.Draw(img)
 
-    name_font = load_font(76, bold=True)
-    eyebrow_font = load_font(26, bold=False)
-    prompt_font = load_font(28, bold=True)
-    body_font = load_font(28, bold=False)
-    metrics_font = load_font(22, bold=False)
-    url_font = load_font(20, bold=False)
+    d.rectangle((PAD, 50, PAD + 46, 96), fill=ACCENT)
+    d.text((PAD + 8, 54), "jh.", font=display_font(28), fill=BG)
+    d.text((PAD + 63, 59), "Jake Hoffman", font=display_font(24), fill=FG)
+    d.line((PAD, 127, W - PAD, 127), fill=(216, 219, 207), width=2)
+    d.text((PAD, 160), EYEBROW, font=load_font(18), fill=DIM)
+    d.text((PAD - 4, 212), "Software with", font=display_font(88), fill=FG)
+    d.text((PAD, 314), "a job to do.", font=display_font(94, italic=True), fill=ACCENT)
 
-    # Name
-    d.text((PAD, PAD), "JAKE HOFFMAN", font=name_font, fill=FG)
+    # A diagram, never a screenshot or a claim about live system state.
+    green = (37, 55, 45)
+    d.rectangle((800, 170, 1136, 464), fill=green)
+    for x in range(814, 1130, 16):
+        for y in range(180, 456, 16):
+            d.point((x, y), fill=(72, 96, 74))
+    for index, label in enumerate(("01  Real data", "02  Check first", "03  Do the work", "04  Keep a record")):
+        y = 194 + index * 65
+        fill = (218, 228, 194) if index == 1 else green
+        ink = green if index == 1 else (243, 242, 220)
+        d.rectangle((822, y, 1114, y + 48), fill=fill, outline=(98, 120, 95))
+        d.text((836, y + 12), label, font=load_font(18), fill=ink)
 
-    # Status dot in the right margin, aligned to the name's baseline
-    dot_r = 9
-    dot_cx = W - PAD - 14
-    dot_cy = PAD + 76 // 2 + 4
-    d.ellipse((dot_cx - dot_r, dot_cy - dot_r, dot_cx + dot_r, dot_cy + dot_r), fill=ACCENT)
-    d.text((dot_cx - dot_r - 110, dot_cy - 13), "ACTIVE", font=eyebrow_font, fill=DIM)
-
-    # Eyebrow
-    d.text((PAD, PAD + 92), EYEBROW, font=eyebrow_font, fill=DIM)
-
-    # Terminal-flavored body
-    y = PAD + 92 + 50
-    d.text((PAD, y), "$ whoami", font=prompt_font, fill=ACCENT)
-    y += 50
-    for line in BODY_LINES:
-        d.text((PAD, y), line, font=body_font, fill=FG)
-        y += 42
-
-    # Metrics
-    y += 28
-    d.text((PAD, y), METRICS, font=metrics_font, fill=DIM)
-
-    # Footer URL (bottom-right)
-    url = "jakethehoffer.github.io/website"
-    bbox = d.textbbox((0, 0), url, font=url_font)
-    url_w = bbox[2] - bbox[0]
-    d.text((W - PAD - url_w, H - PAD - 20), url, font=url_font, fill=DIM)
+    d.line((PAD, 502, W - PAD, 502), fill=(216, 219, 207), width=2)
+    d.text((PAD, 526), METRICS, font=load_font(18), fill=DIM)
+    d.text((PAD, 570), "jakethehoffer.github.io/website", font=load_font(16), fill=ACCENT)
 
     OG_OUT.parent.mkdir(parents=True, exist_ok=True)
     # Provenance chunk: verify-site.py compares this against the METRICS
@@ -132,25 +126,20 @@ def render_og() -> None:
 
 # ---------- shared icon glyph ----------
 def render_jh_glyph(size: int, *, padding_ratio: float = 0.12, with_rim: bool = True) -> Image.Image:
-    """Render the JH glyph centered in a near-black rounded square."""
-    img = Image.new("RGB", (size, size), BG)
+    """Render the same terracotta monogram used in the page header."""
+    img = Image.new("RGB", (size, size), ACCENT)
     d = ImageDraw.Draw(img)
-
-    if with_rim:
-        rim_width = max(1, size // 32)
-        rim_color = (int(ACCENT[0] * 0.45), int(ACCENT[1] * 0.45), int(ACCENT[2] * 0.45))
-        d.rectangle((rim_width, rim_width, size - rim_width, size - rim_width), outline=rim_color, width=rim_width)
 
     # Glyph
     glyph_size = int(size * (1 - padding_ratio * 2) * 0.7)
-    font = load_font(glyph_size, bold=True)
-    text = "JH"
+    font = display_font(glyph_size)
+    text = "jh."
     bbox = d.textbbox((0, 0), text, font=font)
     text_w = bbox[2] - bbox[0]
     text_h = bbox[3] - bbox[1]
     x = (size - text_w) // 2 - bbox[0]
     y = (size - text_h) // 2 - bbox[1]
-    d.text((x, y), text, font=font, fill=ACCENT)
+    d.text((x, y), text, font=font, fill=BG)
 
     return img
 
