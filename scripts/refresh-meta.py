@@ -197,7 +197,7 @@ def main() -> None:
     # Pages artifact (or a local build), never a commit, so there is no
     # date-only diff to avoid any more.
     today = datetime.now(timezone.utc).date().isoformat()
-    value = f"last_deployed: {today}"
+    value = f"Updated: {today}"
     new_html, matched, changed = replace_meta(html, "last_deployed", value)
     if not matched:
         print("[miss] last_deployed (no sentinel found in index.html)")
