@@ -83,7 +83,7 @@ def render_header(project: dict, current_meta: str | None = None) -> str:
     if category not in ("systems", "research", "interactive"):
         raise ValueError(f"Unknown category: {category}")
     return (
-        f'              <header class="project__head" data-category="{category}" data-selected="{str(bool(project.get("selected"))).lower()}">\n'
+        f'              <header class="project__head" id="project-{escape(project["key"])}" data-category="{category}" data-selected="{str(bool(project.get("selected"))).lower()}">\n'
         f'                <span class="project__category">{category}</span>\n'
         f'                <span class="status {status_class}" role="img" aria-label="Status: {status_label.lower()}"></span>\n'
         f'                <span class="project__status-label">{status_label}</span>\n'
@@ -170,10 +170,41 @@ def render_case_study_cta(project: dict) -> str | None:
     )
 
 
+def render_visual(kind: str | None) -> str:
+    """Product diagrams are labelled as overviews, never fake screenshots."""
+    if kind == "cockpit":
+        return '''              <figure class="project__visual project__visual--cockpit" aria-label="Cockpit system overview">
+                <figcaption><span>SYSTEM OVERVIEW</span><span>DESKTOP + PHONE</span></figcaption>
+                <div class="engine-row"><span>Claude</span><span>Codex</span><span>Local models</span></div>
+                <div class="diagram-join" aria-hidden="true"></div>
+                <div class="workspace-panel"><div class="workspace-title"><span aria-hidden="true">C</span><strong>Cockpit</strong></div><p>Your projects. Your history.</p><div class="workspace-features"><span>Conversations</span><span>Scheduled tasks</span><span>Stop &amp; retry</span></div></div>
+                <div class="device-row"><span>Windows app</span><span>Phone companion</span></div>
+              </figure>'''
+    if kind == "workshop":
+        return '''              <figure class="project__visual project__visual--workshop">
+                <figcaption><span>WEBSITE VIEW</span><span>SEPTEMBER 2026</span></figcaption>
+                <div class="arcade-window"><div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>Workshop Arcade</span></div><img src="assets/projects/workshop-arcade.jpg" width="1360" height="900" loading="lazy" decoding="async" alt="Workshop Arcade website with searchable game shelves and colourful playable game cards" /></div>
+                <p class="visual-footnote">100 games, ready to explore.</p>
+              </figure>'''
+    if kind == "dictation":
+        bars = ''.join(f'<i style="--bar:{height}px"></i>' for height in (12,24,38,20,54,72,36,62,88,50,70,32,56,78,40,22,46,66,34,18,30))
+        return f'''              <figure class="project__visual project__visual--dictation" aria-label="Dictation processing overview">
+                <figcaption><span>SYSTEM OVERVIEW</span><span>VOICE TO TEXT</span></figcaption>
+                <div class="voice-wave" aria-hidden="true">{bars}</div>
+                <p class="voice-title">Say it.<br>Keep the words.</p>
+                <ol class="voice-steps"><li><span>01</span>Record</li><li><span>02</span>Transcribe on laptop</li><li><span>03</span>Read &amp; download</li></ol>
+              </figure>'''
+    if kind is not None:
+        raise ValueError(f"Unknown project visual: {kind}")
+    return ""
+
+
 def render_card(project: dict, current_meta: str | None = None) -> str:
     """Render one full <article class='project'> block."""
     parts = [
         '            <article class="project">',
+        render_visual(project.get("visual")),
+        '              <div class="project__content">',
         render_header(project, current_meta),
         render_name(project),
         f'              <p class="project__what">{project.get("summary", project["what"])}</p>',
@@ -203,6 +234,7 @@ def render_card(project: dict, current_meta: str | None = None) -> str:
     if sample:
         parts.append(sample)
     parts.append("              </details>")
+    parts.append("              </div>")
     parts.append("            </article>")
     return "\n".join(parts)
 

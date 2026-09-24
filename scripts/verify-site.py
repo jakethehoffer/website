@@ -459,6 +459,18 @@ CLAIM_WARN_DAYS = 60
 CLAIM_STALE_DAYS = 90
 
 CROSS_REPO_CLAIMS = (
+    ("cockpit ships a Windows AI workspace with saved conversations, "
+     "scheduled tasks and a phone companion",
+     "its README, sessions.ts, scheduled task and remote-control tests",
+     date(2026, 9, 24)),
+    ("dictation supports saved notes, private sharing and recording "
+     "downloads; meeting transcription still needs the laptop",
+     "its README, meeting_worker.py and September 19 release record",
+     date(2026, 9, 24)),
+    ("workshop-arcade has 100 browser games, favorites, recent plays "
+     "and offline support",
+     "its manifest, README and public deployed catalog",
+     date(2026, 9, 24)),
     ("arbitrage covers 19 bookmakers across 7 sports",
      "its coverage tracker and progress log", date(2026, 9, 10)),
     ("arbitrage runs on a Linux cloud host under systemd, "
@@ -1020,6 +1032,16 @@ def check_project_interactions(browser, port: int) -> None:
                 page.keyboard.press("Enter")
             if page.locator(".essay-detail[open]").count() != 2:
                 fail(f"essays do not open from the keyboard at {width}px")
+
+            # Hero shortcuts must reveal the requested product even after
+            # the visitor has narrowed the work to a different category.
+            for key in ("cockpit", "workshop-arcade", "dictation"):
+                page.locator('[data-filter="research"]').click()
+                page.locator(f'.work-index a[href="#project-{key}"]').click()
+                if not page.locator(f"#project-{key}").is_visible():
+                    fail(f"recent-project shortcut {key} stays hidden at {width}px")
+                if page.locator('[data-filter="all"]').get_attribute("aria-pressed") != "true":
+                    fail(f"recent-project shortcut {key} leaves wrong filter at {width}px")
 
             for summary in page.locator(".role-details summary").all():
                 summary.focus()

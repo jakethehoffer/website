@@ -178,7 +178,7 @@ def test_wrong_year_of_study_fails(tree):
 
 # One claim that names every private project, so the date tests below
 # exercise only the timer and not the coverage rule.
-EVERY_PRIVATE_PROJECT = "trader, arbitrage, tax-rebalance and market-bot still hum"
+EVERY_PRIVATE_PROJECT = "cockpit, dictation, trader, arbitrage, tax-rebalance and market-bot"
 
 
 def test_cross_repo_claim_past_stale_days_fails(tree, monkeypatch):
@@ -262,8 +262,8 @@ def test_marketing_adjective_in_yaml_fails(tree):
 
 
 def test_marketing_adjective_in_resume_source_fails(tree):
-    mutate(tree / "resume-static.yml", '"Computer Engineering student focused',
-           '"Rigorous Computer Engineering student focused')
+    mutate(tree / "resume-static.yml", '"Computer Engineering student building',
+           '"Rigorous Computer Engineering student building')
     vs.check_voice()
     assert failed_with("resume-static.yml (prose): rigorous")
 
@@ -338,7 +338,7 @@ def test_resume_expected_strings_name_gpa_and_capped_projects(tree):
     assert "3.85" in expected
     names = expected[2:]
     assert len(names) == 4
-    assert "trader" in names and "Odds Aggregator" in names
+    assert names == ["Cockpit", "Workshop Arcade", "Dictation", "Odds Aggregator"]
 
 
 # ---------------- axe-core with a fallback CDN ----------------

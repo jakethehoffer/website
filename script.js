@@ -58,6 +58,12 @@
     if (!hash || hash === "#") return;
     let target;
     try { target = document.getElementById(decodeURIComponent(hash.slice(1))); } catch (_) { return; }
+    const card = target && target.closest(".project");
+    if (card && card.hidden) {
+      const all = document.querySelector('[data-filter="all"]');
+      if (all) all.click();
+      requestAnimationFrame(() => target.scrollIntoView({block: "start"}));
+    }
     const details = target && target.querySelector(".case-detail");
     if (details) details.open = true;
   }

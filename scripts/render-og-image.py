@@ -18,16 +18,16 @@ import os
 from PIL import Image, ImageDraw, ImageFont, PngImagePlugin
 
 # Portfolio design tokens (keep in sync with styles.css :root).
-BG = (246, 245, 239)
-FG = (36, 44, 38)
-DIM = (96, 102, 91)
-ACCENT = (171, 60, 34)
+BG = (247, 248, 251)
+FG = (21, 26, 38)
+DIM = (86, 96, 116)
+ACCENT = (48, 78, 216)
 
 # Text content shown on the share card. Keep claims in sync with the
 # hero in index.html — scripts/verify-site.py cross-checks each
 # "·"-separated METRICS phrase against the hero metrics block.
-EYEBROW = "COMPUTER ENGINEERING / QUEEN'S UNIVERSITY"
-METRICS = "Class of 2027 · Dean's Scholar · Software & automation"
+EYEBROW = "SOFTWARE / AI TOOLS / WEB APPS"
+METRICS = "Queen's University · Class of 2027 · Toronto, Canada"
 
 ROOT = Path(__file__).resolve().parent.parent
 OG_OUT = ROOT / "assets" / "og-image.png"
@@ -73,7 +73,7 @@ def display_font(size: int, italic: bool = False) -> ImageFont.FreeTypeFont:
     candidates = (
         ("C:/Windows/Fonts/georgiai.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf")
         if italic else
-        ("C:/Windows/Fonts/segoeuib.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf")
+        ("C:/Windows/Fonts/arialbd.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf")
     )
     for candidate in candidates:
         if Path(candidate).exists():
@@ -89,29 +89,24 @@ def render_og() -> None:
     img = Image.new("RGB", (W, H), BG)
     d = ImageDraw.Draw(img)
 
-    d.rectangle((PAD, 50, PAD + 46, 96), fill=ACCENT)
-    d.text((PAD + 8, 54), "jh.", font=display_font(28), fill=BG)
+    d.rounded_rectangle((PAD, 50, PAD + 46, 96), radius=10, fill=ACCENT)
+    d.text((PAD + 10, 55), "jh", font=display_font(28), fill=BG)
     d.text((PAD + 63, 59), "Jake Hoffman", font=display_font(24), fill=FG)
-    d.line((PAD, 127, W - PAD, 127), fill=(216, 219, 207), width=2)
+    d.line((PAD, 127, W - PAD, 127), fill=(215, 220, 231), width=2)
     d.text((PAD, 160), EYEBROW, font=load_font(18), fill=DIM)
-    d.text((PAD - 4, 205), "Jake", font=display_font(112), fill=FG)
-    d.text((PAD - 4, 320), "Hoffman.", font=display_font(110, italic=True), fill=ACCENT)
+    d.text((PAD - 4, 224), "Software built", font=display_font(80), fill=FG)
+    d.text((PAD - 4, 324), "for real use.", font=display_font(80), fill=ACCENT)
 
-    # The same focus areas as the profile, never a live-status claim.
-    green = (37, 55, 45)
-    d.rectangle((800, 170, 1136, 464), fill=green)
-    for x in range(814, 1130, 16):
-        for y in range(180, 456, 16):
-            d.point((x, y), fill=(72, 96, 74))
-    d.text((822, 193), "SOFTWARE WITH A PURPOSE", font=load_font(15), fill=(243, 242, 220))
-    for index, label in enumerate(("Software", "Automation", "Data tools")):
-        y = 235 + index * 65
-        fill = (218, 228, 194) if index == 1 else green
-        ink = green if index == 1 else (243, 242, 220)
-        d.rectangle((822, y, 1114, y + 48), fill=fill, outline=(98, 120, 95))
-        d.text((836, y + 12), label, font=load_font(18), fill=ink)
+    # Product index matches the page. No simulated app activity.
+    d.rounded_rectangle((800, 180, 1136, 450), radius=18, fill=(255, 255, 255), outline=(215, 220, 231), width=2)
+    d.text((824, 204), "RECENTLY BUILT", font=load_font(15), fill=DIM)
+    for index, label in enumerate(("Cockpit", "Workshop Arcade", "Dictation")):
+        y = 250 + index * 60
+        d.rounded_rectangle((822, y, 858, y + 36), radius=7, fill=ACCENT)
+        d.text((835, y + 7), str(index + 1), font=display_font(18), fill=BG)
+        d.text((875, y + 8), label, font=display_font(22), fill=FG)
 
-    d.line((PAD, 502, W - PAD, 502), fill=(216, 219, 207), width=2)
+    d.line((PAD, 502, W - PAD, 502), fill=(215, 220, 231), width=2)
     d.text((PAD, 526), METRICS, font=load_font(18), fill=DIM)
     d.text((PAD, 570), "jakethehoffer.github.io/website", font=load_font(16), fill=ACCENT)
 
@@ -127,14 +122,14 @@ def render_og() -> None:
 
 # ---------- shared icon glyph ----------
 def render_jh_glyph(size: int, *, padding_ratio: float = 0.12, with_rim: bool = True) -> Image.Image:
-    """Render the same terracotta monogram used in the page header."""
+    """Render the same blue monogram used in the page header."""
     img = Image.new("RGB", (size, size), ACCENT)
     d = ImageDraw.Draw(img)
 
     # Glyph
     glyph_size = int(size * (1 - padding_ratio * 2) * 0.7)
     font = display_font(glyph_size)
-    text = "jh."
+    text = "jh"
     bbox = d.textbbox((0, 0), text, font=font)
     text_w = bbox[2] - bbox[0]
     text_h = bbox[3] - bbox[1]

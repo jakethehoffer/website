@@ -1,9 +1,9 @@
 # website
 
-Jake Hoffman's resume website. A name-led introduction, recent experience
-with concrete results, four selected projects and a filterable full collection.
-Warm light and forest dark themes, expandable role details, project records
-and essays, a persistent resume link, and optional email copying.
+Jake Hoffman's resume website. A product-focused introduction, three recent
+featured projects and a filterable full collection. Blue and neutral themes,
+project visuals, recent experience with concrete results, expandable role
+details and essays, a persistent resume link, and optional email copying.
 Plain HTML, CSS, and vanilla JS.
 No framework or client build step.
 
@@ -80,6 +80,7 @@ Each entry:
 | `selected` | boolean; shows the project in the default Selected view, independently of resume priority |
 | `summary` | short card introduction; `what`, `body`, and samples remain in native expandable details |
 | `outcome` | short factual description of Jake's own contribution and the result, shown before the full details |
+| `visual` | optional `cockpit`, `workshop`, or `dictation` visual; diagrams are labelled as system overviews and the arcade uses a real public-site capture |
 | `name` | displayed name in the card's `<h3>` |
 | `status` | `active`, `shipped`, or `archived` (controls the pill colour) |
 | `url` | external link; `null` = name renders without an `<a>` wrapper |
@@ -102,7 +103,7 @@ Project order in the rendered page matches order in `projects.yml`.
 
 ### Resume curation (one-page guarantee)
 
-The **website** starts with four selected projects. All work and category
+The **website** starts with three selected projects. All work and category
 filters reveal the full collection; without JavaScript, every project is
 visible. Website selection is independent of resume selection.
 The **resume** shows only the top
@@ -233,7 +234,7 @@ build step, so the pills simply keep the values last committed.
   sections (contact, summary, education, experience).
 - `index.html` &mdash; semantic single-page markup; projects block
   generated from `projects.yml`.
-- `styles.css` &mdash; responsive portfolio layout, warm light and forest dark themes, reduced-motion and print styles.
+- `styles.css` &mdash; responsive product portfolio layout, blue and neutral light/dark themes, reduced-motion and print styles.
 - `script.js` &mdash; project filters, mobile navigation, saved theme, direct case-study expansion, current-section link, and stale-metadata guard. All page text is visible immediately. Project records and essays use native details, and navigation works without JavaScript.
 - `scripts/build-site.py` &mdash; orchestrator (runs the four generators).
 - `scripts/generate-cards.py` &mdash; renders the projects block of `index.html`.

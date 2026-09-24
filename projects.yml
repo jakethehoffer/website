@@ -27,6 +27,7 @@
 #   selected        true for the default website selection; independent of resume_priority
 #   summary         short website introduction; full description stays in what/body
 #   outcome         factual personal contribution and result shown on the website card
+#   visual          optional cockpit | workshop | dictation overview or site capture
 #   what            1-2 sentence project lede (HTML allowed)
 #   body            longer description, 80-120 words (HTML allowed)
 #   metrics         terse stats line (HTML entities pre-encoded)
@@ -36,13 +37,80 @@
 #   cta             optional button: {label, url}
 #   resume          optional resume entry: {role, bullets: [...]}; omit to skip resume
 
-- key: trader
+- key: cockpit
   selected: true
+  category: systems
+  name: Cockpit
+  summary: "One desktop workspace for AI-assisted work."
+  outcome: "Built the Windows app, saved project conversations, scheduled tasks, and a phone companion. Work can continue across tools without starting the conversation again."
+  status: shipped
+  private: true
+  url: null
+  auto_meta: false
+  hardcoded_date: "2026"
+  what: "An Electron and React app that brings Claude, Codex, and local models into a shared project workspace."
+  body: "The hard part is keeping the work intact when an engine stops, a limit is reached, or a task resumes later. I built around saved history, explicit stop and retry controls, and recovery that keeps the original request. The app also includes scheduled tasks, a shared terminal, and a phone companion. Packaged releases are checked against the finished installer. Private code; this page shows a system overview."
+  metrics: "Windows desktop app &middot; phone companion &middot; saved project history"
+  chips: "TypeScript &middot; React &middot; Electron &middot; Playwright"
+  visual: cockpit
+  resume_priority: 140
+  resume:
+    role: "Cockpit (TypeScript · React · Electron)"
+    bullets:
+      - "Built a Windows workspace for Claude, Codex, and local models with saved project history, task scheduling, retry recovery, and a phone companion."
+
+- key: workshop-arcade
+  selected: true
+  category: interactive
+  name: Workshop Arcade
+  summary: "A hundred games, ready to play in your browser."
+  outcome: "Built a public arcade with 100 browser games, instant play, favorites, continued play, and offline support. Checked game controls and layouts across desktop and phone screens."
+  status: shipped
+  private: false
+  url: https://github.com/jakethehoffer/Workshop-Arcade
+  auto_meta: false
+  hardcoded_date: "2026"
+  what: "A static web arcade with a shared catalog and a sandboxed player for standalone games."
+  body: "Discovery, play, and return visits are part of the same product: search and filters help people find a game, direct links make it shareable, and favorites and recent plays keep it easy to return. I worked on game behavior, keyboard and touch controls, saved progress, and small-screen layouts. Release checks cover the catalog, all 100 games, offline behavior, and page-weight budgets."
+  metrics: "100 browser games &middot; keyboard &amp; touch &middot; install &amp; offline support"
+  chips: "JavaScript &middot; HTML Canvas &middot; CSS &middot; Playwright"
+  visual: workshop
+  cta: {label: "Play the arcade", url: "https://jakethehoffer.github.io/Workshop-Arcade/"}
+  resume_priority: 130
+  resume:
+    role: "Workshop Arcade (JavaScript · HTML Canvas · Playwright)"
+    bullets:
+      - "Built a public 100-game browser arcade with search, favorites, saved play and offline support; release checks exercise every game and phone/desktop layouts."
+
+- key: dictation
+  selected: true
+  category: systems
+  name: Dictation
+  summary: "From spoken words to notes you can keep."
+  outcome: "Built browser dictation, meeting transcripts, saved notes, and recording downloads. A laptop worker handles meeting audio, while phones can record and read the results."
+  status: shipped
+  private: true
+  url: null
+  auto_meta: false
+  hardcoded_date: "2026"
+  what: "A phone-friendly web app for live dictation and meeting transcripts, with a separate Python speech worker."
+  body: "Notes save on the device, with optional private sharing across devices. Meeting recordings are uploaded for laptop-based transcription and returned with timestamps and speaker labels. I worked on durable uploads, retry recovery, storage changes that preserve notes, and downloads that keep the original audio available. Speaker labels are estimates, and meeting processing still requires the laptop."
+  metrics: "Browser &amp; phone &middot; local notes &middot; private recording downloads"
+  chips: "Next.js &middot; React &middot; TypeScript &middot; Python &middot; Whisper"
+  visual: dictation
+  resume_priority: 120
+  resume:
+    role: "Dictation (Next.js · TypeScript · Python · Whisper)"
+    bullets:
+      - "Built live dictation, meeting transcripts, private note sharing and audio downloads, with recoverable uploads and laptop-based speech processing."
+
+- key: trader
+  selected: false
   outcome: "Owned the scheduling, risk limits, and audit trail. Closed the strategy after a failed holdout. It never traded real money."
   category: systems
   summary: "An S&amp;P 500 paper-trading agent with risk checks built in from the start."
   name: trader
-  resume_priority: 100
+  resume_priority: 70
   status: active
   url: https://github.com/jakethehoffer/trader
   private: true
@@ -69,7 +137,7 @@
       - "24/7 AI swing-trading agent for S&P 500 equities, driven by six scheduled, idempotent routines."
 
 - key: arbitrage
-  selected: true
+  selected: false
   outcome: "Built the collection, normalization, and alert pipeline across 19 bookmakers and seven sports."
   category: systems
   summary: "Turning prices from 19 bookmakers into one stream of checked alerts."
@@ -84,8 +152,8 @@
   hardcoded_date: "last commit: n/a"
   what: "Production arbitrage daemon covering 19 bookmakers across 7 sports."
   body: "Ingest &rarr; normalize &rarr; detect cross-book arbs &rarr; push alerts to Telegram and Discord. Runs 24/7 on a Linux cloud host under systemd, with Alembic-managed schema and replay tooling for postmortems."
-  metrics: "19 books &middot; 7 sports &middot; 24/7 uptime"
-  chips: "python &middot; playwright &middot; sqlite &middot; alembic &middot; fastapi"
+  metrics: "19 bookmakers &middot; 7 sports &middot; replayable records"
+  chips: "python &middot; playwright &middot; sqlite &middot; alembic"
   sample:
     label: "Example alert payload"
     html: |-
@@ -97,12 +165,12 @@
   media: null
   cta: null
   resume:
-    role: "Odds Aggregator (Python · Playwright · SQLite/Alembic · FastAPI)"
+    role: "Odds Aggregator (Python · Playwright · SQLite/Alembic)"
     bullets:
       - "Production arbitrage daemon covering 19 bookmakers across 7 sports."
 
 - key: tax-rebalance
-  selected: true
+  selected: false
   outcome: "Shipped a read-only tool with 117 tests. It explains rebalance choices and never places trades."
   category: systems
   summary: "A weekly portfolio check that explains when to rebalance and when to leave things alone."
@@ -235,7 +303,7 @@
       - "Stat-arb research toolkit for TSX pair trading (spec-first, TDD, 76 unit tests). Backtest demonstrated a ~0.6%/yr ceiling on retail capital; retired at v1.0 as a documented negative result."
 
 - key: mega-tictactoe
-  selected: true
+  selected: false
   outcome: "Shipped a playable Unity game with local and online multiplayer and a Minimax opponent."
   category: interactive
   summary: "Nine linked boards. Every move changes where your opponent can play next."
