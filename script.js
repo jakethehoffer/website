@@ -167,13 +167,21 @@
       const section = document.getElementById(link.hash.slice(1));
       if (section && section.getBoundingClientRect().top <= 150) current = link;
     });
+    // The final section can be too short to reach the header. At the
+    // bottom of the page, its link still needs to become current.
+    if (window.scrollY > 0 &&
+        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 1) {
+      current = navLinks[navLinks.length - 1] || null;
+    }
     navLinks.forEach(link => {
       if (link === current) link.setAttribute("aria-current", "location");
       else link.removeAttribute("aria-current");
     });
   }
-  window.addEventListener("scroll", () => {
+  function scheduleSectionMark() {
     if (!scrollPending) { scrollPending = true; requestAnimationFrame(markSection); }
-  }, { passive: true });
+  }
+  window.addEventListener("scroll", scheduleSectionMark, { passive: true });
+  window.addEventListener("resize", scheduleSectionMark);
   markSection();
 })();
