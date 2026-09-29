@@ -100,28 +100,10 @@ jobs:
       - name: Verify site
         run: python scripts/verify-site.py
 
-      # Stage exactly what the branch source used to serve: tracked
-      # files, minus dot-directories (.github, .claude) which Jekyll
-      # skipped. Copying from the working tree, not from git, is what
-      # picks up the refreshed index.html and sitemap.xml above.
+      # Publish only the explicit list of finished website assets.
+      # Copy from the working tree to include the refreshed dates.
       - name: Stage site
-        run: |
-          set -euo pipefail
-          rm -rf _site
-          mkdir -p _site
-          count=0
-          while IFS= read -r -d '' f; do
-            case "$f" in .*) continue ;; esac
-            mkdir -p "_site/$(dirname "$f")"
-            cp "$f" "_site/$f"
-            count=$((count + 1))
-          done < <(git ls-files -z)
-          echo "staged $count file(s)"
-          # A staging bug that produced an empty or near-empty tree would
-          # deploy a blank site over a working one. Assert the shape.
-          test -f _site/index.html
-          test -f _site/404.html
-          test "$count" -ge 20
+        run: python scripts/stage-site.py
 
       - name: Configure Pages
         uses: actions/configure-pages@v6

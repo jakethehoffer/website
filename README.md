@@ -55,6 +55,8 @@ mv resume-source.pdf resume.pdf
 ```
 
 Commit `index.html`, the YAML you changed, and `resume.pdf` together.
+When adding a public image, font or page, add its path to `PUBLIC_FILES`
+in `scripts/stage-site.py`. Only that explicit list is published.
 Forgetting the PDF is now caught in CI: `verify-site.py` asserts the
 PDF's text contains the name, GPA, and every project name the resume
 is supposed to feature from the current sources.
@@ -218,14 +220,21 @@ always be regenerated from the tracked text sources.
 ## Deploy
 
 GitHub Pages, **source = GitHub Actions** (Settings &rarr; Pages), built
-and published by `.github/workflows/deploy.yml`. The artifact is every
-tracked file except dot-directories (`.github/`, `.claude/`), which is
-exactly what the old branch source served, since Jekyll skipped those
-too. To roll back to the branch source, set Pages source to `main` /
-root; the tree at the repo root is a complete, ready-to-serve site.
+and published by `.github/workflows/deploy.yml`. After refreshing dates
+and verifying the site, `scripts/stage-site.py` copies the explicit
+`PUBLIC_FILES` list into a fresh `_site/` folder. This includes the pages,
+styles, browser script, resume, search files, icons, images and font.
+Source YAML, Python scripts, tests, README and working notes stay out of
+the website. The source repository remains public.
 
-Any other static host: drop the repo contents on it as-is. There is no
-build step, so the pills simply keep the values last committed.
+Run `python scripts/stage-site.py` to prepare the same folder locally.
+Use `--output .tmp/site-preview` to choose a different fresh folder inside
+the project. Existing output is never reused or deleted. A missing or
+linked public asset stops staging before any output is created.
+
+For another static host, upload only the staged folder. Keep Pages set to
+GitHub Actions so it uses the same explicit file list. Tests check the
+staged content, exclusion of unlisted files, and local page/style links.
 
 ## Files
 
@@ -237,6 +246,8 @@ build step, so the pills simply keep the values last committed.
 - `styles.css` &mdash; responsive product portfolio layout, blue and neutral light/dark themes, reduced-motion and print styles.
 - `script.js` &mdash; project filters, mobile navigation, saved theme, direct case-study expansion, current-section link, and stale-metadata guard. All page text is visible immediately. Project records and essays use native details, and navigation works without JavaScript.
 - `scripts/build-site.py` &mdash; orchestrator (runs the four generators).
+- `scripts/stage-site.py` &mdash; prepares only the finished public files
+  for publication, from the refreshed working tree.
 - `scripts/generate-cards.py` &mdash; renders the projects block of `index.html`.
 - `scripts/build-resume.py` &mdash; builds `resume-source.docx` from scratch
   out of `resume-static.yml` + `projects.yml`.
@@ -273,9 +284,11 @@ build step, so the pills simply keep the values last committed.
   (`python -m pytest scripts -q`).
 - `scripts/test_deploy_workflow.py` &mdash; checks that publishing waits
   for the shared privacy check, with the required secret and read-only
-  access.
+  access, and uploads the public staging folder.
+- `scripts/test_stage_site.py` &mdash; checks the actual staged file list,
+  current file contents, excluded working material, missing assets, output
+  boundaries and local page/style links.
 - `resume.pdf` &mdash; downloadable PDF (the committed published artifact).
 - `docs/` and `.ai-sync/` &mdash; local working notes (design specs,
-  plans, handoffs). Untracked on purpose: every tracked file outside a
-  dot-directory is also served on Pages, and `public-safety.yml` fails
-  the build if either folder is ever committed.
+  plans, handoffs). Untracked on purpose: the source repository is public,
+  and `public-safety.yml` fails the build if either folder is ever committed.

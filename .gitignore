@@ -10,9 +10,10 @@ Thumbs.db
 *.log
 .tmp/
 .tmp_*
+_site/
 
-# Working notes about the site, not part of the site. Everything
-# tracked in this repo is also served on Pages, so notes stay local.
+# Working notes about the site, not part of the public repository.
+# Pages publishes only the files listed in scripts/stage-site.py.
 # public-safety.yml asserts both paths are untracked, because an
 # ignore rule only stops an accidental add and does nothing about a
 # path that is already tracked.

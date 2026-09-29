@@ -36,3 +36,13 @@ def test_pages_publish_waits_for_privacy_check():
     called = workflow("public-safety.yml")
     assert called["on"]["workflow_call"]["secrets"]["BANNED_TERMS"]["required"] == "true"
     assert "pull_request" in called["on"]
+
+
+def test_pages_upload_uses_the_public_staging_directory():
+    steps = workflow("deploy.yml")["jobs"]["deploy"]["steps"]
+    stage_index = next(i for i, step in enumerate(steps) if step.get("name") == "Stage site")
+    assert steps[stage_index]["run"] == "python scripts/stage-site.py"
+    upload_index = next(i for i, step in enumerate(steps)
+                        if step.get("uses", "").startswith("actions/upload-pages-artifact@"))
+    assert stage_index < upload_index
+    assert steps[upload_index]["with"]["path"] == "_site"
