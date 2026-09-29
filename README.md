@@ -267,6 +267,10 @@ staged content, exclusion of unlisted files, and local page/style links.
   Every section must actually become visible, including the long
   projects and writing sections. The accessibility pass uses reduced
   motion and cannot test this path.
+  Section navigation must mark Contact at the page bottom on phone
+  and tall desktop screens, return to Notes when scrolling up, and
+  clear the marker at the top. Keyboard and direct Contact visits are
+  checked too, including Tab reaching the email address.
   The open phone menu is checked in portrait and landscape in both
   themes: it must fit the screen, every choice must be reachable by
   keyboard, and the theme button and contact link must work.

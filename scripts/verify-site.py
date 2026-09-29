@@ -926,6 +926,60 @@ def check_scroll_reveal(browser, port: int) -> None:
             context.close()
 
 
+def check_section_navigation(browser, port: int) -> None:
+    """A short final section must still become current at the page bottom."""
+    from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+
+    for width, height in ((390, 844), (1280, 900), (1280, 1200)):
+        label = f"section navigation at {width}x{height}"
+        context = browser.new_context(
+            viewport={"width": width, "height": height},
+            reduced_motion="reduce",
+        )
+        try:
+            page = context.new_page()
+            url = f"http://127.0.0.1:{port}/website/"
+            page.goto(url, wait_until="networkidle")
+            page.evaluate("document.fonts.ready")
+
+            def expect_current(href, step):
+                try:
+                    page.wait_for_function("""expected => {
+                        const links = [...document.querySelectorAll('.nav-menu [aria-current]')];
+                        return expected === null ? links.length === 0 :
+                            links.length === 1 && links[0].getAttribute('href') === expected &&
+                            links[0].getAttribute('aria-current') === 'location';
+                    }""", arg=href, timeout=2500)
+                except PlaywrightTimeoutError:
+                    actual = page.locator(".nav-menu [aria-current]").all_text_contents()
+                    fail(f"{label}, {step}: expected {href}, marked {actual}")
+
+            expect_current(None, "page top")
+            page.evaluate("window.scrollTo({top: document.documentElement.scrollHeight, behavior: 'instant'})")
+            expect_current("#contact", "page bottom")
+            page.locator("#writing").evaluate("el => el.scrollIntoView({behavior: 'instant'})")
+            expect_current("#writing", "scrolling back to Notes")
+
+            if width < 851:
+                page.get_by_role("button", name="Open navigation").click()
+            page.locator('.nav-menu a[href="#contact"]').focus()
+            page.keyboard.press("Enter")
+            expect_current("#contact", "keyboard Contact link")
+            page.keyboard.press("Tab")
+            if not page.locator(".contact__address").evaluate("el => el === document.activeElement"):
+                fail(f"{label}: Tab after Contact does not reach the email address")
+
+            # Reload so a direct shared link exercises page startup too.
+            page.reload(wait_until="networkidle")
+            expect_current("#contact", "direct Contact visit")
+            page.locator("#top").evaluate("el => el.scrollIntoView({behavior: 'instant'})")
+            expect_current(None, "return to page top")
+            if not any(label in failure for failure in failures):
+                ok(f"{label}: bottom, upward scroll, keyboard and direct link work")
+        finally:
+            context.close()
+
+
 def check_mobile_menu(browser, port: int) -> None:
     """A sticky header must not strand menu choices below a short screen.
 
@@ -1171,6 +1225,7 @@ def check_layout_and_a11y() -> None:
                         run_axe(page, f"{label_base}, all details open")
                 context.close()
             check_scroll_reveal(browser, port)
+            check_section_navigation(browser, port)
             check_mobile_menu(browser, port)
             check_project_interactions(browser, port)
             check_stale_guard(browser, port)
