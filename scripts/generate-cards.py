@@ -82,8 +82,9 @@ def render_header(project: dict, current_meta: str | None = None) -> str:
     category = project.get("category", "systems")
     if category not in ("systems", "research", "interactive"):
         raise ValueError(f"Unknown category: {category}")
+    anchor = "" if project.get("video") else f' id="project-{escape(project["key"])}"'
     return (
-        f'              <header class="project__head" id="project-{escape(project["key"])}" data-category="{category}" data-selected="{str(bool(project.get("selected"))).lower()}">\n'
+        f'              <header class="project__head"{anchor} data-category="{category}" data-selected="{str(bool(project.get("selected"))).lower()}">\n'
         f'                <span class="project__category">{category}</span>\n'
         f'                <span class="status {status_class}" role="img" aria-label="Status: {status_label.lower()}"></span>\n'
         f'                <span class="project__status-label">{status_label}</span>\n'
@@ -199,11 +200,29 @@ def render_visual(kind: str | None) -> str:
     return ""
 
 
+def render_video(video: dict | None, key: str) -> str:
+    """Native opt-in playback also works without page JavaScript."""
+    if not video:
+        return ""
+    src, poster = escape(video["src"], quote=True), escape(video["poster"], quote=True)
+    note_id = f"{escape(key, quote=True)}-film-note"
+    return f'''              <figure class="project__visual project__visual--film" id="project-{escape(key, quote=True)}">
+                <figcaption>{escape(video["label"])}</figcaption>
+                <video controls playsinline preload="none" width="1920" height="1080" poster="{poster}" aria-label="{escape(video["label"], quote=True)}" aria-describedby="{note_id}">
+                  <source src="{src}" type="video/mp4" />
+                  <p><a href="{src}">Open the Cockpit video</a></p>
+                </video>
+                <p class="film-links"><a href="{src}" target="_blank" rel="noopener">Open video full size</a><span>{escape(video["duration"])}</span></p>
+                <p class="film-note" id="{note_id}">{escape(video["note"])}</p>
+                <details class="film-description"><summary>Read what happens</summary><p>{escape(video["description"])}</p></details>
+              </figure>'''
+
+
 def render_card(project: dict, current_meta: str | None = None) -> str:
     """Render one full <article class='project'> block."""
     parts = [
         '            <article class="project">',
-        render_visual(project.get("visual")),
+        render_video(project.get("video"), project["key"]) or render_visual(project.get("visual")),
         '              <div class="project__content">',
         render_header(project, current_meta),
         render_name(project),

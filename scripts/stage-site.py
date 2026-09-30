@@ -26,6 +26,8 @@ PUBLIC_FILES = (
     "assets/projects/mega-ttt.webp",
     "assets/projects/walking-jumping-cm.png",
     "assets/projects/workshop-arcade.jpg",
+    "assets/projects/cockpit-film.mp4",
+    "assets/projects/cockpit-film.jpg",
 )
 
 

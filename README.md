@@ -57,6 +57,8 @@ mv resume-source.pdf resume.pdf
 Commit `index.html`, the YAML you changed, and `resume.pdf` together.
 When adding a public image, font or page, add its path to `PUBLIC_FILES`
 in `scripts/stage-site.py`. Only that explicit list is published.
+Project video uses native controls and preload="none", so the movie is fetched only when the visitor starts playback. Each video has a visible example-work note and a text description. Add both its movie and poster to the explicit publication list.
+
 Forgetting the PDF is now caught in CI: `verify-site.py` asserts the
 PDF's text contains the name, GPA, and every project name the resume
 is supposed to feature from the current sources.

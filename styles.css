@@ -369,3 +369,18 @@ details[open] > summary .detail-sign::after { content: "−"; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
 @media print { .site-header, .project-toolbar, .work-index, .project__visual, .copy-email, .hero__ctas, .contact__links { display: none; }.project:has(.project__visual) { display: block; }h1, .hero h1 { font-size: 40px; }.about-section { background: #fff; color: #111; }.about-section .section__label { color: #263daa; } }
+
+/* User-started video: preserve the full picture and keep page loading light. */
+.project__visual[id] { scroll-margin-top: 6rem; }
+.project__visual--film { background: #10131e; color: #eef1fa; gap: 0; }
+.project__visual--film figcaption { display: block; font: 600 1.25rem/1.4 var(--sans); letter-spacing: -.02em; margin-bottom: 1.25rem; }
+.project__visual--film video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: contain; background: #090a10; border: 1px solid #394158; border-radius: 8px; }
+.project__visual--film a { color: #d3dcff; text-underline-offset: 3px; }
+.film-links { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; column-gap: 1rem; font-size: .73rem; margin-top: .5rem; }
+.film-links a { display: inline-flex; align-items: center; min-height: 44px; }
+.film-note { color: #bac3db; font-size: .73rem; line-height: 1.6; }
+.film-description { border-top: 1px solid #394158; margin-top: 1rem; font-size: .75rem; line-height: 1.7; }
+.film-description summary { cursor: pointer; display: flex; align-items: center; justify-content: space-between; min-height: 44px; list-style: none; }
+.film-description summary::after { content: "+"; font-size: 1.1rem; }
+.film-description[open] summary::after { content: "−"; }
+.film-description p { color: #bac3db; padding-bottom: .5rem; }

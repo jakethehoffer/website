@@ -43,6 +43,7 @@
       cards.forEach(card => {
         const data = card.querySelector("[data-category]").dataset;
         card.hidden = value === "selected" ? data.selected !== "true" : value !== "all" && data.category !== value;
+        if (card.hidden) card.querySelectorAll("video").forEach(video => video.pause());
         if (!card.hidden) shown++;
       });
       filters.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.filter === value)));

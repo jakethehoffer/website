@@ -28,6 +28,7 @@
 #   summary         short website introduction; full description stays in what/body
 #   outcome         factual personal contribution and result shown on the website card
 #   visual          optional cockpit | workshop | dictation overview or site capture
+#   video           optional {src, poster, label, duration, note, description}; takes priority over visual
 #   what            1-2 sentence project lede (HTML allowed)
 #   body            longer description, 80-120 words (HTML allowed)
 #   metrics         terse stats line (HTML entities pre-encoded)
@@ -49,10 +50,16 @@
   auto_meta: false
   hardcoded_date: "2026"
   what: "An Electron and React app that brings Claude, Codex, and local models into a shared project workspace."
-  body: "The hard part is keeping the work intact when an engine stops, a limit is reached, or a task resumes later. I built around saved history, explicit stop and retry controls, and recovery that keeps the original request. The app also includes scheduled tasks, a shared terminal, and a phone companion. Packaged releases are checked against the finished installer. Private code; this page shows a system overview."
+  body: "The hard part is keeping the work intact when an engine stops, a limit is reached, or a task resumes later. I built around saved history, explicit stop and retry controls, and recovery that keeps the original request. The app also includes scheduled tasks, a shared terminal, and a phone companion. Packaged releases are checked against the finished installer. Private code. The video shows the real app with prepared example chats."
   metrics: "Windows desktop app &middot; phone companion &middot; saved project history"
   chips: "TypeScript &middot; React &middot; Electron &middot; Playwright"
-  visual: cockpit
+  video:
+    src: assets/projects/cockpit-film.mp4
+    poster: assets/projects/cockpit-film.jpg
+    label: Watch Cockpit at work
+    duration: 41 seconds
+    note: "Example chats shown."
+    description: "A request becomes a website. Auto chooses Astra and how much effort to use. The work passes to Opus with the earlier chat. Apps opens the finished site beside the chat. An email draft is prepared for the user to check. No email is sent."
   resume_priority: 140
   resume:
     role: "Cockpit (TypeScript · React · Electron)"
