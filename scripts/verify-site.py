@@ -53,6 +53,8 @@ receives:
              motion at phone and laptop sizes, including long sections
   menu     - the open phone menu fits short screens and every choice
              remains reachable, including contact and the theme button
+  video    - project films wait for Play, decode and seek, pause when
+             filtered out, and remain usable without page JavaScript
   a11y     - axe-core pass on both pages in both schemes; violations
              with impact critical/serious fail, the rest warn
              (axe loads from a CDN with a second CDN as fallback;
@@ -94,6 +96,7 @@ import re
 import struct
 import sys
 import threading
+import time
 from datetime import date, timedelta
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -1154,6 +1157,171 @@ def check_project_interactions(browser, port: int) -> None:
         context.close()
 
 
+class SitePreviewHandler(SimpleHTTPRequestHandler):
+    """Serve the Pages subpath and movie byte ranges used by browser seeking."""
+
+    def log_message(self, *args):
+        pass
+
+    def translate_path(self, path):
+        if path == "/website":
+            path = "/website/"
+        if path.startswith("/website/"):
+            path = path[len("/website"):]
+        return super().translate_path(path)
+
+    def send_head(self):
+        self._remaining = None
+        path = Path(self.translate_path(self.path))
+        if path.suffix != ".mp4" or not path.is_file():
+            return super().send_head()
+        size = path.stat().st_size
+        start, end = 0, size - 1
+        requested = self.headers.get("Range")
+        if requested:
+            match = re.fullmatch(r"bytes=(\d*)-(\d*)", requested)
+            if match and any(match.groups()):
+                left, right = match.groups()
+                start = int(left) if left else max(0, size - int(right))
+                end = min(int(right), size - 1) if left and right else size - 1
+            if not match or not any(match.groups()) or start > end or start >= size:
+                self.send_response(416)
+                self.send_header("Content-Range", f"bytes */{size}")
+                self.send_header("Content-Length", "0")
+                self.end_headers()
+                return None
+        source = path.open("rb")
+        source.seek(start)
+        self._remaining = end - start + 1
+        self.send_response(206 if requested else 200)
+        self.send_header("Content-Type", "video/mp4")
+        self.send_header("Accept-Ranges", "bytes")
+        self.send_header("Content-Length", str(self._remaining))
+        if requested:
+            self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
+        self.end_headers()
+        return source
+
+    def copyfile(self, source, outputfile):
+        try:
+            if self._remaining is None:
+                return super().copyfile(source, outputfile)
+            while self._remaining:
+                chunk = source.read(min(65536, self._remaining))
+                if not chunk:
+                    break
+                outputfile.write(chunk)
+                self._remaining -= len(chunk)
+        except (BrokenPipeError, ConnectionResetError):
+            pass  # Browsers cancel a previous range when seeking or closing.
+
+
+def check_video_page(page, base_url: str, project: dict, *, javascript_enabled=True) -> None:
+    """Exercise the shipped movie with native controls, also in mutation tests."""
+    from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+
+    spec = project["video"]
+    media_requests, errors = [], []
+    page.on("request", lambda request: media_requests.append(request.url)
+            if request.resource_type == "media" else None)
+    page.on("pageerror", lambda error: errors.append(str(error)))
+    page.set_default_timeout(5000)
+    page.goto(f"{base_url}#project-{project['key']}", wait_until="load")
+    page.evaluate("document.fonts.ready")
+    figure = page.locator(f"#project-{project['key']}")
+    video = figure.locator("video")
+    assert video.count() == 1, "project video is missing"
+    assert video.is_visible(), "project video is hidden on a direct visit"
+    assert video.locator("source").get_attribute("src") == spec["src"], "wrong movie source"
+    assert video.get_attribute("poster") == spec["poster"], "wrong movie poster"
+    assert video.get_attribute("aria-label") == spec["label"], "movie label is missing"
+    assert figure.locator(".film-note").inner_text() == spec["note"], "movie note is missing"
+    assert video.get_attribute("aria-describedby") == figure.locator(".film-note").get_attribute("id"), "movie note is not associated with the player"
+    assert figure.locator(".film-links a").get_attribute("href") == spec["src"], "full-size movie link is broken"
+    initial = video.evaluate("""v => {
+        const r = v.getBoundingClientRect();
+        return {controls: v.controls && v.playsInline, paused: v.paused,
+            preload: v.preload, autoplay: v.autoplay, ready: v.readyState,
+            fits: r.left >= 0 && r.right <= innerWidth + 1 &&
+                r.top >= document.querySelector('.site-header').getBoundingClientRect().bottom &&
+                r.bottom <= innerHeight + 1 &&
+                document.documentElement.scrollWidth <= innerWidth + 1};
+    }""")
+    assert initial["controls"], "native movie controls or inline playback are missing"
+    assert initial["fits"], "movie does not fit the direct-link view"
+    assert initial["paused"] and not initial["autoplay"], "movie starts without Play"
+    assert initial["preload"] == "none" and initial["ready"] == 0 and not media_requests, "movie downloads before Play"
+
+    def wait_for_video(condition, message, *, arg=None, timeout=5):
+        # Page timers and animation callbacks stop when scripts are disabled.
+        # Poll from Python so the native player is checked in both modes.
+        deadline = time.monotonic() + timeout
+        while not video.evaluate(condition, arg):
+            if time.monotonic() >= deadline:
+                state = video.evaluate("""v => ({time: v.currentTime, paused: v.paused,
+                    ready: v.readyState, seeking: v.seeking, error: v.error?.message})""")
+                raise PlaywrightTimeoutError(f"{message}: {state}")
+            page.wait_for_timeout(100)
+
+    # Muting only this test avoids sound on the developer's machine. Native
+    # Space is the user's Play action, including when page scripts are off.
+    video.evaluate("v => { v.muted = true; }")
+    video.focus()
+    page.keyboard.press("Space")
+    wait_for_video("v => v.currentTime > 0.3 && !v.paused",
+                   "movie did not start after Play", timeout=10)
+    playback = video.evaluate("""v => ({duration: v.duration, width: v.videoWidth,
+        height: v.videoHeight, frames: v.getVideoPlaybackQuality().totalVideoFrames,
+        audio: v.webkitAudioDecodedByteCount, error: v.error?.message})""")
+    assert not playback.get("error"), f"movie playback failed: {playback}"
+    assert playback["width"] > 0 and playback["height"] > 0 and playback["frames"] > 0, "movie picture did not decode"
+    assert playback.get("audio", 0) > 0, "movie audio did not decode"
+    duration = re.fullmatch(r"(\d+) seconds", spec["duration"])
+    assert duration and abs(playback["duration"] - int(duration[1])) < 1, "movie duration differs from the visible label"
+    target = playback["duration"] * 0.65
+    video.evaluate("(v, time) => { v.pause(); v.currentTime = time; }", target)
+    wait_for_video("""(v, target) => !v.seeking &&
+        v.readyState >= 2 && Math.abs(v.currentTime - target) < 0.1""",
+        "movie did not seek", arg=target)
+
+    if javascript_enabled:
+        video.evaluate("v => v.play()")
+        other = next(value for value in ("systems", "research", "interactive")
+                     if value != project["category"])
+        page.locator(f'[data-filter="{other}"]').click()
+        assert video.evaluate("v => v.closest('.project').hidden && v.paused"), "hidden movie keeps playing"
+        page.locator(f'.work-index a[href="#project-{project["key"]}"]').click()
+        assert video.is_visible() and video.evaluate("v => v.paused"), "movie shortcut does not restore a paused player"
+
+    summary = figure.locator(".film-description summary")
+    summary.focus()
+    page.keyboard.press("Enter")
+    assert figure.locator(".film-description").evaluate("el => el.open"), "movie description does not open from the keyboard"
+    assert figure.locator(".film-description p").inner_text() == spec["description"], "movie description differs from its source"
+    assert not errors, f"movie page errors: {errors}"
+
+
+def check_project_videos(browser, port: int) -> None:
+    from playwright.sync_api import Error as PlaywrightError
+
+    projects = yaml.safe_load(PROJECTS_YML.read_text(encoding="utf-8"))
+    for project in (p for p in projects if p.get("video")):
+        for width, javascript_enabled in ((1280, True), (390, True), (320, True), (390, False)):
+            label = f"{project['key']} video at {width}px, JavaScript {'on' if javascript_enabled else 'off'}"
+            context = browser.new_context(
+                viewport={"width": width, "height": 900 if width == 1280 else 844},
+                reduced_motion="reduce", java_script_enabled=javascript_enabled,
+            )
+            try:
+                check_video_page(context.new_page(), f"http://127.0.0.1:{port}/website/",
+                                 project, javascript_enabled=javascript_enabled)
+                ok(f"{label}: deferred loading, playback, seek and keyboard description work")
+            except (AssertionError, PlaywrightError) as error:
+                fail(f"{label}: {error}")
+            finally:
+                context.close()
+
+
 def check_layout_and_a11y() -> None:
     try:
         from playwright.sync_api import sync_playwright
@@ -1161,22 +1329,7 @@ def check_layout_and_a11y() -> None:
         soft_dep_missing("playwright", "layout overflow, a11y and stale-guard checks")
         return
 
-    class SiteHandler(SimpleHTTPRequestHandler):
-        def log_message(self, *args):  # keep CI output to the checks
-            pass
-
-        def translate_path(self, path):
-            # Serve the repo under the production /website/ subpath so
-            # 404.html's absolute /website/... asset URLs resolve here
-            # exactly like they do on GitHub Pages. (Unprefixed paths
-            # keep working, but the checks below always use the prefix.)
-            if path == "/website":
-                path = "/website/"
-            if path.startswith("/website/"):
-                path = path[len("/website"):]
-            return super().translate_path(path)
-
-    handler = partial(SiteHandler, directory=str(ROOT))
+    handler = partial(SitePreviewHandler, directory=str(ROOT))
     server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
     port = server.server_address[1]
     thread = threading.Thread(target=server.serve_forever, daemon=True)
@@ -1228,6 +1381,7 @@ def check_layout_and_a11y() -> None:
             check_section_navigation(browser, port)
             check_mobile_menu(browser, port)
             check_project_interactions(browser, port)
+            check_project_videos(browser, port)
             check_stale_guard(browser, port)
             browser.close()
     finally:

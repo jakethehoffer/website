@@ -58,6 +58,13 @@ Commit `index.html`, the YAML you changed, and `resume.pdf` together.
 When adding a public image, font or page, add its path to `PUBLIC_FILES`
 in `scripts/stage-site.py`. Only that explicit list is published.
 Project video uses native controls and preload="none", so the movie is fetched only when the visitor starts playback. Each video has a visible example-work note and a text description. Add both its movie and poster to the explicit publication list.
+Before publishing, browser checks confirm the movie waits for Play, plays from
+the keyboard, decodes picture and sound, and lets visitors skip ahead on desktop
+and phone screens. They also check that hiding the project pauses the movie and
+that its text description opens from the keyboard. Playback and seeking are
+checked with page JavaScript disabled too. The checks run with sound muted, so
+they do not replace a listening review. The local server supports movie byte
+ranges so seeking works as it does on the public site.
 
 Forgetting the PDF is now caught in CI: `verify-site.py` asserts the
 PDF's text contains the name, GPA, and every project name the resume
@@ -294,6 +301,10 @@ staged content, exclusion of unlisted files, and local page/style links.
 - `scripts/test_stage_site.py` &mdash; checks the actual staged file list,
   current file contents, excluded working material, missing assets, output
   boundaries and local page/style links.
+- `scripts/test_video_checks.py` checks the real movie and
+  proves that missing movies, early downloads, autoplay, missing controls,
+  and hidden playback are rejected. It checks playback and missing movies with
+  page scripts on and off, plus the local server's movie byte ranges.
 - `resume.pdf` &mdash; downloadable PDF (the committed published artifact).
 - `docs/` and `.ai-sync/` &mdash; local working notes (design specs,
   plans, handoffs). Untracked on purpose: the source repository is public,
