@@ -929,17 +929,23 @@ def check_scroll_reveal(browser, port: int) -> None:
             context.close()
 
 
-def check_section_navigation(browser, port: int) -> None:
+def check_section_navigation(browser, port: int, *, text_scale: int = 100) -> None:
     """A short final section must still become current at the page bottom."""
     from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
     for width, height in ((390, 844), (1280, 900), (1280, 1200)):
-        label = f"section navigation at {width}x{height}"
+        label = f"section navigation at {width}x{height}, text {text_scale}%"
         context = browser.new_context(
             viewport={"width": width, "height": height},
             reduced_motion="reduce",
         )
         try:
+            if text_scale != 100:
+                def enlarged_styles(route):
+                    response = route.fetch()
+                    route.fulfill(response=response, body=response.text() +
+                                  f"\nhtml {{ font-size: {text_scale}%; }}")
+                context.route("**/styles.css?*", enlarged_styles)
             page = context.new_page()
             url = f"http://127.0.0.1:{port}/website/"
             page.goto(url, wait_until="networkidle")
@@ -955,7 +961,10 @@ def check_section_navigation(browser, port: int) -> None:
                     }""", arg=href, timeout=2500)
                 except PlaywrightTimeoutError:
                     actual = page.locator(".nav-menu [aria-current]").all_text_contents()
-                    fail(f"{label}, {step}: expected {href}, marked {actual}")
+                    position = page.evaluate("""() => ({hash: location.hash, y: scrollY,
+                        height: innerHeight, page: document.documentElement.scrollHeight,
+                        contact: document.querySelector('#contact').getBoundingClientRect().top})""")
+                    fail(f"{label}, {step}: expected {href}, marked {actual}, position {position}")
 
             expect_current(None, "page top")
             page.evaluate("window.scrollTo({top: document.documentElement.scrollHeight, behavior: 'instant'})")
@@ -983,7 +992,7 @@ def check_section_navigation(browser, port: int) -> None:
             context.close()
 
 
-def check_mobile_menu(browser, port: int) -> None:
+def check_mobile_menu(browser, port: int, *, text_scale: int = 100) -> None:
     """A sticky header must not strand menu choices below a short screen.
 
     Closed-menu overflow checks cannot see this. Exercise the open menu
@@ -992,7 +1001,7 @@ def check_mobile_menu(browser, port: int) -> None:
     """
     for scheme in ("dark", "light"):
         for width, height in ((320, 568), (375, 667), (568, 320), (667, 375)):
-            label = f"phone menu at {width}x{height} [{scheme}]"
+            label = f"phone menu at {width}x{height} [{scheme}, text {text_scale}%]"
             context = browser.new_context(
                 viewport={"width": width, "height": height},
                 color_scheme=scheme, reduced_motion="reduce",
@@ -1000,6 +1009,8 @@ def check_mobile_menu(browser, port: int) -> None:
             try:
                 page = context.new_page()
                 page.goto(f"http://127.0.0.1:{port}/website/", wait_until="networkidle")
+                if text_scale != 100:
+                    page.add_style_tag(content=f"html {{ font-size: {text_scale}%; }}")
                 page.evaluate("document.fonts.ready")
                 toggle = page.get_by_role("button", name="Open navigation")
                 toggle.click()
@@ -1030,12 +1041,50 @@ def check_mobile_menu(browser, port: int) -> None:
                     fail(f"{label}: theme button did not switch the theme")
 
                 menu.get_by_role("link", name="contact", exact=True).click()
+                page.wait_for_url("**/#contact")
                 if not page.url.endswith("#contact") or menu.is_visible():
                     fail(f"{label}: contact link did not navigate and close the menu")
                 elif not any(label in failure for failure in failures):
                     ok(f"{label}: all choices reachable, theme and contact work")
             finally:
                 context.close()
+
+
+def check_large_text(browser, port: int) -> None:
+    """Enlarging text must not widen the page or clip words inside columns."""
+    for scheme in ("dark", "light"):
+        context = browser.new_context(color_scheme=scheme, reduced_motion="reduce")
+        try:
+            page = context.new_page()
+            for doc in ("index.html", "404.html"):
+                page.goto(f"http://127.0.0.1:{port}/website/{doc}", wait_until="networkidle")
+                page.add_style_tag(content="html { font-size: 200%; }")
+                page.evaluate("document.fonts.ready")
+                if doc == "index.html":
+                    page.locator('[data-filter="all"]').click()
+                    page.locator("details").evaluate_all("els => els.forEach(el => el.open = true)")
+                for width in (320, 390, 850, 1280):
+                    page.set_viewport_size({"width": width, "height": 900})
+                    label = f"200% text at {width}px ({doc}, {scheme})"
+                    metrics = page.evaluate("""() => ({
+                        scroll: document.documentElement.scrollWidth,
+                        client: document.documentElement.clientWidth,
+                        clipped: [...document.querySelectorAll('body *')].filter(el => {
+                            // Code samples deliberately scroll within their own box.
+                            if (el.closest('pre, .visually-hidden')) return false;
+                            return el.clientWidth > 0 && el.getBoundingClientRect().width > 0 &&
+                                // Hover arrows move by 2px without clipping any words.
+                                el.scrollWidth > el.clientWidth + 3;
+                        }).map(el => el.tagName.toLowerCase() + '.' + el.className).slice(0, 8)
+                    })""")
+                    if metrics["scroll"] > metrics["client"] + 1:
+                        fail(f"{label}: page extends to {metrics['scroll']}px")
+                    elif metrics["clipped"]:
+                        fail(f"{label}: text exceeds its box: {metrics['clipped']}")
+                    else:
+                        ok(f"{label}: words fit with details open")
+        finally:
+            context.close()
 
 
 def check_project_interactions(browser, port: int) -> None:
@@ -1379,7 +1428,10 @@ def check_layout_and_a11y() -> None:
                 context.close()
             check_scroll_reveal(browser, port)
             check_section_navigation(browser, port)
+            check_section_navigation(browser, port, text_scale=200)
             check_mobile_menu(browser, port)
+            check_mobile_menu(browser, port, text_scale=200)
+            check_large_text(browser, port)
             check_project_interactions(browser, port)
             check_project_videos(browser, port)
             check_stale_guard(browser, port)

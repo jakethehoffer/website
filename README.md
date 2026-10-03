@@ -283,6 +283,9 @@ staged content, exclusion of unlisted files, and local page/style links.
   The open phone menu is checked in portrait and landscape in both
   themes: it must fit the screen, every choice must be reachable by
   keyboard, and the theme button and contact link must work.
+  With text enlarged to 200%, both pages and all expanded details must fit
+  at phone and desktop widths. Words must stay inside their columns, and
+  every phone menu choice must remain reachable in portrait and landscape.
   Project filters must show exactly the right cards and count, with
   keyboard focus retained. Details and essays must open from the keyboard,
   case-study links must expand their targets (including a direct visit),

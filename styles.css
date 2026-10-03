@@ -384,3 +384,27 @@ details[open] > summary .detail-sign::after { content: "−"; }
 .film-description summary::after { content: "+"; font-size: 1.1rem; }
 .film-description[open] summary::after { content: "−"; }
 .film-description p { color: #bac3db; padding-bottom: .5rem; }
+
+/* Keep the reading area and controls usable when visitors enlarge text. */
+:root { --gutter: clamp(20px, 5vw, 72px); }
+body { overflow-wrap: anywhere; }
+.hero__grid > *, .about-layout > *, .timeline__item > *, .work-index > a > span { min-width: 0; }
+.work-index > a { grid-template-columns: 48px minmax(0, 1fr) 20px; }
+.work-index__heading, .work-index__foot { flex-wrap: wrap; }
+.nav-brand { white-space: normal; min-width: 0; }
+.brand-mark, .nav-toggle { flex-shrink: 0; }
+.brand-mark { line-height: 1; }
+.work-icon { font-size: min(1.7rem, 32px); }
+.role-results { grid-template-columns: repeat(auto-fit, minmax(min(100%, 4.8rem), 1fr)); }
+.btn { max-width: 100%; }
+@media (min-width: 851px) {
+  .nav-menu { flex-wrap: wrap; justify-content: flex-end; }
+}
+@media (max-width: 1050px) {
+  .work-index > a { grid-template-columns: 40px minmax(0, 1fr) 16px; }
+}
+@media (max-width: 850px) {
+  .site-nav { flex-wrap: nowrap; gap: 1rem; }
+  /* Absolute-position percentages use the real header height, including wrapped names. */
+  .nav-menu { max-height: calc(100dvh - 100%); }
+}

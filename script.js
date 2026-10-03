@@ -164,9 +164,12 @@
   function markSection() {
     scrollPending = false;
     let current = null;
+    // Enlarged text also enlarges the space left above anchor targets.
+    const sectionTop = Math.max(150,
+      parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) + 1 || 0);
     navLinks.forEach(link => {
       const section = document.getElementById(link.hash.slice(1));
-      if (section && section.getBoundingClientRect().top <= 150) current = link;
+      if (section && section.getBoundingClientRect().top <= sectionTop) current = link;
     });
     // The final section can be too short to reach the header. At the
     // bottom of the page, its link still needs to become current.
