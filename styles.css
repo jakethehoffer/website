@@ -263,7 +263,7 @@ details[open] > summary .detail-sign::after { content: "−"; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
 @media print {
-  :root, :root[data-theme="dark"] { --bg: #fff; --surface: #fff; --soft: #fff; --ink: #111; --muted: #444; --line: #ccc; --accent: #732913; --green: #234630; }
+  :root, :root[data-theme="dark"] { color-scheme: light; --bg: #fff; --surface: #fff; --soft: #fff; --ink: #111; --muted: #444; --line: #ccc; --accent: #732913; --accent-soft: #fff; --green: #234630; }
   .hero__grid, .about-layout, .projects { display: block; }
   .hero__grid, .section { padding-block: 1rem; }
   .project { break-inside: avoid; margin-block: 1rem; }
