@@ -43,16 +43,16 @@
   category: systems
   name: Cockpit
   summary: "One desktop workspace for AI-assisted work."
-  outcome: "Built the Windows app, saved project conversations, scheduled tasks, and a phone companion. Work can continue across tools without starting the conversation again."
+  outcome: "Built the Windows app and its phone companion. Work carries on after a restart or a usage limit, and a chat can move between AI engines without starting over."
   status: shipped
   private: true
   url: null
   auto_meta: false
   hardcoded_date: "2026"
   what: "An Electron and React app that brings Claude, Codex, and local models into a shared project workspace."
-  body: "The hard part is keeping the work intact when an engine stops, a limit is reached, or a task resumes later. I built around saved history, explicit stop and retry controls, and recovery that keeps the original request. The app also includes scheduled tasks, a shared terminal, and a phone companion. Packaged releases are checked against the finished installer. Private code. The video shows the real app with prepared example chats."
-  metrics: "Windows desktop app &middot; phone companion &middot; saved project history"
-  chips: "TypeScript &middot; React &middot; Electron &middot; Playwright"
+  body: "The hard part is keeping work intact when something interrupts it. If the app closes, Windows restarts, or a usage limit hits partway through a task, the chat picks up the same request and checks what already ran before it repeats anything. One button hands a chat from Claude to Codex, or back, with the unfinished request and the work done so far. Auto chooses the model and how much effort each request gets. When two chats work in the same project, each gets its own copy of the code, so neither can undo the other&rsquo;s changes. From a phone, you can chat, start work by voice, and open the app&rsquo;s main screens. Releases are checked against the finished installer, and the app has over 5,300 automated tests. Private code. The video shows the real app with prepared example chats."
+  metrics: "Claude, Codex &amp; local models &middot; phone companion &middot; 5,300+ tests"
+  chips: "TypeScript &middot; React &middot; Electron &middot; Vitest"
   video:
     src: assets/projects/cockpit-film.mp4
     poster: assets/projects/cockpit-film.jpg
@@ -64,7 +64,7 @@
   resume:
     role: "Cockpit (TypeScript · React · Electron)"
     bullets:
-      - "Built a Windows workspace for Claude, Codex, and local models with saved project history, task scheduling, retry recovery, and a phone companion."
+      - "Built a Windows workspace for Claude, Codex, and local models with one-click handoffs between engines, recovery after restarts and usage limits, a phone companion, and 5,300+ automated tests."
 
 - key: workshop-arcade
   selected: true
@@ -101,7 +101,7 @@
   auto_meta: false
   hardcoded_date: "2026"
   what: "A phone-friendly web app for live dictation and meeting transcripts, with a separate Python speech worker."
-  body: "Notes save on the device, with optional private sharing across devices. Meeting recordings are uploaded for laptop-based transcription and returned with timestamps and speaker labels. I worked on durable uploads, retry recovery, storage changes that preserve notes, and downloads that keep the original audio available. Speaker labels are estimates, and meeting processing still requires the laptop."
+  body: "Notes save on the device, with optional private sharing across devices. Meeting recordings are uploaded for laptop-based transcription and returned with timestamps and speaker labels. Recorded phone calls can be imported and transcribed the same way. A wrong speaker label can be fixed with a tap, and meetings of five minutes or more get a topic list made by a local model on the laptop. I worked on durable uploads, retry recovery, storage changes that preserve notes, and downloads that keep the original audio available. Speaker labels and topics are estimates, and meeting processing still requires the laptop."
   metrics: "Browser &amp; phone &middot; local notes &middot; private recording downloads"
   chips: "Next.js &middot; React &middot; TypeScript &middot; Python &middot; Whisper"
   visual: dictation
@@ -113,7 +113,7 @@
 
 - key: trader
   selected: false
-  outcome: "Owned the scheduling, risk limits, and audit trail. Closed the strategy after a failed holdout. It never traded real money."
+  outcome: "Owned the scheduling, risk limits, and audit trail. Closed the first strategy after a failed holdout, then started a new pre-registered test on paper. It has never traded real money."
   category: systems
   summary: "An S&amp;P 500 paper-trading agent with risk checks built in from the start."
   name: trader
@@ -125,29 +125,29 @@
   meta_key: trader.last_commit
   auto_meta: true
   hardcoded_date: "last commit: n/a"
-  what: "24/7 AI swing-trading agent for S&amp;P 500 equities, driven by six scheduled, idempotent routines."
-  body: "Paper-traded on IBKR + Finnhub news. It passed its 30-day graduation gate, then failed a reserved out-of-sample holdout, so I closed the strategy research rather than tune a sixth variant. Designed the risk model, journaling, and kill-switch from day one."
-  metrics: "s&amp;p 500 &middot; 6 scheduled agents &middot; ibkr paper"
+  what: "Unattended AI trading agent for S&amp;P 500 equities, run by scheduled, idempotent routines."
+  body: "Paper-traded on IBKR + Finnhub news. The first strategy passed its 30-day graduation gate, then failed a reserved out-of-sample holdout, so I closed that research rather than tune a sixth variant. A new pre-registered study has run on paper since October 2026. Designed the risk model, journaling, and kill-switch from day one."
+  metrics: "s&amp;p 500 &middot; 6 scheduled routines &middot; ibkr paper"
   chips: "python &middot; pytest &middot; ib_async &middot; finnhub"
   sample:
     label: "Example daemon log"
     html: |-
       <span class="sample__dim">// example daemon log</span>
-      <span class="sample__dim">[2026-05-12 09:31:02]</span> <span class="sample__ok">scan_premarket</span>: 14 candidates &rarr; <span class="sample__hi">3 passed</span> (volatility gate)
-      <span class="sample__dim">[2026-05-12 09:31:18]</span> <span class="sample__ok">place_orders</span>: limit buy 100 NVDA @ 132.40 (paper)
-      <span class="sample__dim">[2026-05-12 16:00:01]</span> <span class="sample__ok">eod</span>: pnl +1.23%, 1 fill, 0 reject
+      <span class="sample__dim">[2026-05-12 08:30:02]</span> <span class="sample__ok">pre_market</span>: 14 candidates &rarr; <span class="sample__hi">3 passed</span> (volatility gate)
+      <span class="sample__dim">[2026-05-12 09:30:18]</span> <span class="sample__ok">open</span>: limit buy 100 NVDA @ 132.40 (paper)
+      <span class="sample__dim">[2026-05-12 16:15:01]</span> <span class="sample__ok">eod</span>: pnl +1.23%, 1 fill, 0 reject
   media: null
   cta: null
   resume:
     role: "trader (Python · IBKR · Finnhub · pytest)"
     bullets:
-      - "24/7 AI swing-trading agent for S&P 500 equities, driven by six scheduled, idempotent routines."
+      - "Unattended AI trading agent for S&P 500 equities on IBKR paper, run by scheduled, idempotent routines."
 
 - key: arbitrage
   selected: false
-  outcome: "Built the collection, normalization, and alert pipeline across 19 bookmakers and seven sports."
+  outcome: "Built the collection, normalization, and alert pipeline, with collectors for 17 bookmakers across seven sports."
   category: systems
-  summary: "Turning prices from 19 bookmakers into one stream of checked alerts."
+  summary: "Turning bookmaker prices into one stream of checked alerts."
   name: Odds Aggregator
   resume_priority: 90
   status: active
@@ -157,9 +157,9 @@
   meta_key: arbitrage.last_commit
   auto_meta: true
   hardcoded_date: "last commit: n/a"
-  what: "Production arbitrage daemon covering 19 bookmakers across 7 sports."
-  body: "Ingest &rarr; normalize &rarr; detect cross-book arbs &rarr; push alerts to Telegram and Discord. Runs 24/7 on a Linux cloud host under systemd, with Alembic-managed schema and replay tooling for postmortems."
-  metrics: "19 bookmakers &middot; 7 sports &middot; replayable records"
+  what: "Production arbitrage daemon with collectors for 17 bookmakers across 7 sports."
+  body: "Ingest &rarr; normalize &rarr; detect cross-book arbs &rarr; push alerts to Telegram. Runs 24/7 on a Linux cloud host under systemd, with Alembic-managed schema and replay tooling for postmortems."
+  metrics: "17 bookmakers &middot; 7 sports &middot; replayable records"
   chips: "python &middot; playwright &middot; sqlite &middot; alembic"
   sample:
     label: "Example alert payload"
@@ -174,7 +174,7 @@
   resume:
     role: "Odds Aggregator (Python · Playwright · SQLite/Alembic)"
     bullets:
-      - "Production arbitrage daemon covering 19 bookmakers across 7 sports."
+      - "Production arbitrage daemon with collectors for 17 bookmakers across 7 sports."
 
 - key: tax-rebalance
   selected: false
@@ -225,7 +225,7 @@
   auto_meta: false
   hardcoded_date: "verdict delivered &middot; 2026"
   what: "Market-making feasibility bot for NDAX, a Canadian crypto exchange. Collected real 24/7 venue data before any trading, ran it through a pre-trade synthesizer, and the verdict came back NOT_READY."
-  body: "Collects 24/7 order-book and trade telemetry with no coverage gaps over NDAX&rsquo;s REST + WebSocket feeds into a SQLite WAL store, then scores every pair against a 9-criterion pre-trade synthesizer. After 7 covered days the verdict was NOT_READY across all 75 CAD pairs. The data shows passive retail market making can't clear a flat 0.20%/fill (40 bps round-trip) venue. A queue-aware paper-fill model confirmed it; the one pair that initially passed was bootstrap-validated and rejected as an artifact of a thin sample. The negative verdict IS the deliverable. 258 tests. The collector ran unattended on a systemd cloud host until the verdict came in."
+  body: "Collected 24/7 order-book and trade telemetry with no coverage gaps over NDAX&rsquo;s REST + WebSocket feeds into a SQLite WAL store, then scored every pair against a 9-criterion pre-trade synthesizer. After 7 covered days the verdict was NOT_READY across all 75 CAD pairs. The data shows passive retail market making can't clear a flat 0.20%/fill (40 bps round-trip) venue. A queue-aware paper-fill model confirmed it; the one pair that initially passed was bootstrap-validated and rejected as an artifact of a thin sample. The negative verdict IS the deliverable. 258 tests. The collector ran unattended on a systemd cloud host until the verdict came in."
   metrics: "75 pairs &middot; 7 days 24/7 data &middot; 258 tests"
   chips: "python &middot; sqlite/wal &middot; websocket &middot; structlog &middot; pydantic &middot; typer"
   sample:

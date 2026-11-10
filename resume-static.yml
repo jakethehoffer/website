@@ -53,7 +53,7 @@ sections:
       - { type: role, text: "Independent Software Developer", date: "Nov 2025 – Present" }
       - type: bullets
         items:
-          - "Build and maintain desktop, web, and automation projects, including an AI workspace, a 100-game arcade, and a meeting-transcript app."
+          - "Build desktop, web, and automation projects, including an AI workspace, a 100-game arcade, and a meeting-transcript app."
           - "Completed a crypto market-making feasibility study in three weeks; seven days of recorded market data produced a NOT_READY verdict across all 75 pairs."
       - { type: role, text: "IT Intern", date: "Jun 2024 – Aug 2024; Jun 2025 – Aug 2025" }
       - { type: org, text: "Lynx Equity Limited" }

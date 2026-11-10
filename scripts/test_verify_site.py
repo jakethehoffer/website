@@ -223,8 +223,8 @@ def test_commit_count_in_page_fails(tree, sneak):
 
 
 def test_commit_count_in_yaml_prose_fails(tree):
-    mutate(tree / "projects.yml", 'what: "24/7 AI swing-trading agent',
-           'what: "2,000+ commits. 24/7 AI swing-trading agent')
+    mutate(tree / "projects.yml", 'what: "Unattended AI trading agent',
+           'what: "2,000+ commits. Unattended AI trading agent')
     vs.check_padded_metrics()
     assert failed_with("padded metric in projects.yml")
 
@@ -255,8 +255,8 @@ def test_entity_em_dash_fails(tree):
 
 
 def test_marketing_adjective_in_yaml_fails(tree):
-    mutate(tree / "projects.yml", 'what: "24/7 AI swing-trading agent',
-           'what: "Production-grade 24/7 AI swing-trading agent')
+    mutate(tree / "projects.yml", 'what: "Unattended AI trading agent',
+           'what: "Production-grade Unattended AI trading agent')
     vs.check_voice()
     assert failed_with("banned marketing adjective(s) in projects.yml (prose): production-grade")
 

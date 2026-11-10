@@ -462,43 +462,58 @@ CLAIM_WARN_DAYS = 60
 CLAIM_STALE_DAYS = 90
 
 CROSS_REPO_CLAIMS = (
-    ("cockpit ships a Windows AI workspace with saved conversations, "
-     "scheduled tasks and a phone companion",
-     "its README, sessions.ts, scheduled task and remote-control tests",
-     date(2026, 9, 24)),
-    ("dictation supports saved notes, private sharing and recording "
-     "downloads; meeting transcription still needs the laptop",
-     "its README, meeting_worker.py and September 19 release record",
-     date(2026, 9, 24)),
+    ("cockpit is a Windows workspace for Claude, Codex and local models "
+     "with one-click engine handoffs (0.1.316), restart and usage-limit "
+     "recovery, a separate project copy per parallel chat (0.1.298), a "
+     "phone companion with voice and the main screens (0.1.317/0.1.319) "
+     "and 5,300+ Vitest tests",
+     "its CLAUDE.md, docs/simple-handoffs.md, docs/same-project-chats.md, "
+     "src/shared/cockpit-features.ts and the test runs in .ai-sync/handoff.md",
+     date(2026, 11, 9)),
+    ("dictation supports saved notes, private sharing, recording "
+     "downloads, imported phone calls, tap-to-fix speaker labels and "
+     "local topic lists; meeting transcription still needs the laptop",
+     "its README and .ai-sync handoff (releases 2026-09-29 to 2026-10-16)",
+     date(2026, 11, 9)),
     ("workshop-arcade has 100 browser games, favorites, recent plays "
-     "and offline support",
-     "its manifest, README and public deployed catalog",
-     date(2026, 9, 24)),
-    ("arbitrage covers 19 bookmakers across 7 sports",
-     "its coverage tracker and progress log", date(2026, 9, 10)),
+     "and offline support (project paused 2026-09-28, site still live)",
+     "its manifest, README, .ai-sync handoff and public deployed catalog",
+     date(2026, 11, 9)),
+    ("arbitrage has collectors for 17 bookmakers across 7 sports, so the "
+     "site says 'collectors for' (two books parked 2026-09-30, and only "
+     "five collecting under a temporary 2026-11-07 decision)",
+     "its decision records 2026-09-30-park-blocked-bookmakers.md and "
+     "2026-11-07-five-funded-bookmakers.md (its README still says 19)",
+     date(2026, 11, 9)),
     ("arbitrage runs on a Linux cloud host under systemd, "
      "with a watchdog on a separate machine",
-     "its deployment decision record", date(2026, 9, 10)),
-    ("arbitrage has not built the paper-trading recorder named as "
-     "the next step",
-     "its source tree", date(2026, 9, 10)),
-    ("trader closed its strategy research, never traded real money, "
-     "and still runs on paper",
-     "its programme-conclusion decision record", date(2026, 9, 10)),
+     "its local-daemon-cloud-only decision, Oracle Cloud runbook and "
+     ".ai-sync state", date(2026, 11, 9)),
+    ("arbitrage alerts go to Telegram only (Discord dormant in production "
+     "since 2026-04-28), and the site names no next step",
+     "its CLAUDE.md alert-channel section", date(2026, 11, 9)),
+    ("trader closed its first strategy after a failed holdout, started a "
+     "pre-registered news-tilt paper study in October 2026 (first verdict "
+     "look 2027-10-13), never traded real money, and still runs on paper",
+     "its programme-conclusion, 2026-10-11 start and 2026-10-13 Day 0 "
+     "decision records and config/mode.yaml", date(2026, 11, 9)),
     ("both trader and arbitrage still run unattended "
-     '(hero says "2 unattended systems")',
-     "gh repo view --json isArchived,pushedAt on each", date(2026, 9, 10)),
-    ('trader runs six scheduled routines (hero says "6 scheduled agents", '
-     "the case study names them)",
-     "its routines folder, one spec per routine", date(2026, 9, 10)),
+     "(cards and case studies say so)",
+     "gh repo view --json isArchived,pushedAt on each, plus their "
+     ".ai-sync state", date(2026, 11, 9)),
+    ("trader runs six scheduled routines, pre_market, open, midday, "
+     'monitor, close and eod (metrics say "6 scheduled routines", the '
+     "case study names them)",
+     "its routines folder, one spec per routine, and routines/systemd",
+     date(2026, 11, 9)),
     ("tax-rebalance is not scheduled anywhere, so the site describes "
      "what it does and never says it is running",
      "its ci.yml (no cron), the host's scheduled tasks, and "
-     "gh repo view --json isArchived,pushedAt", date(2026, 9, 9)),
+     "gh repo view --json isArchived,pushedAt", date(2026, 11, 9)),
     ("market-bot's collector was wound down on 2026-06-08, so the site "
      "speaks of it in the past tense, and its suite is 258 tests",
      "its README status table and its last .ai-sync handoff",
-     date(2026, 9, 10)),
+     date(2026, 11, 9)),
 )
 
 

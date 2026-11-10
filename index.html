@@ -137,13 +137,13 @@
               </header>
               <h3 class="project__name">Cockpit <span class="project__private">private</span></h3>
               <p class="project__what">One desktop workspace for AI-assisted work.</p>
-              <p class="project__outcome"><span>My work &amp; the result</span>Built the Windows app, saved project conversations, scheduled tasks, and a phone companion. Work can continue across tools without starting the conversation again.</p>
-              <p class="project__chips" aria-label="Tools used"><span>TypeScript</span><span>React</span><span>Electron</span><span>Playwright</span></p>
+              <p class="project__outcome"><span>My work &amp; the result</span>Built the Windows app and its phone companion. Work carries on after a restart or a usage limit, and a chat can move between AI engines without starting over.</p>
+              <p class="project__chips" aria-label="Tools used"><span>TypeScript</span><span>React</span><span>Electron</span><span>Vitest</span></p>
               <details class="project__details">
                 <summary>About this project<span class="visually-hidden">: Cockpit</span></summary>
                 <p class="project__body">An Electron and React app that brings Claude, Codex, and local models into a shared project workspace.</p>
-                <p class="project__body">The hard part is keeping the work intact when an engine stops, a limit is reached, or a task resumes later. I built around saved history, explicit stop and retry controls, and recovery that keeps the original request. The app also includes scheduled tasks, a shared terminal, and a phone companion. Packaged releases are checked against the finished installer. Private code. The video shows the real app with prepared example chats.</p>
-                <p class="project__metrics">Windows desktop app &middot; phone companion &middot; saved project history</p>
+                <p class="project__body">The hard part is keeping work intact when something interrupts it. If the app closes, Windows restarts, or a usage limit hits partway through a task, the chat picks up the same request and checks what already ran before it repeats anything. One button hands a chat from Claude to Codex, or back, with the unfinished request and the work done so far. Auto chooses the model and how much effort each request gets. When two chats work in the same project, each gets its own copy of the code, so neither can undo the other&rsquo;s changes. From a phone, you can chat, start work by voice, and open the app&rsquo;s main screens. Releases are checked against the finished installer, and the app has over 5,300 automated tests. Private code. The video shows the real app with prepared example chats.</p>
+                <p class="project__metrics">Claude, Codex &amp; local models &middot; phone companion &middot; 5,300+ tests</p>
               </details>
               </div>
             </article>
@@ -196,7 +196,7 @@
               <details class="project__details">
                 <summary>About this project<span class="visually-hidden">: Dictation</span></summary>
                 <p class="project__body">A phone-friendly web app for live dictation and meeting transcripts, with a separate Python speech worker.</p>
-                <p class="project__body">Notes save on the device, with optional private sharing across devices. Meeting recordings are uploaded for laptop-based transcription and returned with timestamps and speaker labels. I worked on durable uploads, retry recovery, storage changes that preserve notes, and downloads that keep the original audio available. Speaker labels are estimates, and meeting processing still requires the laptop.</p>
+                <p class="project__body">Notes save on the device, with optional private sharing across devices. Meeting recordings are uploaded for laptop-based transcription and returned with timestamps and speaker labels. Recorded phone calls can be imported and transcribed the same way. A wrong speaker label can be fixed with a tap, and meetings of five minutes or more get a topic list made by a local model on the laptop. I worked on durable uploads, retry recovery, storage changes that preserve notes, and downloads that keep the original audio available. Speaker labels and topics are estimates, and meeting processing still requires the laptop.</p>
                 <p class="project__metrics">Browser &amp; phone &middot; local notes &middot; private recording downloads</p>
               </details>
               </div>
@@ -213,18 +213,18 @@
               </header>
               <h3 class="project__name">trader <span class="project__private">private</span></h3>
               <p class="project__what">An S&amp;P 500 paper-trading agent with risk checks built in from the start.</p>
-              <p class="project__outcome"><span>My work &amp; the result</span>Owned the scheduling, risk limits, and audit trail. Closed the strategy after a failed holdout. It never traded real money.</p>
+              <p class="project__outcome"><span>My work &amp; the result</span>Owned the scheduling, risk limits, and audit trail. Closed the first strategy after a failed holdout, then started a new pre-registered test on paper. It has never traded real money.</p>
               <p class="project__chips" aria-label="Tools used"><span>python</span><span>pytest</span><span>ib_async</span><span>finnhub</span></p>
               <p class="project__cta"><a class="btn" href="#case-study">Read the case study <span aria-hidden="true">&darr;</span></a></p>
               <details class="project__details">
                 <summary>About this project<span class="visually-hidden">: trader</span></summary>
-                <p class="project__body">24/7 AI swing-trading agent for S&amp;P 500 equities, driven by six scheduled, idempotent routines.</p>
-                <p class="project__body">Paper-traded on IBKR + Finnhub news. It passed its 30-day graduation gate, then failed a reserved out-of-sample holdout, so I closed the strategy research rather than tune a sixth variant. Designed the risk model, journaling, and kill-switch from day one.</p>
-                <p class="project__metrics">s&amp;p 500 &middot; 6 scheduled agents &middot; ibkr paper</p>
+                <p class="project__body">Unattended AI trading agent for S&amp;P 500 equities, run by scheduled, idempotent routines.</p>
+                <p class="project__body">Paper-traded on IBKR + Finnhub news. The first strategy passed its 30-day graduation gate, then failed a reserved out-of-sample holdout, so I closed that research rather than tune a sixth variant. A new pre-registered study has run on paper since October 2026. Designed the risk model, journaling, and kill-switch from day one.</p>
+                <p class="project__metrics">s&amp;p 500 &middot; 6 scheduled routines &middot; ibkr paper</p>
               <pre class="project__sample" aria-label="Example daemon log" tabindex="0"><span class="sample__dim">// example daemon log</span>
-<span class="sample__dim">[2026-05-12 09:31:02]</span> <span class="sample__ok">scan_premarket</span>: 14 candidates &rarr; <span class="sample__hi">3 passed</span> (volatility gate)
-<span class="sample__dim">[2026-05-12 09:31:18]</span> <span class="sample__ok">place_orders</span>: limit buy 100 NVDA @ 132.40 (paper)
-<span class="sample__dim">[2026-05-12 16:00:01]</span> <span class="sample__ok">eod</span>: pnl +1.23%, 1 fill, 0 reject</pre>
+<span class="sample__dim">[2026-05-12 08:30:02]</span> <span class="sample__ok">pre_market</span>: 14 candidates &rarr; <span class="sample__hi">3 passed</span> (volatility gate)
+<span class="sample__dim">[2026-05-12 09:30:18]</span> <span class="sample__ok">open</span>: limit buy 100 NVDA @ 132.40 (paper)
+<span class="sample__dim">[2026-05-12 16:15:01]</span> <span class="sample__ok">eod</span>: pnl +1.23%, 1 fill, 0 reject</pre>
               </details>
               </div>
             </article>
@@ -236,18 +236,18 @@
                 <span class="project__category">systems</span>
                 <span class="status status--active" role="img" aria-label="Status: active"></span>
                 <span class="project__status-label">ACTIVE</span>
-                <span class="project__last-commit" data-meta="arbitrage.last_commit">last commit: 7d ago</span>
+                <span class="project__last-commit" data-meta="arbitrage.last_commit">last commit: today</span>
               </header>
               <h3 class="project__name">Odds Aggregator <span class="project__private">private</span></h3>
-              <p class="project__what">Turning prices from 19 bookmakers into one stream of checked alerts.</p>
-              <p class="project__outcome"><span>My work &amp; the result</span>Built the collection, normalization, and alert pipeline across 19 bookmakers and seven sports.</p>
+              <p class="project__what">Turning bookmaker prices into one stream of checked alerts.</p>
+              <p class="project__outcome"><span>My work &amp; the result</span>Built the collection, normalization, and alert pipeline, with collectors for 17 bookmakers across seven sports.</p>
               <p class="project__chips" aria-label="Tools used"><span>python</span><span>playwright</span><span>sqlite</span><span>alembic</span></p>
               <p class="project__cta"><a class="btn" href="#case-study-arb">Read the case study <span aria-hidden="true">&darr;</span></a></p>
               <details class="project__details">
                 <summary>About this project<span class="visually-hidden">: Odds Aggregator</span></summary>
-                <p class="project__body">Production arbitrage daemon covering 19 bookmakers across 7 sports.</p>
-                <p class="project__body">Ingest &rarr; normalize &rarr; detect cross-book arbs &rarr; push alerts to Telegram and Discord. Runs 24/7 on a Linux cloud host under systemd, with Alembic-managed schema and replay tooling for postmortems.</p>
-                <p class="project__metrics">19 bookmakers &middot; 7 sports &middot; replayable records</p>
+                <p class="project__body">Production arbitrage daemon with collectors for 17 bookmakers across 7 sports.</p>
+                <p class="project__body">Ingest &rarr; normalize &rarr; detect cross-book arbs &rarr; push alerts to Telegram. Runs 24/7 on a Linux cloud host under systemd, with Alembic-managed schema and replay tooling for postmortems.</p>
+                <p class="project__metrics">17 bookmakers &middot; 7 sports &middot; replayable records</p>
               <pre class="project__sample" aria-label="Example alert payload" tabindex="0"><span class="sample__dim">// example alert payload</span>
 <span class="sample__hi">[ARB]</span> NHL &middot; Edmonton @ Vegas
   pinnacle  EDM -132   &rarr;  stake 0.567
@@ -299,7 +299,7 @@
               <details class="project__details">
                 <summary>About this project<span class="visually-hidden">: market-bot</span></summary>
                 <p class="project__body">Market-making feasibility bot for NDAX, a Canadian crypto exchange. Collected real 24/7 venue data before any trading, ran it through a pre-trade synthesizer, and the verdict came back NOT_READY.</p>
-                <p class="project__body">Collects 24/7 order-book and trade telemetry with no coverage gaps over NDAX&rsquo;s REST + WebSocket feeds into a SQLite WAL store, then scores every pair against a 9-criterion pre-trade synthesizer. After 7 covered days the verdict was NOT_READY across all 75 CAD pairs. The data shows passive retail market making can't clear a flat 0.20%/fill (40 bps round-trip) venue. A queue-aware paper-fill model confirmed it; the one pair that initially passed was bootstrap-validated and rejected as an artifact of a thin sample. The negative verdict IS the deliverable. 258 tests. The collector ran unattended on a systemd cloud host until the verdict came in.</p>
+                <p class="project__body">Collected 24/7 order-book and trade telemetry with no coverage gaps over NDAX&rsquo;s REST + WebSocket feeds into a SQLite WAL store, then scored every pair against a 9-criterion pre-trade synthesizer. After 7 covered days the verdict was NOT_READY across all 75 CAD pairs. The data shows passive retail market making can't clear a flat 0.20%/fill (40 bps round-trip) venue. A queue-aware paper-fill model confirmed it; the one pair that initially passed was bootstrap-validated and rejected as an artifact of a thin sample. The negative verdict IS the deliverable. 258 tests. The collector ran unattended on a systemd cloud host until the verdict came in.</p>
                 <p class="project__metrics">75 pairs &middot; 7 days 24/7 data &middot; 258 tests</p>
               <pre class="project__sample" aria-label="Excerpt from the pre-trade synthesizer verdict" tabindex="0"><span class="sample__dim">// market-bot synth - 7 days 24/7 data, 75 ndax cad pairs</span>
 <span class="sample__dim">[PENGU/CAD]</span> median +239 bps  p10 &minus;408 bps  &rarr; <span class="sample__hi">NOT_READY</span> (thin tail, $9.5k/day)
@@ -482,7 +482,7 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
               <div class="timeline__body"><p class="role-summary">Built Cockpit, Workshop Arcade, and Dictation alongside data and automation projects. Work spans the interface, background tasks, testing, and delivery.</p>
                 <details class="role-details"><summary>Role details<span class="visually-hidden">: Independent Software Engineer</span></summary>
               <ul class="timeline__bullets">
-                  <li>Built a Windows workspace that brings Claude, Codex, and local models into saved project conversations, with a phone companion and scheduled tasks.</li>
+                  <li>Built a Windows workspace for Claude, Codex, and local models, with one-button handoffs between engines, recovery after restarts and usage limits, and a phone companion.</li>
                   <li>Developed a public arcade of 100 browser games, with search, favorites, continued play, and checks across phone and desktop layouts.</li>
                   <li>Built a dictation and meeting-transcript app with local notes, private sharing, recording downloads, and laptop-based speech processing.</li>
                 </ul>
@@ -620,32 +620,32 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
             <div class="case-detail__body">
           <p class="case-study__lede">
             Six scheduled, idempotent routines on IBKR paper + Finnhub news.
-            Paper-trading the S&amp;P 500 behind a kill-switch and a
-            pre-registered graduation gate. It passed that gate and then failed
-            a reserved holdout, so it never went live.
+            The first strategy paper-traded the S&amp;P 500 behind a
+            kill-switch and a pre-registered graduation gate. It passed that
+            gate, then failed a reserved holdout, so it never went live.
           </p>
 
           <ol class="architecture-flow" aria-label="Trading agent routines">
-            <li><span class="architecture-flow__number" aria-hidden="true">01</span><strong>Scan</strong><span>Find candidates before the market opens.</span></li>
-            <li><span class="architecture-flow__number" aria-hidden="true">02</span><strong>Check risk</strong><span>Apply limits and the paper-trading gate.</span></li>
-            <li><span class="architecture-flow__number" aria-hidden="true">03</span><strong>Place orders</strong><span>Send approved orders to the paper account.</span></li>
-            <li><span class="architecture-flow__number" aria-hidden="true">04</span><strong>Monitor</strong><span>Track positions while the market is open.</span></li>
-            <li><span class="architecture-flow__number" aria-hidden="true">05</span><strong>Close the day</strong><span>Record results and update risk counters.</span></li>
-            <li><span class="architecture-flow__number" aria-hidden="true">06</span><strong>Journal</strong><span>Keep the record each routine works from.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">01</span><strong>Pre-market</strong><span>Plan the day. Places no trades.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">02</span><strong>Open</strong><span>Carry out the plan after a fresh check.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">03</span><strong>Midday</strong><span>Review the morning and add setups if they still hold.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">04</span><strong>Monitor</strong><span>Watch risk every 30 minutes. Cannot open positions.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">05</span><strong>Close</strong><span>Clean up five minutes before the bell.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">06</span><strong>End of day</strong><span>Email a summary of the day.</span></li>
           </ol>
 
           <div class="case-study__prose">
             <h3>The problem</h3>
-            <p>A monolith trading bot is one place where every bug becomes a money bug. Splitting the work across six small, idempotent routines means each one can be tested in isolation, re-run safely on failure, and reasoned about on its own. <code>scan_premarket</code> only knows how to filter candidates; <code>gate</code> only knows the risk rules; <code>place_orders</code> only knows the IBKR API. They communicate through the journal, not in-process state.</p>
+            <p>A monolith trading bot is one place where every bug becomes a money bug. Splitting the work across six small, idempotent routines means each one can be tested in isolation, re-run safely on failure, and reasoned about on its own. <code>pre_market</code> plans the day and writes no trades. <code>open</code> carries out that plan after a fresh check, and <code>monitor</code> watches risk without being able to open a position. They communicate through the day&rsquo;s journal, not in-process state.</p>
 
             <h3>The risk model</h3>
-            <p>Default is paper. The kill-switch is a single YAML key (<code>kill_switch.enabled: true</code>) read at the top of every routine. Flip it and the system stops opening positions at the next scheduled tick. Risk counters (per-trade, per-day, per-week) live in committed JSON so the state survives restarts and is reviewable in a diff. The 30-day paper gate is enforced by <code>gate</code> reading a graduation file written only by the EOD routine.</p>
+            <p>Default is paper. The kill-switch is one YAML file, <code>config/kill_switch.yaml</code>, which the routines that plan and open positions check before acting. A single-day loss of 8% sets it automatically and halts new entries until someone clears it by hand. The first strategy also had an 8% stop on every trade and breakers at a 3% daily and 7% weekly drawdown. The 30-day paper gate was scored against a window manifest that fails safe, so a missing or unreadable manifest counts as an invalid window.</p>
 
             <h3>What I learned</h3>
             <p>Three things I&rsquo;d repeat on the next agent like this: idempotent scheduled routines from day one (the monolith refactor I avoided would have eaten weeks); kill-switch and risk gates <em>before</em> any trading logic, so strategy iteration can&rsquo;t corrupt state; observability turned out to be the hardest engineering problem, not the math. Knowing <em>why</em> the agent made each call was harder than getting it to make calls at all.</p>
 
             <h3>How it resolved</h3>
-            <p>The paper window closed on 2026-08-12 and passed all six graduation gates, including positive alpha against SPY. A reserved out-of-sample holdout, pre-registered before it ran, failed the next day. The strategy had already been measured against three long historical windows and trailed SPY in all three. Those 30 paper days were the only stretch it ever beat the index, and the margin sat inside the standard error. Five pre-registered improvements had failed by then, so I closed the strategy research rather than tune a sixth variant against a spent holdout. It never traded real money. The bot still runs on paper, which costs nothing, and the scheduling, risk and audit machinery now carries a pre-registered forward study that runs into 2027.</p>
+            <p>The paper window closed on 2026-08-12 and passed all six graduation gates, including positive alpha against SPY. A reserved out-of-sample holdout, pre-registered before it ran, failed the next day. The strategy had already been measured against three long historical windows and trailed SPY in all three. Those 30 paper days were the only stretch it ever beat the index, and the margin sat inside the standard error. Five pre-registered improvements had failed by then, so I closed the strategy research rather than tune a sixth variant against a spent holdout. It never traded real money. The bot still runs on paper. Since October 2026 the same scheduling, risk and audit machinery has run a new pre-registered study, an S&amp;P 500 index core with 30% held in five-day positions bought on good overnight news. Its first verdict is due in October 2027.</p>
           </div>
             </div>
           </details>
@@ -658,10 +658,10 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
             <summary><span class="detail-heading"><h2>Inside the odds aggregator</h2><span>Different sources, one common format, and a record of every alert.</span></span><span class="detail-sign" aria-hidden="true"></span></summary>
             <div class="case-detail__body">
           <p class="case-study__lede">
-            Nineteen bookmakers, seven sports, polled continuously. When prices on
-            the same outcome diverge enough to clear the vig and transaction
-            friction, an alert fires to Telegram and Discord within seconds of
-            the gap opening. Runs unattended on a Linux cloud host under
+            It has collectors for seventeen bookmakers across seven sports, and
+            the books in use are polled continuously. When prices on the same
+            outcome diverge enough to clear the vig and transaction friction,
+            an alert goes to Telegram. Runs unattended on a Linux cloud host under
             systemd, with a watchdog on a separate machine and replay
             tooling for postmortems.
           </p>
@@ -670,19 +670,19 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
             <li><span class="architecture-flow__number" aria-hidden="true">01</span><strong>Collect</strong><span>Read prices from the bookmaker sources.</span></li>
             <li><span class="architecture-flow__number" aria-hidden="true">02</span><strong>Normalize</strong><span>Give matching markets a common name.</span></li>
             <li><span class="architecture-flow__number" aria-hidden="true">03</span><strong>Compare</strong><span>Check cross-book prices for a possible edge.</span></li>
-            <li><span class="architecture-flow__number" aria-hidden="true">04</span><strong>Alert</strong><span>Send matches to Telegram and Discord.</span></li>
+            <li><span class="architecture-flow__number" aria-hidden="true">04</span><strong>Alert</strong><span>Send matches to Telegram.</span></li>
             <li><span class="architecture-flow__number" aria-hidden="true">05</span><strong>Record</strong><span>Keep the inputs for replay and review.</span></li>
           </ol>
 
           <div class="case-study__prose">
             <h3>The problem</h3>
-            <p>A real-time cross-book ingester sounds simple and isn&rsquo;t. Each book formats markets differently, prices go stale within seconds, and books vary wildly in scrape-friendliness. <code>FanDuel</code> removed itself with bot detection; <code>Pinnacle</code> requires auth. An arb that&rsquo;s real on paper is often gone by the time you see it; an arb that looks &ldquo;available&rdquo; is often a stale price. The hard part isn&rsquo;t math, it&rsquo;s <em>fresh</em> math.</p>
+            <p>A real-time cross-book ingester sounds simple and isn&rsquo;t. Each book formats markets differently, prices go stale within seconds, and books vary wildly in scrape-friendliness. <code>FanDuel</code> removed itself with bot detection, and <code>Pinnacle</code> shows fewer markets without a sign-in. An arb that&rsquo;s real on paper is often gone by the time you see it, and one that looks available is often a stale price. The hard part isn&rsquo;t math, it&rsquo;s <em>fresh</em> math.</p>
 
             <h3>The system</h3>
             <p>Per-book ingest workers feed a normalization layer that canonicalizes markets (so <code>Moneyline</code> on BetMGM resolves to the same key as <code>h2h</code> on Pinnacle). The arb detector walks canonical odds for each event, converts to implied probabilities, and flags any cross-book combination where &Sigma; implied &lt; 1 minus a configurable edge floor. SQLite with Alembic handles schema evolution. Over ten migrations so far. A separate journal table records every raw scrape, which means failures and false-positives are replayable against the exact inputs that produced them.</p>
 
-            <h3>What I learned / what&rsquo;s next</h3>
-            <p>Production scrapers fail in interesting ways. The most underestimated work was <em>defensive ingestion</em>, meaning per-book health scoring, automatic backoff on bot detection, and tolerance for intermittent clusters. The math layer was small; the operations layer was most of it. Next step: a paper-trading recorder that attributes realized P&amp;L to historical alerts without actually placing bets, so the alert pipeline can be calibrated against real outcomes.</p>
+            <h3>What I learned</h3>
+            <p>Production scrapers fail in interesting ways. The most underestimated work was <em>defensive ingestion</em>, meaning per-book health scoring, automatic backoff on bot detection, and tolerance for intermittent clusters. The math layer was small, and the operations layer was most of it.</p>
           </div>
             </div>
           </details>
@@ -775,7 +775,7 @@ shoe.pulse(side: <span class="sample__hi">Side.right</span>,
       <div class="container site-footer__inner">
         <a class="footer-brand" href="#top">Jake Hoffman <span aria-hidden="true">↑</span></a>
         <p class="site-footer__meta">
-          <span data-meta="last_deployed">Updated: 2026-09-24</span>
+          <span data-meta="last_deployed">Updated: 2026-11-10</span>
           <span class="site-footer__sep">&middot;</span>
           <span>&copy; <span id="footer-year">2026</span> jake hoffman</span>
         </p>
